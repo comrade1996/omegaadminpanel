@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -8,25 +7,28 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import { Form, HasError, AlertError } from 'vform'
+import {Form, HasError, AlertError} from 'vform'
 import moment from 'moment'
-Vue.component(HasError.name, HasError)
-Vue.component(AlertError.name, AlertError)
+
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
 window.Form = Form;
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
 
 
-import VueProgressBar from 'vue-progressbar'
+import VueProgressBar from 'vue-progressbar';
 
 Vue.use(VueProgressBar, {
     color: 'rgb(143, 255, 199)',
     failedColor: 'red',
     height: '20px'
-})
+});
 
-import swal from 'sweetalert2'
-window.swal =swal;
+import swal from 'sweetalert2';
+
+window.swal = swal;
 
 const toast = swal.mixin({
     toast: true,
@@ -38,24 +40,25 @@ const toast = swal.mixin({
 window.toast = toast;
 
 const routes = [
-    { path: '/dashboard', component: require('./components/Dashboard.vue').default },
-    { path: '/profile', component: require('./components/Profile.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default }
-  ]
+    {path: '/dashboard', component: require('./components/Dashboard.vue').default},
+    {path: '/profile', component: require('./components/Profile.vue').default},
+    {path: '/users', component: require('./components/Users.vue').default}
+];
 
-  const router = new VueRouter({
+const router = new VueRouter({
     mode: 'history',
     routes
-  })
-Vue.filter('capitalize', function (value) {
-    if (!value) return ''
-    value = value.toString()
-    return value.charAt(0).toUpperCase() + value.slice(1)
-})
+});
 
-Vue.filter('readableDate',function (date) {
+Vue.filter('capitalize', function (value) {
+    if (!value) return '';
+    value = value.toString();
+    return value.charAt(0).toUpperCase() + value.slice(1);
+});
+
+Vue.filter('readableDate', function (date) {
     return moment(date).format("MMM Do YY");
-})
+});
 
 let Fire = new Vue();
 window.Fire = Fire;

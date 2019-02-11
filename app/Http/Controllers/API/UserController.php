@@ -22,17 +22,19 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
         $this->validate($request,
             [
-               'name' => 'required|string|max:191',
-               'email' => 'required|string|email|max:191|unique:users',
-               'password' => 'required|string|min:6'
+                'name' => 'required|string|max:191',
+                'email' => 'required|string|email|max:191|unique:users',
+                'password' => 'required|string|min:6'
             ]);
+
         return User::create([
             'name' => $request['name'],
             'email' => $request['email'],
@@ -47,8 +49,8 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @return void
      */
     public function show($id)
     {
@@ -58,9 +60,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return void
      */
     public function update(Request $request, $id)
     {
@@ -70,13 +72,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return array
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
-        return['message' => 'user Deleted'];
+
+        return ['message' => 'user Deleted'];
     }
 }
