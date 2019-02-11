@@ -1991,6 +1991,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      editmode: true,
       users: {},
       items: [{
         id: 1,
@@ -2003,6 +2004,7 @@ __webpack_require__.r(__webpack_exports__);
         label: 'Author'
       }],
       form: new Form({
+        id: '',
         name: '',
         email: '',
         password: '',
@@ -2013,6 +2015,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    openCreateModal: function openCreateModal() {
+      this.editmode = false;
+      this.form.clear();
+      this.form.reset();
+      $('#createUser').modal('show');
+    },
+    openEditModal: function openEditModal(user) {
+      this.editmode = true;
+      this.form.clear();
+      this.form.reset();
+      $('#createUser').modal('show');
+      this.form.fill(user);
+    },
     getUsers: function getUsers() {
       var _this = this;
 
@@ -2036,6 +2051,17 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.$Progress.finish();
       }).catch(function () {});
+    },
+    updateUser: function updateUser() {
+      // this.$progress.start();
+      console.log("hoola");
+      this.form.put('api/user/' + this.form.id).then(function () {
+        swal.fire('Updated!', 'Your user has been updated.', 'success'); // this.$progress.finish();
+
+        $('#createUser').modal('hide');
+        Fire.$emit('afterCreate');
+      }).catch(function () {//  this.$Progress.fail();
+      });
     },
     deleteUser: function deleteUser(id) {
       var _this3 = this;
@@ -58239,14 +58265,30 @@ var render = function() {
     _c("div", { staticClass: "row mt-5" }, [
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "card-header" }, [
+            _c("h3", { staticClass: "card-title" }, [_vm._v("Users Table")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-tools" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  on: { click: _vm.openCreateModal }
+                },
+                [
+                  _vm._v(" New User "),
+                  _c("i", { staticClass: "fas fa-user-plus" })
+                ]
+              )
+            ])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body table-responsive p-0" }, [
             _c("table", { staticClass: "table table-hover" }, [
               _c(
                 "tbody",
                 [
-                  _vm._m(1),
+                  _vm._m(0),
                   _vm._v(" "),
                   _vm._l(_vm.users, function(user) {
                     return _c("tr", { key: user.id }, [
@@ -58269,7 +58311,22 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._m(2, true),
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                _vm.openEditModal(user)
+                              }
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fas fa-user-edit text-blue"
+                            })
+                          ]
+                        ),
                         _vm._v(
                           "\n                                /\n                                "
                         ),
@@ -58318,7 +58375,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "form",
@@ -58326,7 +58383,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.createUser($event)
+                      _vm.editmode ? _vm.updateUser() : _vm.createUser()
                     }
                   }
                 },
@@ -58554,7 +58611,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._m(4)
+                  _vm._m(2)
                 ]
               )
             ])
@@ -58565,25 +58622,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [_vm._v("Users Table")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-tools" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { "data-toggle": "modal", "data-target": "#createUser" }
-          },
-          [_vm._v(" New User "), _c("i", { staticClass: "fas fa-user-plus" })]
-        )
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -58600,14 +58638,6 @@ var staticRenderFns = [
       _c("th", [_vm._v("Created At")]),
       _vm._v(" "),
       _c("th", [_vm._v("Modify")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "#" } }, [
-      _c("i", { staticClass: "fas fa-user-edit text-blue" })
     ])
   },
   function() {
