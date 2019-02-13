@@ -50,6 +50,35 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item has-treeview  ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-boxes text-green"></i>
+                        <p>
+                            Products
+                            <i class="right fa fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <router-link to="/products" class="nav-link">
+                                <i class="nav-icon fas fa-box text-teal"></i>
+                                <p>
+                                    Products List
+                                </p>
+                            </router-link>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <router-link to="/categories" class="nav-link">
+                                <i class="nav-icon fas fa-warehouse text-teal"></i>
+                                <p>
+                                    Products Categories
+                                </p>
+                            </router-link>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <router-link to="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user text-orange"></i>

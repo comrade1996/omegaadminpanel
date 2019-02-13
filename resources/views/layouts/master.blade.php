@@ -8,7 +8,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-
     <title>Lara Start</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -19,11 +18,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <div id="app">
     <div class="wrapper">
 
-        @include('includes.nav')
+    @include('includes.nav')
 
-        @include('includes.sidebar')
+    @include('includes.sidebar')
 
-        <!-- Content Wrapper. Contains page content -->
+    <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <!-- /.content-header -->
@@ -33,16 +32,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <router-view></router-view>
                     <vue-progress-bar></vue-progress-bar>
                 </div>
-                <!-- /.content -->
             </div>
+            <!-- ./wrapper -->
         </div>
-        <!-- /.content-wrapper -->
 
-        @include('includes.footer')
 
-    </div>
-</div>
-<!-- ./wrapper -->
+@include('includes.footer')
 
 @include('includes.scripts')
 

@@ -6,7 +6,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Users Table</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#createUser"> New User <i
+                            <button class="btn btn-primary" @click="openCreateModal"> New User <i
                                 class="fas fa-user-plus"></i></button>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                                 <td>{{user.type | capitalize}}</td>
                                 <td>{{user.created_at | readableDate }}</td>
                                 <td>
-                                    <a href="#">
+                                    <a href="#" @click="openEditModal(user)">
                                         <i class="fas fa-user-edit text-blue"></i>
                                     </a>
                                     /
@@ -57,7 +57,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="createUser">
+                    <form @submit.prevent="editmode ? updateUser() : createUser()">
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>Name</label>
@@ -65,7 +65,6 @@
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                                 <has-error :form="form" field="name"></has-error>
                             </div>
-
                             <div class="form-group">
                                 <label>Email</label>
                                 <input v-model="form.email" type="text" name="email"
@@ -115,7 +114,9 @@
 <script>
     export default {
         data() {
+
             return {
+                editmode: true,
                 users: {},
                 items: [
                     {id: 1, label: 'Admin'},
@@ -123,6 +124,7 @@
                     {id: 3, label: 'Author'}
                 ],
                 form: new Form({
+                    id: '',
                     name: '',
                     email: '',
                     password: '',
@@ -134,6 +136,20 @@
         },
         methods:
             {
+                openCreateModal() {
+                    this.editmode = false;
+
+                    this.form.clear();
+                    this.form.reset();
+                    $('#createUser').modal('show');
+                },
+                openEditModal(user) {
+                    this.editmode = true;
+                    this.form.clear();
+                    this.form.reset();
+                    $('#createUser').modal('show');
+                    this.form.fill(user);
+                },
                 getUsers() {
                     axios.get("api/user").then(({data}) => (this.users = data.data));
                 },
@@ -152,6 +168,24 @@
                         })
                         .catch(() => {
 
+                        })
+                },
+                updateUser() {
+                    // this.$progress.start();
+                    console.log("hoola");
+                    this.form.put('api/user/' + this.form.id)
+                        .then(() => {
+                            swal.fire(
+                                'Updated!',
+                                'Your user has been updated.',
+                                'success'
+                            )
+                            // this.$progress.finish();
+                            $('#createUser').modal('hide');
+                            Fire.$emit('afterCreate');
+                        })
+                        .catch(() => {
+                            //  this.$Progress.fail();
                         })
                 },
                 deleteUser(id) {
