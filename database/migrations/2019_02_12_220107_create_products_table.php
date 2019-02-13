@@ -24,10 +24,9 @@ class CreateProductsTable extends Migration
             $table->date('edate');
             $table->string('photo')->default('profile.png')->nullable();
             $table->timestamps();
-        });
 
-        Schema::table('products', function (Blueprint $table) {
             $table->softDeletes();
+
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }

@@ -16,8 +16,9 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -27,10 +28,10 @@ class CategoryController extends Controller
                 'description' => 'required|string'
 
             ]);
+
         return Category::create([
             'name' => $request['name'],
             'description' => $request['description']
-
         ]);
 
     }
@@ -38,8 +39,8 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @return void
      */
     public function show($id)
     {
@@ -49,13 +50,13 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param Category $category
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        $category = category::findOrFail($id);
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
@@ -68,12 +69,12 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return array
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
         return['message' => 'Category Deleted'];
     }
