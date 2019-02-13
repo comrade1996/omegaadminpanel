@@ -12,7 +12,8 @@
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
-                            <tbody><tr>
+                            <tbody>
+                            <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -36,7 +37,8 @@
                                     </a>
                                 </td>
                             </tr>
-                            </tbody></table>
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -44,7 +46,8 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="createUser" tabindex="-1" role="dialog" aria-labelledby="createUserTitle" aria-hidden="true">
+        <div class="modal fade" id="createUser" tabindex="-1" role="dialog" aria-labelledby="createUserTitle"
+             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -62,44 +65,45 @@
                             <has-error :form="form" field="name"></has-error>
                         </div>
 
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input v-model="form.email" type="text" name="email"
-                                   class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                            <has-error :form="form" field="email"></has-error>
-                        </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input v-model="form.email" type="text" name="email"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
+                                <has-error :form="form" field="email"></has-error>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input v-model="form.password" type="password" name="password"
-                                   class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                            <has-error :form="form" field="password"></has-error>
-                        </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input v-model="form.password" type="password" name="password"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                <has-error :form="form" field="password"></has-error>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Role</label>
-                            <select v-model="form.type" name="type" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                                <option value="">Select Role for User</option>
-                                <option v-for="item in items" :value="item.id">
-                                    {{ item.label }}
-                                </option>
-                            </select>
-                            <has-error :form="form" field="type"></has-error>
-                        </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select v-model="form.type" name="type" class="form-control"
+                                        :class="{ 'is-invalid': form.errors.has('type') }">
+                                    <option value="">Select Role for User</option>
+                                    <option v-for="item in items" :value="item.id">
+                                        {{ item.label }}
+                                    </option>
+                                </select>
+                                <has-error :form="form" field="type"></has-error>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Bio</label>
-                            <textarea v-model="form.bio"  name="bio"
-                                   class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }">
+                            <div class="form-group">
+                                <label>Bio</label>
+                                <textarea v-model="form.bio" name="bio"
+                                          class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }">
                                 </textarea>
-                            <has-error :form="form" field="bio"></has-error>
-                        </div>
+                                <has-error :form="form" field="bio"></has-error>
+                            </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -116,9 +120,9 @@
                 editmode:true,
                 users:{},
                 items: [
-                    { id: 1, label: 'Admin' },
-                    { id: 2, label: 'User' },
-                    { id: 3, label: 'Author' }
+                    {id: 1, label: 'Admin'},
+                    {id: 2, label: 'User'},
+                    {id: 3, label: 'Author'}
                 ],
                 form:new Form({
                     id:'',
@@ -153,22 +157,20 @@
                 {
                     axios.get("api/user").then(({data}) => (this.users =data.data));
                 },
-                createUser()
-                {
+                createUser() {
 
                     this.form.post('api/user')
-                        .then(()=>{
+                        .then(() => {
                             this.$Progress.start();
                             Fire.$emit('afterCreate');
-                            $('#createUser').modal('hide')
+                            $('#createUser').modal('hide');
                             toast.fire({
                                 type: 'success',
                                 title: 'User Created successfully'
-                            })
+                            });
                             this.$Progress.finish();
-
                         })
-                        .catch(()=>{
+                        .catch(() => {
 
                         })
                   },
@@ -204,14 +206,14 @@
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
-                        if(result.value) {
+                        if (result.value) {
                             this.form.delete('api/user/' + id)
                                 .then(() => {
                                     swal.fire(
                                         'Deleted!',
                                         'Your file has been deleted.',
                                         'success'
-                                    )
+                                    );
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
@@ -220,18 +222,20 @@
                                         'Your file has been Filed.',
                                         'warning'
                                     )
-                                })
+                                });
                         }
                     })
 
                 }
             },
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component mounted.');
         },
         created() {
             this.getUsers();
-            Fire.$on('afterCreate',()=>{this.getUsers()});
+            Fire.$on('afterCreate', () => {
+                this.getUsers();
+            });
             //setInterval(()=>this.getUsers(), 3000);
 
         }
