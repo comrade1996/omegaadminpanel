@@ -138,7 +138,7 @@
             return{
                 editmode:true,
                 products:{},
-                categories: [],
+                categories: [{}],
                 form:new Form({
                     id:'',
                     name:'',
