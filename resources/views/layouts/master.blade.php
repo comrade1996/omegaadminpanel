@@ -37,7 +37,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
 
 
-@include('includes.footer')
+        @include('includes.footer')
+    </div>
+</div>
 
 @include('includes.scripts')
 
