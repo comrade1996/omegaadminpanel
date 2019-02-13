@@ -16,8 +16,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -30,6 +31,7 @@ class ProductController extends Controller
                 'quantity' => 'required|numeric',
                 'edate' => 'required|date|after:today'
             ]);
+
         return Product::create([
             'name' => $request['name'],
             'purchaseprice' => $request['purchaseprice'],
@@ -38,8 +40,6 @@ class ProductController extends Controller
             'quantity' => $request['quantity'],
             'edate' => $request['edate'],
             'company' => $request['company']
-
-
         ]);
 
     }
@@ -58,36 +58,36 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param Product $product
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        $Product = Product::findOrFail($id);
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
                 'purchaseprice' => 'required|numeric',
                 'sellingprice' => 'required|numeric',
-                'category_id' => 'required|numeric',
+                'category' => 'required|numeric',
                 'quantity' => 'required|numeric',
                 'edate' => 'required|date|after:today'
             ]);
 
-        $Product->update($request->all());
+        $product->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return array
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $Product = Product::findOrFail($id);
-        $Product->delete();
+        $product->delete();
         return['message' => 'Product Deleted'];
     }
 }
