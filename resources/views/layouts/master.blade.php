@@ -175,7 +175,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </p>
                 </router-link>
               </li>
-         <li class="nav-item has-treeview  ">
+          <li class="nav-item has-treeview  ">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog text-green"></i>
               <p>
@@ -188,6 +188,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <router-link to="/users" class="nav-link">
                   <i class="fas fa-users nav-icon text-teal"></i>
                   <p>Users</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview  ">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-boxes text-green"></i>
+              <p>
+                Products
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/products" class="nav-link">
+                  <i class="nav-icon fas fa-box text-teal"></i>
+                  <p>
+                    Products List
+                  </p>
+                </router-link>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/categories" class="nav-link">
+                  <i class="nav-icon fas fa-warehouse text-teal"></i>
+                  <p>
+                    Products Categories
+                  </p>
                 </router-link>
               </li>
             </ul>

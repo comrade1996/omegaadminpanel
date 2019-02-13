@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
-use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     public function index()
     {
-        return User::latest()->paginate(10);
+        return Category::latest()->paginate(10);
     }
 
     /**
@@ -25,16 +24,13 @@ class UserController extends Controller
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
-                'email' => 'required|string|email|max:191|unique:users',
-                'password' => 'required|string|min:6'
+                'description' => 'required|string'
+
             ]);
-        return User::create([
+        return Category::create([
             'name' => $request['name'],
-            'email' => $request['email'],
-            'type' => $request['type'],
-            'bio' => $request['bio'],
-            'photo' => $request['photo'],
-            'password' => Hash::make($request['password']),
+            'description' => $request['description']
+
         ]);
 
     }
@@ -59,15 +55,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $category = category::findOrFail($id);
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
-                'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-                'password' => 'sometimes|string|min:6'
+                'description' => 'required|string'
             ]);
 
-        $user->update($request->all());
+        $category->update($request->all());
     }
 
     /**
@@ -78,8 +73,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return['message' => 'user Deleted'];
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return['message' => 'Category Deleted'];
     }
 }

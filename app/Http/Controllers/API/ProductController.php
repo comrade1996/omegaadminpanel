@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
-use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class ProductController extends Controller
 {
     public function index()
     {
-        return User::latest()->paginate(10);
+        return Product::latest()->paginate(10);
     }
 
     /**
@@ -25,16 +24,22 @@ class UserController extends Controller
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
-                'email' => 'required|string|email|max:191|unique:users',
-                'password' => 'required|string|min:6'
+                'purchaseprice' => 'required|numeric',
+                'sellingprice' => 'required|numeric',
+                'category' => 'required|numeric',
+                'quantity' => 'required|numeric',
+                'edate' => 'required|date|after:today'
             ]);
-        return User::create([
+        return Product::create([
             'name' => $request['name'],
-            'email' => $request['email'],
-            'type' => $request['type'],
-            'bio' => $request['bio'],
-            'photo' => $request['photo'],
-            'password' => Hash::make($request['password']),
+            'purchaseprice' => $request['purchaseprice'],
+            'sellingprice' => $request['sellingprice'],
+            'category_id' => $request['category'],
+            'quantity' => $request['quantity'],
+            'edate' => $request['edate'],
+            'company' => $request['company']
+
+
         ]);
 
     }
@@ -59,15 +64,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $Product = Product::findOrFail($id);
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
-                'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-                'password' => 'sometimes|string|min:6'
+                'purchaseprice' => 'required|numeric',
+                'sellingprice' => 'required|numeric',
+                'category_id' => 'required|numeric',
+                'quantity' => 'required|numeric',
+                'edate' => 'required|date|after:today'
             ]);
 
-        $user->update($request->all());
+        $Product->update($request->all());
     }
 
     /**
@@ -78,8 +86,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return['message' => 'user Deleted'];
+        $Product = Product::findOrFail($id);
+        $Product->delete();
+        return['message' => 'Product Deleted'];
     }
 }
