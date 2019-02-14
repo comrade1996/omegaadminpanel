@@ -21,7 +21,7 @@ class ExpensesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +31,9 @@ class ExpensesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -73,9 +74,10 @@ class ExpensesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Expenses  $expenses
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Expenses $expenses
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, Expenses $expenses)
     {
@@ -92,8 +94,9 @@ class ExpensesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Expenses  $expenses
-     * @return \Illuminate\Http\Response
+     * @param  \App\Expenses $expenses
+     * @return array
+     * @throws \Exception
      */
     public function destroy(Expenses $expenses)
     {
