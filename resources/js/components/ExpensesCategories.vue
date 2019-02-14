@@ -1,7 +1,4 @@
 <template>
-
-فثسف
-    ++++++++++++++++++++++++++++++++++++++++++++++
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-12">
@@ -9,13 +6,15 @@
                     <div class="card-header">
                         <h3 class="card-title">Expenses Categories Table</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Category <i class="fas fa-Category-plus"></i></button>
+                            <button class="btn btn-primary" @click="openCreateModal"> New Category <i
+                                class="fas fa-Category-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
-                            <tbody><tr>
+                            <tbody>
+                            <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Description</th>
@@ -38,7 +37,8 @@
                                     </a>
                                 </td>
                             </tr>
-                            </tbody></table>
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -46,7 +46,8 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="createCategory" tabindex="-1" role="dialog" aria-labelledby="createCategoryTitle" aria-hidden="true">
+        <div class="modal fade" id="createCategory" tabindex="-1" role="dialog" aria-labelledby="createCategoryTitle"
+             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -56,26 +57,26 @@
                         </button>
                     </div>
                     <form @submit.prevent="editmode ? updateCategory() : createCategory()">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input v-model="form.name" type="text" name="name"
-                                   class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                            <has-error :form="form" field="name"></has-error>
-                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input v-model="form.name" type="text" name="name"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
+                                <has-error :form="form" field="name"></has-error>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Description</label>
-                            <input v-model="form.description" type="text" name="description"
-                                   class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
-                            <has-error :form="form" field="description"></has-error>
-                        </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input v-model="form.description" type="text" name="description"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
+                                <has-error :form="form" field="description"></has-error>
+                            </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -85,83 +86,74 @@
 
 <script>
     export default {
-        data()
-        {
+        data() {
 
-            return{
-                editmode:true,
-                ExpensesCategories:{},
-                form:new Form({
-                    id:'',
-                    name:'',
-                    description:''
+            return {
+                editmode: true,
+                ExpensesCategories: {},
+                form: new Form({
+                    id: '',
+                    name: '',
+                    description: ''
                 })
             }
         },
         methods:
             {
-                openCreateModal()
-                {
-                    this.editmode=false;
+                openCreateModal() {
+                    this.editmode = false;
 
                     this.form.clear();
                     this.form.reset();
                     $('#createCategory').modal('show');
                 },
-                openEditModal(Category)
-                {
-                    this.editmode=true;
+                openEditModal(Category) {
+                    this.editmode = true;
                     this.form.clear();
                     this.form.reset();
                     $('#createCategory').modal('show');
                     this.form.fill(Category);
                 },
-                getExpensesCategories()
-                {
-                    axios.get("api/expensescategory").then(({data}) => (this.ExpensesCategories =data.data));
+                getExpensesCategories() {
+                    axios.get("api/expensescategory").then(({data}) => (this.ExpensesCategories = data.data));
                 },
-                createCategory()
-                {
+                createCategory() {
 
                     this.form.post('api/expensescategory')
-                        .then(()=>{
+                        .then(() => {
                             this.$Progress.start();
                             Fire.$emit('afterCreate');
                             $('#createCategory').modal('hide')
                             toast.fire({
                                 type: 'success',
                                 title: 'Category Created successfully'
-                            })
+                            });
                             this.$Progress.finish();
 
                         })
-                        .catch(()=>{
+                        .catch(() => {
 
                         })
-                  },
-                updateCategory()
-                {
-                   // this.$progress.start();
+                },
+                updateCategory() {
+                    // this.$progress.start();
                     console.log("hoola");
-                    this.form.put('api/expensescategory/'+this.form.id)
-                        .then(()=>
-                        {
+                    this.form.put('api/expensescategory/' + this.form.id)
+                        .then(() => {
                             swal.fire(
                                 'Updated!',
                                 'Your Category has been updated.',
                                 'success'
                             )
-                           // this.$progress.finish();
+                            // this.$progress.finish();
                             $('#createCategory').modal('hide');
                             Fire.$emit('afterCreate');
                         })
-                        .catch(()=>
-                        {
-                          //  this.$Progress.fail();
+                        .catch(() => {
+                            //  this.$Progress.fail();
                         })
                 },
-                deleteCategory(id)
-                {
+                deleteCategory(id) {
                     swal.fire({
                         title: 'Are you sure?',
                         text: "You won't be able to revert this!",
@@ -171,7 +163,7 @@
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
-                        if(result.value) {
+                        if (result.value) {
                             this.form.delete('api/category/' + id)
                                 .then(() => {
                                     swal.fire(
@@ -198,8 +190,10 @@
         },
         created() {
             this.getExpensesCategories();
-            Fire.$on('afterCreate',()=>{this.getExpensesCategories()});
-            //setInterval(()=>this.getExpensesCategories(), 3000);
+            Fire.$on('afterCreate', () => {
+                this.getExpensesCategories()
+            });
+            // setInterval(()=>this.getExpensesCategories(), 3000);
 
         }
     }

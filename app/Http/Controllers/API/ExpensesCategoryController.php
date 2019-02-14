@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Category;
 use App\ExpensesCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,7 +22,7 @@ class ExpensesCategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -31,8 +32,9 @@ class ExpensesCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -53,8 +55,8 @@ class ExpensesCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\ExpensesCategory  $expensesCategory
-     * @return \Illuminate\Http\Response
+     * @param  \App\ExpensesCategory $expensesCategory
+     * @return void
      */
     public function show(ExpensesCategory $expensesCategory)
     {
@@ -64,8 +66,8 @@ class ExpensesCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ExpensesCategory  $expensesCategory
-     * @return \Illuminate\Http\Response
+     * @param  \App\ExpensesCategory $expensesCategory
+     * @return void
      */
     public function edit(ExpensesCategory $expensesCategory)
     {
@@ -75,9 +77,10 @@ class ExpensesCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ExpensesCategory  $expensesCategory
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\ExpensesCategory $expensesCategory
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, ExpensesCategory $expensesCategory)
     {
@@ -93,8 +96,9 @@ class ExpensesCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ExpensesCategory  $expensesCategory
-     * @return \Illuminate\Http\Response
+     * @param  \App\ExpensesCategory $expensesCategory
+     * @return array
+     * @throws \Exception
      */
     public function destroy(ExpensesCategory $expensesCategory)
     {
