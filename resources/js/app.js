@@ -43,7 +43,9 @@ const routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/categories', component: require('./components/Categories.vue').default },
+    { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
     { path: '/products', component: require('./components/Products.vue').default },
+    { path: '/expenses', component: require('./components/Expenses.vue').default },
     { path: '/users', component: require('./components/Users.vue').default }
   ];
 

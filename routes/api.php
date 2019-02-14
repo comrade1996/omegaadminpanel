@@ -18,4 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::apiResources(['user'=>'API\UserController']);
 Route::apiResources(['category'=>'API\CategoryController']);
+Route::apiResources(['expensescategory'=>'API\ExpensesCategoryController']);
+Route::apiResources(['expenses'=>'API\ExpensesController']);
 Route::apiResources(['product'=>'API\ProductController']);

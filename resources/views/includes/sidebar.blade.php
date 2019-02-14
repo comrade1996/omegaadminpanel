@@ -79,6 +79,36 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="nav-item has-treeview  ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-file-invoice-dollar text-red"></i>
+                        <p>
+                            Expenses
+                            <i class="right fa fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <router-link to="/expenses" class="nav-link">
+                                <i class="nav-icon fas fa-coins text-pink"></i>
+                                <p>
+                                    Expenses List
+                                </p>
+                            </router-link>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <router-link to="/expensescategories" class="nav-link">
+                                <i class="nav-icon fas fa-warehouse text-pink"></i>
+                                <p>
+                                    Expenses Categories
+                                </p>
+                            </router-link>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <router-link to="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user text-orange"></i>
