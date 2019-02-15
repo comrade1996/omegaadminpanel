@@ -45,7 +45,7 @@ class ExpensesCategoryController extends Controller
 
             ]);
 
-        return Category::create([
+        return ExpensesCategory::create([
             'name' => $request['name'],
             'description' => $request['description']
         ]);
@@ -82,13 +82,15 @@ class ExpensesCategoryController extends Controller
      * @return void
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, ExpensesCategory $expensesCategory)
+    public function update(Request $request,$id)
     {
+        $expensesCategory = ExpensesCategory::findOrFail($id);
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
                 'description' => 'required|string'
             ]);
+        $test = $request->all();
 
         $expensesCategory->update($request->all());
     }

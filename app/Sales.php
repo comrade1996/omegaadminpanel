@@ -5,11 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ExpensesCategory extends Model
+class Sales extends Model
 {
-    protected $table = 'expensescategories';
     use SoftDeletes;
+
     protected $fillable = [
-        'name', 'description'
+        'subtotal','discount','grandtotal'
     ];
 }

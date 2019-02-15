@@ -20,4 +20,5 @@ Route::apiResources(['user'=>'API\UserController']);
 Route::apiResources(['category'=>'API\CategoryController']);
 Route::apiResources(['expensescategory'=>'API\ExpensesCategoryController']);
 Route::apiResources(['expenses'=>'API\ExpensesController']);
+Route::apiResources(['sales'=>'API\SalesController']);
 Route::apiResources(['product'=>'API\ProductController']);

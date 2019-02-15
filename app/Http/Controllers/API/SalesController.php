@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Expenses;
+use App\Sales;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ExpensesController extends Controller
+class SalesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class ExpensesController extends Controller
      */
     public function index()
     {
-        return Expenses::latest()->paginate(10);
+        return Sales::latest()->paginate(10);
     }
 
     /**
@@ -39,23 +39,25 @@ class ExpensesController extends Controller
     {
         $this->validate($request,
             [
-                'amount' => 'required|numeric',
-                'category' => 'required|numeric'
+                'subtotal' => 'required|numeric',
+                'discount' => 'numeric',
+                'grandtotal' => 'required|numeric'
             ]);
 
-        return Expenses::create([
-            'expensescategory_id' => $request['category'],
-            'amount' => $request['amount']
+        return Sales::create([
+            'subtotal' => $request['subtotal'],
+            'discount' => $request['discount'],
+            'grandtotal' => $request['grandtotal']
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Expenses  $expenses
+     * @param  \App\Sales  $Sales
      * @return \Illuminate\Http\Response
      */
-    public function show(Expenses $expenses)
+    public function show(Sales $Sales)
     {
         //
     }
@@ -63,10 +65,10 @@ class ExpensesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Expenses  $expenses
+     * @param  \App\Sales  $Sales
      * @return \Illuminate\Http\Response
      */
-    public function edit(Expenses $expenses)
+    public function edit(Sales $Sales)
     {
         //
     }
@@ -75,34 +77,35 @@ class ExpensesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Expenses $expenses
+     * @param  \App\Sales $Sales
      * @return void
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Expenses $expenses)
+    public function update(Request $request, $id)
     {
-
+        $Sales = Sales::findOrFail($id);
         $this->validate($request,
             [
-                'amount' => 'required|numeric',
-                'category' => 'required|numeric'
+                'subtotal' => 'required|numeric',
+                'discount' => 'numeric',
+                'grandtotal' => 'required|numeric'
             ]);
 
-        $expenses->update($request->all());
+        $Sales->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Expenses $expenses
+     * @param  \App\Sales $Sales
      * @return array
      * @throws \Exception
      */
     public function destroy($id)
     {
-        $expenses = Expenses::findOrFail($id);
-        $expenses->delete();
-        return['message' => 'Expenses Deleted'];
+        $Sales = Sales::findOrFail($id);
+        $Sales->delete();
+        return['message' => 'Sales Deleted'];
 
     }
 }

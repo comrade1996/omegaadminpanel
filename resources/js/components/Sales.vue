@@ -4,34 +4,36 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Expenses Table</h3>
+                        <h3 class="card-title">Sales Table</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Expenses <i class="fas fa-expenses-plus"></i></button>
+                            <button class="btn btn-primary" @click="openCreateModal"> New sales <i class="fas fa-sales-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody><tr>
-                                <th>ID</th>
-                                <th>Category</th>
-                                <th>Amount</th>
+                                <th> Invoice ID</th>
+                                <th>Sub Total</th>
+                                <th>Discount</th>
+                                <th>Grand Total</th>
                                 <th>Created At</th>
                                 <th>Modify</th>
                                 <th>Options</th>
                             </tr>
-                            <tr v-for="expenses in expensess" :key="expenses.id">
-                                <td>{{expenses.id}}</td>
-                                <td>{{expenses.expensescategory | capitalize}}</td>
-                                <td>{{expenses.amount}}</td>
-                                <td>{{expenses.created_at | readableDate }}</td>
-                                <td>{{expenses.updated_at | readableDate }}</td>
+                            <tr v-for="sale in sales" :key="sale.id">
+                                <td>{{sale.id}}</td>
+                                <td>{{sale.subtotal}}</td>
+                                <td>{{sale.discount}}</td>
+                                <td>{{sale.grandtotal}}</td>
+                                <td>{{sale.created_at | readableDate }}</td>
+                                <td>{{sale.updated_at | readableDate }}</td>
                                 <td>
-                                    <a href="#" @click="openEditModal(expenses)">
+                                    <a href="#" @click="openEditModal(sale)">
                                         <i class="fas fa-pencil-alt text-blue"></i>
                                     </a>
                                     /
-                                    <a href="#" @click="deleteexpenses(expenses.id)">
+                                    <a href="#" @click="deleteSales(sale.id)">
                                         <i class="fas fa-trash text-red"></i>
                                     </a>
                                 </td>
@@ -44,32 +46,34 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="createexpenses" tabindex="-1" role="dialog" aria-labelledby="createexpensesTitle" aria-hidden="true">
+        <div class="modal fade" id="createsales" tabindex="-1" role="dialog" aria-labelledby="createsalesTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createexpensesTitle">Create expenses</h5>
+                        <h5 class="modal-title" id="createsalesTitle">Create Sales</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editmode ? updateexpenses() : createexpenses()">
+                    <form @submit.prevent="editmode ? updateSales() : createSales()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Category</label>
-                                <select v-model="form.category" name="category" class="form-control" :class="{ 'is-invalid': form.errors.has('category') }">
-                                    <option value="">Select Category for expenses</option>
-                                    <option v-for="category in categories" :value="category.id">
-                                        {{ category.name | capitalize}}
-                                    </option>
-                                </select>
-                                <has-error :form="form" field="category"></has-error>
+                                <label>Sub Total</label>
+                                <input v-model="form.subtotal" type="text" name="subtotal"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('subtotal') }">
+                                <has-error :form="form" field="subtotal"></has-error>
                             </div>
                             <div class="form-group">
-                                <label>Amount</label>
-                                <input v-model="form.amount" type="text" name="amonut"
-                                       class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
-                                <has-error :form="form" field="amount"></has-error>
+                                <label>Discount</label>
+                                <input v-model="form.discount" type="text" name="discount"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('discount') }">
+                                <has-error :form="form" field="discount"></has-error>
+                            </div>
+                            <div class="form-group">
+                                <label>Grand Total</label>
+                                <input v-model="form.grandtotal" type="text" name="grandtotal"
+                                       class="form-control" :class="{ 'is-invalid': form.errors.has('grandtotal') }">
+                                <has-error :form="form" field="grandtotal"></has-error>
                             </div>
 
                         </div>
@@ -91,12 +95,12 @@
 
             return{
                 editmode:true,
-                expensess:{},
-                categories: [{}],
+                sales:{},
                 form:new Form({
                     id:'',
-                    amount:'',
-                    category:''
+                    subtotal:'',
+                    discount:'',
+                    grandtotal:''
                 })
             }
         },
@@ -108,35 +112,31 @@
 
                     this.form.clear();
                     this.form.reset();
-                    $('#createexpenses').modal('show');
+                    $('#createsales').modal('show');
                 },
-                openEditModal(expenses)
+                openEditModal(sales)
                 {
                     this.editmode=true;
                     this.form.clear();
                     this.form.reset();
-                    $('#createexpenses').modal('show');
-                    this.form.fill(expenses);
+                    $('#createsales').modal('show');
+                    this.form.fill(sales);
                 },
-                getexpensess()
+                getSales()
                 {
-                    axios.get("api/expenses").then(({data}) => (this.expensess =data.data));
+                    axios.get("api/sales").then(({data}) => (this.sales =data.data));
                 },
-                getCategories()
-                {
-                    axios.get("api/expensescategory").then(({data}) => (this.categories =data.data));
-                },
-                createexpenses()
+                createSales()
                 {
 
-                    this.form.post('api/expenses')
+                    this.form.post('api/sales')
                         .then(()=>{
                             this.$Progress.start();
                             Fire.$emit('afterCreate');
-                            $('#createexpenses').modal('hide')
+                            $('#createsales').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'expenses Created successfully'
+                                title: 'sales Created successfully'
                             })
                             this.$Progress.finish();
 
@@ -145,20 +145,20 @@
 
                         })
                 },
-                updateexpenses()
+                updateSales()
                 {
                     // this.$progress.start();
                     console.log("hoola");
-                    this.form.put('api/expenses/'+this.form.id)
+                    this.form.put('api/sales/'+this.form.id)
                         .then(()=>
                         {
                             swal.fire(
                                 'Updated!',
-                                'Your expenses has been updated.',
+                                'Your sales has been updated.',
                                 'success'
                             )
                             // this.$progress.finish();
-                            $('#createexpenses').modal('hide');
+                            $('#createsales').modal('hide');
                             Fire.$emit('afterCreate');
                         })
                         .catch(()=>
@@ -166,7 +166,7 @@
                             //  this.$Progress.fail();
                         })
                 },
-                deleteexpenses(id)
+                deleteSales(id)
                 {
                     swal.fire({
                         title: 'Are you sure?',
@@ -178,7 +178,7 @@
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                         if(result.value) {
-                            this.form.delete('api/expenses/' + id)
+                            this.form.delete('api/sales/' + id)
                                 .then(() => {
                                     swal.fire(
                                         'Deleted!',
@@ -203,12 +203,9 @@
             console.log('Component mounted.')
         },
         created() {
-            this.getexpensess();
-            Fire.$on('afterCreate',()=>{this.getexpensess()});
-            this.getCategories();
-            Fire.$on('afterCreate',()=>{this.getCategories()});
-            console.log(this.categories)
-            //setInterval(()=>this.getexpensess(), 3000);
+            this.getSales();
+            Fire.$on('afterCreate',()=>{this.getSales()});
+            //setInterval(()=>this.getsaless(), 3000);
 
         }
     }

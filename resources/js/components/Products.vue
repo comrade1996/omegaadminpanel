@@ -74,21 +74,21 @@
 
                         <div class="form-group">
                             <label>Purchase Price</label>
-                            <input v-model="form.purchaseprice" type="number" name="purchaseprice"
+                            <input v-model="form.purchaseprice" type="text" name="purchaseprice"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('purchaseprice') }">
                             <has-error :form="form" field="purchaseprice"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Selling Price</label>
-                            <input v-model="form.sellingprice" type="number" name="sellingprice"
+                            <input v-model="form.sellingprice" type="text" name="sellingprice"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('sellingprice') }">
                             <has-error :form="form" field="sellingprice"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input v-model="form.quantity" type="number" name="quantity"
+                            <input v-model="form.quantity" type="text" name="quantity"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('quantity') }">
                             <has-error :form="form" field="quantity"></has-error>
                         </div>

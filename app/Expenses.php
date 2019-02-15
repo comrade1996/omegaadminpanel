@@ -13,9 +13,9 @@ class Expenses extends Model
         'amount','expensescategory_id'
     ];
 
-
+    protected $with=['expensescategory'];
     public function expensescategory()
     {
-        return $this->hasOne('App\ExpensesCategory');
+        return $this->belongsTo('App\ExpensesCategory');
     }
 }

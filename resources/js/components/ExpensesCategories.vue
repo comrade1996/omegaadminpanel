@@ -137,6 +137,9 @@
                 },
                 updateCategory() {
                     // this.$progress.start();
+
+                    console.log(this.form.id)
+                    console.log(this.form.description)
                     console.log("hoola");
                     this.form.put('api/expensescategory/' + this.form.id)
                         .then(() => {
@@ -164,7 +167,7 @@
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                         if (result.value) {
-                            this.form.delete('api/category/' + id)
+                            this.form.delete('api/expensescategory/' + id)
                                 .then(() => {
                                     swal.fire(
                                         'Deleted!',
