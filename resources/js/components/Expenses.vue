@@ -20,9 +20,9 @@
                                 <th>Modify</th>
                                 <th>Options</th>
                             </tr>
-                            <tr v-for="expenses in expensess" :key="expenses.id">
+                            <tr v-for="expenses in expensess.data" :key="expenses.id">
                                 <td>{{expenses.id}}</td>
-                                <td>{{expenses.expensescategory | capitalize}}</td>
+                                <td>{{expenses.expensescategory.name | capitalize}}</td>
                                 <td>{{expenses.amount}}</td>
                                 <td>{{expenses.created_at | readableDate }}</td>
                                 <td>{{expenses.updated_at | readableDate }}</td>
@@ -39,6 +39,10 @@
                             </tbody></table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="expensess"
+                                    @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -102,6 +106,11 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/expenses?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
                 openCreateModal()
                 {
                     this.editmode=false;
@@ -120,7 +129,7 @@
                 },
                 getexpensess()
                 {
-                    axios.get("api/expenses").then(({data}) => (this.expensess =data.data));
+                    axios.get("api/expenses").then(({data}) => (this.expensess =data));
                 },
                 getCategories()
                 {
@@ -203,6 +212,14 @@
             console.log('Component mounted.')
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findExpenses?q='+query)
+                    .then((data)=>{
+                        this.expensess = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getexpensess();
             Fire.$on('afterCreate',()=>{this.getexpensess()});
             this.getCategories();

@@ -78,4 +78,18 @@ class CategoryController extends Controller
         $category->delete();
         return['message' => 'Category Deleted'];
     }
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $categories= Category::where(function ($query) use($search)
+            {
+                $query->where('name','LIKE',"%$search%")
+                    ->orWhere('description','LIKE',"%$search%");
+            })->paginate(10);
+            return $categories;
+        }
+
+        return $categories=Category::latest()->paginate(10);
+    }
 }

@@ -14,8 +14,13 @@ class Product extends Model
     ];
 
 
-    public function category()
+    protected $with=['category'];
+    public function
+
+    category()
     {
-        return $this->hasOne('App\Category');
+        return $this->belongsTo('App\Category');
     }
+
+
 }

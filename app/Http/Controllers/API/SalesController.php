@@ -108,4 +108,20 @@ class SalesController extends Controller
         return['message' => 'Sales Deleted'];
 
     }
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $sales= Sales::where(function ($query) use($search)
+            {
+                $query->where('subtotal','LIKE',"%$search%")
+                    ->orWhere('discount','LIKE',"%$search%")
+                ->orWhere('grandtotal','LIKE',"%$search%")
+                ->orWhere('id','LIKE',"%$search%");
+            })->paginate(10);
+            return $sales;
+        }
+
+        return $sales=Sales::latest()->paginate(10);
+    }
 }

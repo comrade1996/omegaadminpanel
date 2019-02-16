@@ -22,7 +22,7 @@
                                 <th>Created At</th>
                                 <th>Modify</th>
                             </tr>
-                            <tr v-for="user in users" :key="user.id">
+                            <tr v-for="user in users.data" :key="user.id">
                                 <td>{{user.id}}</td>
                                 <td>{{user.name | capitalize}}</td>
                                 <td>{{user.email | capitalize}}</td>
@@ -42,6 +42,10 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="users"
+                        @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -136,6 +140,12 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/user?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
+
                 openCreateModal() {
                     this.editmode = false;
 
@@ -151,7 +161,7 @@
                     this.form.fill(user);
                 },
                 getUsers() {
-                    axios.get("api/user").then(({data}) => (this.users = data.data));
+                    axios.get("api/user").then(({data}) => (this.users = data));
                 },
                 createUser() {
 
@@ -224,6 +234,14 @@
             console.log('Component mounted.');
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findUser?q='+query)
+                    .then((data)=>{
+                        this.users = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getUsers();
             Fire.$on('afterCreate', () => {
                 this.getUsers();

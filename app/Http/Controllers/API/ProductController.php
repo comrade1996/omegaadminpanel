@@ -90,4 +90,21 @@ class ProductController extends Controller
         $product->delete();
         return['message' => 'Product Deleted'];
     }
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $products= Product::where(function ($query) use($search)
+            {
+                $query->where('name','LIKE',"%$search%")
+                    ->orWhere('purchaseprice','LIKE',"%$search%")
+                    ->orWhere('sellingprice','LIKE',"%$search%")
+                    ->orWhere('company','LIKE',"%$search%")
+                    ->orWhere('quantity','LIKE',"%$search%");
+            })->paginate(10);
+            return $products;
+        }
+
+        return $products=Product::latest()->paginate(10);
+    }
 }

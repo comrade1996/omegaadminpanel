@@ -21,7 +21,7 @@
                                 <th>Created At</th>
                                 <th>Modify</th>
                             </tr>
-                            <tr v-for="category in ExpensesCategories" :key="category.id">
+                            <tr v-for="category in ExpensesCategories.data" :key="category.id">
                                 <td>{{category.id}}</td>
                                 <td>{{category.name | capitalize}}</td>
                                 <td>{{category.description | capitalize}}</td>
@@ -41,6 +41,10 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="ExpensesCategories"
+                                    @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -100,6 +104,11 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/expensescategory?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
                 openCreateModal() {
                     this.editmode = false;
 
@@ -115,7 +124,7 @@
                     this.form.fill(Category);
                 },
                 getExpensesCategories() {
-                    axios.get("api/expensescategory").then(({data}) => (this.ExpensesCategories = data.data));
+                    axios.get("api/expensescategory").then(({data}) => (this.ExpensesCategories = data));
                 },
                 createCategory() {
 
@@ -192,6 +201,14 @@
             console.log('Component mounted.')
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findExpensesCategory?q='+query)
+                    .then((data)=>{
+                        this.ExpensesCategories = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getExpensesCategories();
             Fire.$on('afterCreate', () => {
                 this.getExpensesCategories()

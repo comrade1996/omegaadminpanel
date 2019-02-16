@@ -21,7 +21,7 @@
                                 <th>Modify</th>
                                 <th>Options</th>
                             </tr>
-                            <tr v-for="sale in sales" :key="sale.id">
+                            <tr v-for="sale in sales.data" :key="sale.id">
                                 <td>{{sale.id}}</td>
                                 <td>{{sale.subtotal}}</td>
                                 <td>{{sale.discount}}</td>
@@ -41,6 +41,10 @@
                             </tbody></table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="sales"
+                                    @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -106,6 +110,11 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/sales?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
                 openCreateModal()
                 {
                     this.editmode=false;
@@ -124,7 +133,7 @@
                 },
                 getSales()
                 {
-                    axios.get("api/sales").then(({data}) => (this.sales =data.data));
+                    axios.get("api/sales").then(({data}) => (this.sales =data));
                 },
                 createSales()
                 {
@@ -203,6 +212,14 @@
             console.log('Component mounted.')
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findSales?q='+query)
+                    .then((data)=>{
+                        this.sales = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getSales();
             Fire.$on('afterCreate',()=>{this.getSales()});
             //setInterval(()=>this.getsaless(), 3000);

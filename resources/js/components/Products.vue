@@ -25,14 +25,14 @@
                                 <th>Modify</th>
                                 <th>Options</th>
                             </tr>
-                            <tr v-for="product in products" :key="product.id">
+                            <tr v-for="product in products.data" :key="product.id">
                                 <td>{{product.id}}</td>
                                 <td>{{product.name}}</td>
                                 <td>{{product.purchaseprice}}</td>
                                 <td>{{product.sellingprice}}</td>
                                 <td>{{product.quantity | capitalize}}</td>
                                 <td>{{product.company | capitalize}}</td>
-                                <td>{{product.category_id | capitalize}}</td>
+                                <td>{{product.category.name | capitalize}}</td>
                                 <td>{{product.edate | readableDate }}</td>
                                 <td>{{product.created_at | readableDate }}</td>
                                 <td>{{product.updated_at | readableDate }}</td>
@@ -49,6 +49,10 @@
                             </tbody></table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="products"
+                                    @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -154,6 +158,11 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/product?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
                 openCreateModal()
                 {
                     this.editmode=false;
@@ -172,7 +181,7 @@
                 },
                 getProducts()
                 {
-                    axios.get("api/product").then(({data}) => (this.products =data.data));
+                    axios.get("api/product").then(({data}) => (this.products =data));
                 },
                 getCategories()
                 {
@@ -255,6 +264,14 @@
             console.log('Component mounted.')
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findProduct?q='+query)
+                    .then((data)=>{
+                        this.products = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getProducts();
             Fire.$on('afterCreate',()=>{this.getProducts()});
             this.getCategories();

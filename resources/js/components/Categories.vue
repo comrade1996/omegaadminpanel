@@ -19,7 +19,7 @@
                                 <th>Created At</th>
                                 <th>Modify</th>
                             </tr>
-                            <tr v-for="category in categories" :key="category.id">
+                            <tr v-for="category in categories.data" :key="category.id">
                                 <td>{{category.id}}</td>
                                 <td>{{category.name | capitalize}}</td>
                                 <td>{{category.description | capitalize}}</td>
@@ -38,6 +38,10 @@
                             </tbody></table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="categories"
+                                    @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -97,6 +101,11 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/category?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
                 openCreateModal()
                 {
                     this.editmode=false;
@@ -115,7 +124,7 @@
                 },
                 getCategories()
                 {
-                    axios.get("api/category").then(({data}) => (this.categories =data.data));
+                    axios.get("api/category").then(({data}) => (this.categories =data));
                 },
                 createCategory()
                 {
@@ -194,6 +203,14 @@
             console.log('Component mounted.')
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findCategory?q='+query)
+                    .then((data)=>{
+                        this.categories = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getCategories();
             Fire.$on('afterCreate',()=>{this.getCategories()});
             //setInterval(()=>this.getCategories(), 3000);

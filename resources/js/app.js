@@ -43,6 +43,7 @@ const routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/categories', component: require('./components/Categories.vue').default },
+    { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/products', component: require('./components/Products.vue').default },
     { path: '/expenses', component: require('./components/Expenses.vue').default },
     { path: '/sales', component: require('./components/Sales.vue').default },
@@ -78,7 +79,22 @@ window.Fire = Fire;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+Vue.component('pagination', require('laravel-vue-pagination'));
 
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
@@ -89,5 +105,14 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data:{
+        search:''
+    },
+    methods:{
+        searchit:_.debounce(()=>
+        {
+            Fire.$emit('searching')
+        },1200)
+    }
 });

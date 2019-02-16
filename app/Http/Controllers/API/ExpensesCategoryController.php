@@ -107,4 +107,19 @@ class ExpensesCategoryController extends Controller
         $expensesCategory->delete();
         return['message' => 'Expenses Category Deleted'];
     }
+
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $expensescategories= ExpensesCategory::where(function ($query) use($search)
+            {
+                $query->where('name','LIKE',"%$search%")
+                    ->orWhere('description','LIKE',"%$search%");
+            })->paginate(10);
+            return $expensescategories;
+        }
+
+        return $expensescategories=ExpensesCategory::latest()->paginate(10);
+    }
 }
