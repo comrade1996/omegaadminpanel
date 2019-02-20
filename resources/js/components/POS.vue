@@ -92,8 +92,8 @@
             {
 
                 addsell(product){
-
-                      this.sells.push({product})
+                    if(!this.sells.contain(product))
+                      this.sells.push(product)
 
                     console.log(typeof this.sells)
                     console.log(typeof this.sells)

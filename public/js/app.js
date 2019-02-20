@@ -2613,9 +2613,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   },
   methods: {
     addsell: function addsell(product) {
-      this.sells.push({
-        product: product
-      });
+      if (!this.sells.contain(product)) this.sells.push(product);
       console.log(_typeof(this.sells));
       console.log(_typeof(this.sells));
     },
