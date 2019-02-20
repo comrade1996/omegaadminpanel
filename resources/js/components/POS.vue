@@ -65,7 +65,7 @@
                             </tbody></table>
                     </div>
 
-                    <button class="btn btn-flat btn-success" @click="openCreateModal">Submit</button>
+                    <button class="btn btn-flat btn-success" @click="">Submit</button>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -84,7 +84,7 @@
 
             return{
                 products:{},
-                sells:{}
+                sells:[]
 
             }
         },
@@ -92,11 +92,10 @@
             {
 
                 addsell(product){
-                    if(!this.sells.contain(product))
                       this.sells.push(product)
 
                     console.log(typeof this.sells)
-                    console.log(typeof this.sells)
+                    console.log(this.sells)
                 },
                 removesell(product){},
                 getResults(page = 1) {

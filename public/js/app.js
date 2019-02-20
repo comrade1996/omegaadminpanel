@@ -2608,14 +2608,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   data: function data() {
     return {
       products: {},
-      sells: {}
+      sells: []
     };
   },
   methods: {
     addsell: function addsell(product) {
-      if (!this.sells.contain(product)) this.sells.push(product);
+      this.sells.push(product);
       console.log(_typeof(this.sells));
-      console.log(_typeof(this.sells));
+      console.log(this.sells);
     },
     removesell: function removesell(product) {},
     getResults: function getResults() {
@@ -63541,7 +63541,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-flat btn-success",
-              on: { click: _vm.openCreateModal }
+              on: { click: function($event) {} }
             },
             [_vm._v("Submit")]
           )
