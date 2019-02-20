@@ -64,6 +64,23 @@
 
                             </tbody></table>
                     </div>
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>Sub Total</td>
+                            <td>Discount</td>
+                            <td>Grand Total</td>
+                        </tr>
+                        <tr>
+                            <td>{{subtotal}}</td>
+                            <td><input v-model="discount" type="number" name="discount"></td>
+                            <td>{{grandtotal}}</td>
+                        </tr>
+                        </tbody></table>
 
                     <button class="btn btn-flat btn-success" @click="">Submit</button>
                     <!-- /.card-body -->
