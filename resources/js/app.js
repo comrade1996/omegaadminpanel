@@ -10,6 +10,7 @@ window.Vue = require('vue');
 import {Form, HasError, AlertError} from 'vform'
 import moment from 'moment'
 
+
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 window.Form = Form;
@@ -48,9 +49,9 @@ const routes = [
     { path: '/expenses', component: require('./components/Expenses.vue').default },
     { path: '/sales', component: require('./components/Sales.vue').default },
     { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default }
+    { path: '/users', component: require('./components/Users.vue').default },
+    { path: '/pos', component: require('./components/POS.vue').default }
   ];
-
 const router = new VueRouter({
     mode: 'history',
     routes
@@ -116,3 +117,4 @@ const app = new Vue({
         },1200)
     }
 });
+

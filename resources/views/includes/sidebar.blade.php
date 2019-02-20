@@ -33,6 +33,14 @@
                         </p>
                     </router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link to="/pos" class="nav-link">
+                        <i class="nav-icon fas fa-cash-register text-blue"></i>
+                        <p>
+                            POS
+                        </p>
+                    </router-link>
+                </li>
                 <li class="nav-item has-treeview  ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog text-green"></i>
