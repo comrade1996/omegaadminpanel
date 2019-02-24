@@ -2623,6 +2623,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
+    var subtotal = 0;
+    var grandtotal = 0;
+
+    discount: '0';
+
     return {
       products: {},
       sells: []
@@ -2630,11 +2635,49 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   },
   methods: {
     addsell: function addsell(product) {
-      this.sells.push(product);
+      var added = false;
+      var tempProduct = product;
+      this.sells.forEach(function (element) {
+        if (element.id == tempProduct.id) {
+          element.quantity++;
+          added = true;
+        }
+      });
+
+      if (!added) {
+        tempProduct.quantity = 1;
+        console.log(product.quantity);
+        this.sells.push(tempProduct);
+      }
+
       console.log(_typeof(this.sells));
       console.log(this.sells);
+      this.subtotalcalculation();
+      this.grandtotalcalculation();
     },
-    removesell: function removesell(product) {},
+    removesell: function removesell(product) {
+      var removed = false;
+      var tempProduct = product;
+      this.sells.forEach(function (element) {
+        if (element.id == tempProduct.id && element.quantity > 1) {
+          element.quantity--;
+          removed = true;
+        }
+      });
+      this.subtotalcalculation();
+      this.grandtotalcalculation();
+    },
+    subtotalcalculation: function subtotalcalculation() {
+      var tempSubtotal = 0;
+      this.sells.forEach(function (element) {
+        tempSubtotal = tempSubtotal + element.quantity * element.sellingprice;
+      });
+      this.subtotal = tempSubtotal;
+    },
+    grandtotalcalculation: function grandtotalcalculation() {
+      console.log();
+      this.grandtotal = this.subtotal - this.discount.toInteger();
+    },
     getResults: function getResults() {
       var _this = this;
 
@@ -63561,7 +63604,7 @@ var render = function() {
               _vm._m(5),
               _vm._v(" "),
               _c("tr", [
-                _c("td", [_vm._v(_vm._s(_vm.subtotal))]),
+                _c("td", [_vm._v(_vm._s(this.subtotal))]),
                 _vm._v(" "),
                 _c("td", [
                   _c("input", {
@@ -63573,7 +63616,11 @@ var render = function() {
                         expression: "discount"
                       }
                     ],
-                    attrs: { type: "number", name: "discount" },
+                    attrs: {
+                      type: "number",
+                      onchange: "this.grandtotalcalculation()",
+                      name: "discount"
+                    },
                     domProps: { value: _vm.discount },
                     on: {
                       input: function($event) {
@@ -63586,7 +63633,7 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.grandtotal))])
+                _c("td", [_vm._v(_vm._s(this.grandtotal))])
               ])
             ])
           ]),

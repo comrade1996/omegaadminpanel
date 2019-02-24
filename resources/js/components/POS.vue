@@ -76,9 +76,9 @@
                             <td>Grand Total</td>
                         </tr>
                         <tr>
-                            <td>{{subtotal}}</td>
-                            <td><input v-model="discount" type="number" name="discount"></td>
-                            <td>{{grandtotal}}</td>
+                            <td>{{this.subtotal}}</td>
+                            <td><input type="number"  onchange="this.grandtotalcalculation()" v-model="discount" name="discount"></td>
+                            <td>{{this.grandtotal}}</td>
                         </tr>
                         </tbody></table>
 
@@ -98,23 +98,69 @@
     export default {
         data()
         {
+           var subtotal=0;
+               var grandtotal=0;
 
+            discount:'0'
             return{
                 products:{},
                 sells:[]
-
             }
         },
         methods:
             {
 
                 addsell(product){
-                      this.sells.push(product)
+                    var added=false;
+                    var tempProduct=product;
+                        this.sells.forEach(function (element) {
+                            if (element.id == tempProduct.id) {
+                                element.quantity++;
+                                added = true
+                            }
+                        });
+                if(!added)
+                    {
+                        tempProduct.quantity=1;
 
-                    console.log(typeof this.sells)
-                    console.log(this.sells)
+                        console.log(product.quantity);
+                        this.sells.push(tempProduct)
+                    }
+
+                    console.log(typeof this.sells);
+                    console.log(this.sells);
+
+                    this.subtotalcalculation();
+                    this.grandtotalcalculation()
                 },
-                removesell(product){},
+                removesell(product)
+                {
+                    var removed=false;
+                    var tempProduct=product;
+                    this.sells.forEach(function (element) {
+                        if (element.id == tempProduct.id && element.quantity>1) {
+                            element.quantity--;
+                            removed = true
+                        }
+
+
+                    });
+
+                    this.subtotalcalculation();
+                    this.grandtotalcalculation()
+                },
+                subtotalcalculation()
+                {
+                    var tempSubtotal=0;
+                    this.sells.forEach(function (element) {
+                        tempSubtotal=tempSubtotal+(element.quantity*element.sellingprice)
+                    });
+                    this.subtotal=tempSubtotal;
+                },
+                grandtotalcalculation(){
+                    console.log()
+                    this.grandtotal=this.subtotal - this.discount.toInteger()
+                },
                 getResults(page = 1) {
                     axios.get('api/product?page=' + page)
                         .then(response => {
@@ -135,7 +181,7 @@
                                 'Updated!',
                                 'Your Product has been updated.',
                                 'success'
-                            )
+                            );
                             // this.$progress.finish();
                             $('#createProduct').modal('hide');
                             Fire.$emit('afterCreate');
