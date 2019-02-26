@@ -125,7 +125,7 @@ const app = new Vue({
         searchit:_.debounce(()=>
         {
             Fire.$emit('searching')
-        },1200)
+        },800)
     }
 });
 

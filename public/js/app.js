@@ -80895,7 +80895,7 @@ var app = new Vue({
   methods: {
     searchit: _.debounce(function () {
       Fire.$emit('searching');
-    }, 1200)
+    }, 800)
   }
 });
 
