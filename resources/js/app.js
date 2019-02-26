@@ -17,8 +17,19 @@ window.Form = Form;
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted,{
+    iconPack : 'material' // set your iconPack, defaults to material. material|fontawesome|custom-class
+});
 
 
+/*
+Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
+    theme: "bubble",
+    fullWidth:true,
+    duration:800
+})*/
 import VueProgressBar from 'vue-progressbar';
 
 Vue.use(VueProgressBar, {

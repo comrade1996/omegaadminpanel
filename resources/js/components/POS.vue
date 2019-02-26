@@ -76,9 +76,9 @@
                             <td>Grand Total</td>
                         </tr>
                         <tr>
-                            <td>{{this.subtotal}}</td>
-                            <td><input type="number"  onchange="this.grandtotalcalculation()" v-model="discount" name="discount"></td>
-                            <td>{{this.grandtotal}}</td>
+                            <td>{{subtotal}}</td>
+                            <td><input type="number"   onchange="grandtotalcalculation(discount)" v-model.number="discount" name="discount"></td>
+                            <td>{{subtotal}}</td>
                         </tr>
                         </tbody></table>
 
@@ -100,8 +100,8 @@
         {
            var subtotal=0;
                var grandtotal=0;
-
-            discount:'0'
+                    discount:'';
+            var disc=0
             return{
                 products:{},
                 sells:[]
@@ -112,21 +112,22 @@
 
                 addsell(product){
                     var added=false;
-                    var tempProduct=product;
+                    var tempProduct = JSON.parse(JSON.stringify(product));
                         this.sells.forEach(function (element) {
-                            if (element.id == tempProduct.id) {
+                            if (element.id == tempProduct.id && product.quantity>0) {
                                 element.quantity++;
+                                product.quantity--;
                                 added = true
                             }
                         });
-                if(!added)
+                if(!added && product.quantity>0)
                     {
                         tempProduct.quantity=1;
-
+                        product.quantity--;
                         console.log(product.quantity);
                         this.sells.push(tempProduct)
                     }
-
+                  //  this.$toasted.global.quantity();
                     console.log(typeof this.sells);
                     console.log(this.sells);
 
@@ -140,6 +141,10 @@
                     this.sells.forEach(function (element) {
                         if (element.id == tempProduct.id && element.quantity>1) {
                             element.quantity--;
+                            product.quantity++;
+                            removed = true
+                        }
+                        if (element.id == tempProduct.id && element.quantity==1) {
                             removed = true
                         }
 
@@ -157,9 +162,10 @@
                     });
                     this.subtotal=tempSubtotal;
                 },
-                grandtotalcalculation(){
+                grandtotalcalculation(discount){
                     console.log()
-                    this.grandtotal=this.subtotal - this.discount.toInteger()
+                    this.disc = parseInt(discount, 10);
+                    this.grandtotal=this.subtotal - this.disc
                 },
                 getResults(page = 1) {
                     axios.get('api/product?page=' + page)
