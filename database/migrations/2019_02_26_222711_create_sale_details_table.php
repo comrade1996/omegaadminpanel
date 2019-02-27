@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesTable extends Migration
+class CreateSaleDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateSalesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->unique();
-            $table->double('subtotal');
-            $table->double('discount')->default(0);
-            $table->double('grandtotal');
-            $table->softDeletes();
+        Schema::create('sale_details', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedBigInteger('sale_id');
+            $table->unsignedInteger('product_id');
+            $table->double('price');
+            $table->unsignedInteger('quantity');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateSalesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('sale_details');
     }
 }

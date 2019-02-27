@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Sales;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use phpseclib\Math\BigInteger;
 
 class SalesController extends Controller
 {
@@ -39,12 +41,14 @@ class SalesController extends Controller
     {
         $this->validate($request,
             [
+                'sale_id'=> 'required|numeric',
                 'subtotal' => 'required|numeric',
                 'discount' => 'numeric',
                 'grandtotal' => 'required|numeric'
             ]);
-
+        $saleid = mt_rand(100000, 999999);
         return Sales::create([
+            'id'=> $request['sale_id'],
             'subtotal' => $request['subtotal'],
             'discount' => $request['discount'],
             'grandtotal' => $request['grandtotal']

@@ -21,7 +21,7 @@
                                 <td>{{product.id}}</td>
                                 <td>{{product.name}}</td>
                                 <td>{{product.sellingprice}}</td>
-                                <td>{{product.quantity | capitalize}}</td>
+                                <td>{{product.quantity }}</td>
                                 <td>{{product.edate | readableDate }}</td>
                                 <td>
                                     <button  @click="addsell(product)"><i class="fas fa-plus-circle text-green"></i></button>
@@ -55,10 +55,10 @@
                                 <th>Quantity</th>
                                 <th>Price</th>
                             </tr>
-                            <tr v-for="sell in sells" :key="sell.id">
+                            <tr v-for="sell in sells" :key="sell.id" v-if="sell.quantity>0">
                                 <td>{{sell.id}}</td>
                                 <td>{{sell.name}}</td>
-                                <td>{{sell.quantity | capitalize}}</td>
+                                <td >{{sell.quantity }}</td>
                                 <td>{{sell.sellingprice}}</td>
                             </tr>
 
@@ -77,12 +77,12 @@
                         </tr>
                         <tr>
                             <td>{{subtotal}}</td>
-                            <td><input type="number"   onchange="grandtotalcalculation(discount)" v-model.number="discount" name="discount"></td>
-                            <td>{{subtotal}}</td>
+                            <td><input type="number" ref="discount" data-value="0" @input="grandtotalcalculation(discount)"   v-model="discount"></td>
+                            <td>{{grandtotal}}</td>
                         </tr>
                         </tbody></table>
 
-                    <button class="btn btn-flat btn-success" @click="">Submit</button>
+                    <button class="btn btn-flat btn-success" @click="updateSales">Submit</button>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -98,11 +98,14 @@
     export default {
         data()
         {
-           var subtotal=0;
-               var grandtotal=0;
-                    discount:'';
-            var disc=0
+           var subtotal;
+               var grandtotal;
+
+
             return{
+                 subtotal,
+             grandtotal,
+                discount:'',
                 products:{},
                 sells:[]
             }
@@ -124,27 +127,27 @@
                     {
                         tempProduct.quantity=1;
                         product.quantity--;
-                        console.log(product.quantity);
+
                         this.sells.push(tempProduct)
                     }
                   //  this.$toasted.global.quantity();
-                    console.log(typeof this.sells);
-                    console.log(this.sells);
-
+                    console.log(product.quantity)
                     this.subtotalcalculation();
-                    this.grandtotalcalculation()
+                    this.grandtotalcalculation(this.discount)
+
                 },
                 removesell(product)
                 {
                     var removed=false;
                     var tempProduct=product;
                     this.sells.forEach(function (element) {
-                        if (element.id == tempProduct.id && element.quantity>1) {
+                        if (element.id == tempProduct.id && element.quantity>0) {
                             element.quantity--;
                             product.quantity++;
                             removed = true
                         }
                         if (element.id == tempProduct.id && element.quantity==1) {
+                            this.sells.slice(indexOf(element))
                             removed = true
                         }
 
@@ -152,7 +155,6 @@
                     });
 
                     this.subtotalcalculation();
-                    this.grandtotalcalculation()
                 },
                 subtotalcalculation()
                 {
@@ -161,11 +163,74 @@
                         tempSubtotal=tempSubtotal+(element.quantity*element.sellingprice)
                     });
                     this.subtotal=tempSubtotal;
+                    this.grandtotalcalculation(this.discount)
+
                 },
                 grandtotalcalculation(discount){
-                    console.log()
-                    this.disc = parseInt(discount, 10);
-                    this.grandtotal=this.subtotal - this.disc
+                   var tempGrandtotal=0;
+                     var disc=0
+                    var disc = parseInt(discount, 10);
+                    var  tempsub =parseInt(this.subtotal, 10);
+                    tempGrandtotal=tempsub - disc;
+                    this.grandtotal = tempGrandtotal;
+
+
+
+                },
+                updateSales()
+                {
+                  //  var formData = new FormData();
+                   // formData.append('foo', 'bar');
+                    //this.$http.post('/api', formData)
+                    var id =Math.floor(Math.random()*90000) + 10000;
+
+                    axios.post('api/sales', {
+                        sale_id:id,
+                        subtotal: this.subtotal,
+                        grandtotal:this.grandtotal,
+                        discount:this.discount
+                    })
+                        .then( (response => {
+                            console.log(response);
+                            this.sells.forEach(function (element) {
+                                console.log("storing")
+
+                                axios.post('api/salesdetails', {
+                                    sale_id:id,
+                                    product_id: element.id,
+                                    quantity:element.quantity,
+                                    price:element.sellingprice
+                                })
+                                    .then(function (response) {
+                                        console.log(response);
+                                    })
+                                    .catch(function (error) {
+                                        console.log(error);
+                                    });
+
+                            });
+
+                            console.log("stored")
+                        }))
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                updateSalesDetails(sale_id, product_id, quantity,price)
+                {
+
+                    axios.post('api/salesdetails', {
+                        sale_id:sale_id,
+                        product_id: product_id,
+                        quantity:quantity,
+                        price:price
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 },
                 getResults(page = 1) {
                     axios.get('api/product?page=' + page)
@@ -179,8 +244,8 @@
                 updateProduct()
                 {
                     // this.$progress.start();
-                    console.log("hoola");
-                    this.form.put('api/product/'+this.form.id)
+
+                           this.form.put('api/product/'+this.form.id)
                         .then(()=>
                         {
                             swal.fire(
@@ -200,8 +265,8 @@
 
             },
         mounted() {
-            console.log('Component mounted.')
-        },
+
+                   },
         created() {
             Fire.$on('searching', () => {
                 let query =this.$parent.search;

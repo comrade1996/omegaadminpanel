@@ -2523,8 +2523,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 //
 //
 //
@@ -2623,13 +2621,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    var subtotal = 0;
-    var grandtotal = 0;
-
-    discount: '';
-
-    var disc = 0;
+    var subtotal;
+    var grandtotal;
     return {
+      subtotal: subtotal,
+      grandtotal: grandtotal,
+      discount: '',
       products: {},
       sells: []
     };
@@ -2649,32 +2646,30 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       if (!added && product.quantity > 0) {
         tempProduct.quantity = 1;
         product.quantity--;
-        console.log(product.quantity);
         this.sells.push(tempProduct);
       } //  this.$toasted.global.quantity();
 
 
-      console.log(_typeof(this.sells));
-      console.log(this.sells);
+      console.log(product.quantity);
       this.subtotalcalculation();
-      this.grandtotalcalculation();
+      this.grandtotalcalculation(this.discount);
     },
     removesell: function removesell(product) {
       var removed = false;
       var tempProduct = product;
       this.sells.forEach(function (element) {
-        if (element.id == tempProduct.id && element.quantity > 1) {
+        if (element.id == tempProduct.id && element.quantity > 0) {
           element.quantity--;
           product.quantity++;
           removed = true;
         }
 
         if (element.id == tempProduct.id && element.quantity == 1) {
+          this.sells.slice(indexOf(element));
           removed = true;
         }
       });
       this.subtotalcalculation();
-      this.grandtotalcalculation();
     },
     subtotalcalculation: function subtotalcalculation() {
       var tempSubtotal = 0;
@@ -2682,31 +2677,80 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         tempSubtotal = tempSubtotal + element.quantity * element.sellingprice;
       });
       this.subtotal = tempSubtotal;
+      this.grandtotalcalculation(this.discount);
     },
     grandtotalcalculation: function grandtotalcalculation(discount) {
-      console.log();
-      this.disc = parseInt(discount, 10);
-      this.grandtotal = this.subtotal - this.disc;
+      var tempGrandtotal = 0;
+      var disc = 0;
+      var disc = parseInt(discount, 10);
+      var tempsub = parseInt(this.subtotal, 10);
+      tempGrandtotal = tempsub - disc;
+      this.grandtotal = tempGrandtotal;
+    },
+    updateSales: function updateSales() {
+      var _this = this;
+
+      //  var formData = new FormData();
+      // formData.append('foo', 'bar');
+      //this.$http.post('/api', formData)
+      var id = Math.floor(Math.random() * 90000) + 10000;
+      axios.post('api/sales', {
+        sale_id: id,
+        subtotal: this.subtotal,
+        grandtotal: this.grandtotal,
+        discount: this.discount
+      }).then(function (response) {
+        console.log(response);
+
+        _this.sells.forEach(function (element) {
+          console.log("storing");
+          axios.post('api/salesdetails', {
+            sale_id: id,
+            product_id: element.id,
+            quantity: element.quantity,
+            price: element.sellingprice
+          }).then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            console.log(error);
+          });
+        });
+
+        console.log("stored");
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    updateSalesDetails: function updateSalesDetails(sale_id, product_id, quantity, price) {
+      axios.post('api/salesdetails', {
+        sale_id: sale_id,
+        product_id: product_id,
+        quantity: quantity,
+        price: price
+      }).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     getResults: function getResults() {
-      var _this = this;
+      var _this2 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('api/product?page=' + page).then(function (response) {
-        _this.users = response.data;
+        _this2.users = response.data;
       });
     },
     getProducts: function getProducts() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("api/product").then(function (_ref) {
         var data = _ref.data;
-        return _this2.products = data;
+        return _this3.products = data;
       });
     },
     updateProduct: function updateProduct() {
       // this.$progress.start();
-      console.log("hoola");
       this.form.put('api/product/' + this.form.id).then(function () {
         swal.fire('Updated!', 'Your Product has been updated.', 'success'); // this.$progress.finish();
 
@@ -2716,21 +2760,19 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       });
     }
   },
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  },
+  mounted: function mounted() {},
   created: function created() {
-    var _this3 = this;
+    var _this4 = this;
 
     Fire.$on('searching', function () {
-      var query = _this3.$parent.search;
+      var query = _this4.$parent.search;
       axios.get('api/findProduct?q=' + query).then(function (data) {
-        _this3.products = data.data;
+        _this4.products = data.data;
       }).catch(function () {});
     });
     this.getProducts();
     Fire.$on('afterCreate', function () {
-      _this3.getProducts();
+      _this4.getProducts();
     });
   }
 });
@@ -63764,9 +63806,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(product.sellingprice))]),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(_vm._f("capitalize")(product.quantity)))
-                      ]),
+                      _c("td", [_vm._v(_vm._s(product.quantity))]),
                       _vm._v(" "),
                       _c("td", [
                         _vm._v(_vm._s(_vm._f("readableDate")(product.edate)))
@@ -63841,17 +63881,17 @@ var render = function() {
                   _vm._m(3),
                   _vm._v(" "),
                   _vm._l(_vm.sells, function(sell) {
-                    return _c("tr", { key: sell.id }, [
-                      _c("td", [_vm._v(_vm._s(sell.id))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sell.name))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(_vm._f("capitalize")(sell.quantity)))
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(sell.sellingprice))])
-                    ])
+                    return sell.quantity > 0
+                      ? _c("tr", { key: sell.id }, [
+                          _c("td", [_vm._v(_vm._s(sell.id))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(sell.name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(sell.quantity))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(sell.sellingprice))])
+                        ])
+                      : _vm._e()
                   })
                 ],
                 2
@@ -63873,33 +63913,31 @@ var render = function() {
                     directives: [
                       {
                         name: "model",
-                        rawName: "v-model.number",
+                        rawName: "v-model",
                         value: _vm.discount,
-                        expression: "discount",
-                        modifiers: { number: true }
+                        expression: "discount"
                       }
                     ],
-                    attrs: {
-                      type: "number",
-                      onchange: "grandtotalcalculation(discount)",
-                      name: "discount"
-                    },
+                    ref: "discount",
+                    attrs: { type: "number", "data-value": "0" },
                     domProps: { value: _vm.discount },
                     on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                      input: [
+                        function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.discount = $event.target.value
+                        },
+                        function($event) {
+                          _vm.grandtotalcalculation(_vm.discount)
                         }
-                        _vm.discount = _vm._n($event.target.value)
-                      },
-                      blur: function($event) {
-                        _vm.$forceUpdate()
-                      }
+                      ]
                     }
                   })
                 ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.subtotal))])
+                _c("td", [_vm._v(_vm._s(_vm.grandtotal))])
               ])
             ])
           ]),
@@ -63908,7 +63946,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-flat btn-success",
-              on: { click: function($event) {} }
+              on: { click: _vm.updateSales }
             },
             [_vm._v("Submit")]
           )
