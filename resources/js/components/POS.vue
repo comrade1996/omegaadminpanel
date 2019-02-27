@@ -9,7 +9,8 @@
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
-                            <tbody><tr>
+                            <tbody>
+                            <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Price</th>
@@ -24,12 +25,15 @@
                                 <td>{{product.quantity | capitalize}}</td>
                                 <td>{{product.edate | readableDate }}</td>
                                 <td>
-                                    <button  @click="addsell(product)"><i class="fas fa-plus-circle text-green"></i></button>
+                                    <button @click="addSell(product)"><i class="fas fa-plus-circle text-green"></i>
+                                    </button>
                                     /
-                                    <button  @click="removesell(product)"> <i class="fas fa-minus-circle text-red"></i></button>
+                                    <button @click="removeSell(product)"><i class="fas fa-minus-circle text-red"></i>
+                                    </button>
                                 </td>
                             </tr>
-                            </tbody></table>
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -49,7 +53,8 @@
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
-                            <tbody><tr>
+                            <tbody>
+                            <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Quantity</th>
@@ -62,7 +67,8 @@
                                 <td>{{sell.sellingprice}}</td>
                             </tr>
 
-                            </tbody></table>
+                            </tbody>
+                        </table>
                     </div>
                     <table class="table table-hover">
                         <tbody>
@@ -80,7 +86,8 @@
                             <td><input v-model="discount" type="number" name="discount"></td>
                             <td>{{grandtotal}}</td>
                         </tr>
-                        </tbody></table>
+                        </tbody>
+                    </table>
 
                     <button class="btn btn-flat btn-success" @click="">Submit</button>
                     <!-- /.card-body -->
@@ -96,52 +103,49 @@
 
 <script>
     export default {
-        data()
-        {
+        data() {
 
-            return{
-                products:{},
-                sells:[]
+            return {
+                products: {},
+                sells: []
 
             }
         },
         methods:
             {
 
-                addsell(product){
-                      this.sells.push(product)
+                addSell(product) {
+                    this.sells.push(product);
 
-                    console.log(typeof this.sells)
-                    console.log(this.sells)
+                    console.log(typeof this.sells);
+                    console.log(this.sells);
                 },
-                removesell(product){},
+                removeSell(product) {
+                },
                 getResults(page = 1) {
                     axios.get('api/product?page=' + page)
                         .then(response => {
                             this.users = response.data;
-                        });},
-                getProducts()
-                {
-                    axios.get("api/product").then(({data}) => (this.products =data));
+                        });
                 },
-                updateProduct()
-                {
+                getProducts() {
+                    axios.get("api/product").then(({data}) => (this.products = data));
+                },
+                updateProduct() {
                     // this.$progress.start();
                     console.log("hoola");
-                    this.form.put('api/product/'+this.form.id)
-                        .then(()=>
-                        {
+                    this.form.put('api/product/' + this.form.id)
+                        .then(() => {
                             swal.fire(
                                 'Updated!',
                                 'Your Product has been updated.',
                                 'success'
-                            )
+                            );
                             // this.$progress.finish();
                             $('#createProduct').modal('hide');
                             Fire.$emit('afterCreate');
                         })
-                        .catch(()=>
-                        {
+                        .catch(() => {
                             //  this.$Progress.fail();
                         })
                 }
@@ -152,15 +156,18 @@
         },
         created() {
             Fire.$on('searching', () => {
-                let query =this.$parent.search;
-                axios.get('api/findProduct?q='+query)
-                    .then((data)=>{
+                let query = this.$parent.search;
+                axios.get('api/findProduct?q=' + query)
+                    .then((data) => {
                         this.products = data.data
                     })
-                    .catch(()=>{})
+                    .catch(() => {
+                    })
             });
             this.getProducts();
-            Fire.$on('afterCreate',()=>{this.getProducts()});
+            Fire.$on('afterCreate', () => {
+                this.getProducts()
+            });
 
 
         }
