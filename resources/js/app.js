@@ -17,12 +17,11 @@ window.Form = Form;
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
-import Toasted from 'vue-toasted';
+import Snotify from 'vue-snotify';
+// You also need to import the styles. If you're using webpack's css-loader, you can do so here:
+import 'vue-snotify/styles/material.css'; // or dark.css or simple.css
 
-Vue.use(Toasted,{
-    iconPack : 'material' // set your iconPack, defaults to material. material|fontawesome|custom-class
-});
-
+Vue.use(Snotify);
 
 /*
 Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
@@ -125,7 +124,7 @@ const app = new Vue({
         searchit:_.debounce(()=>
         {
             Fire.$emit('searching')
-        },800)
+        },500)
     }
 });
 

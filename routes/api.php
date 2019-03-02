@@ -29,3 +29,5 @@ Route::get('findExpensesCategory','API\ExpensesCategoryController@search');
 Route::get('findExpenses','API\ExpensesController@search');
 Route::get('findSales','API\SalesController@search');
 Route::get('findProduct','API\ProductController@search');
+Route::get('storesalesdetails','API\SalesDetailsController@persist');
+Route::post('persistproduct','API\ProductController@persist');

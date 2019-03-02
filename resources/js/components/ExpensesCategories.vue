@@ -107,7 +107,7 @@
                 getResults(page = 1) {
                     axios.get('api/expensescategory?page=' + page)
                         .then(response => {
-                            this.users = response.data;
+                            this.ExpensesCategories = response.data;
                         });},
                 openCreateModal() {
                     this.editmode = false;

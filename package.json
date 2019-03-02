@@ -33,6 +33,7 @@
         "vue-dual-list": "^1.0.0",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.0.2",
+        "vue-snotify": "^3.2.1",
         "vue-toasted": "^1.1.26"
     }
 }

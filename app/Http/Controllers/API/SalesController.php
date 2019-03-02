@@ -46,7 +46,7 @@ class SalesController extends Controller
                 'discount' => 'numeric',
                 'grandtotal' => 'required|numeric'
             ]);
-        $saleid = mt_rand(100000, 999999);
+       // $saleid = mt_rand(100000, 999999);
         return Sales::create([
             'id'=> $request['sale_id'],
             'subtotal' => $request['subtotal'],

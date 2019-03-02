@@ -1,4 +1,5 @@
 <template>
+
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-6">
@@ -40,6 +41,7 @@
                 <!-- /.card -->
             </div>
 
+
             <!-- /.Sells begin -->
             <div class="col-md-5">
                 <div class="card">
@@ -77,7 +79,7 @@
                         </tr>
                         <tr>
                             <td>{{subtotal}}</td>
-                            <td><input type="number" ref="discount" data-value="0" @input="grandtotalcalculation(discount)"   v-model="discount"></td>
+                            <td><input type="number"  value="0" @input="grandtotalcalculation(discount)"   v-model="discount"></td>
                             <td>{{grandtotal}}</td>
                         </tr>
                         </tbody></table>
@@ -112,7 +114,15 @@
         },
         methods:
             {
-
+                displayNotification() {
+                    console.log("notification")
+                    $('#erorrtype').toast('show')
+                    this.$snotify.simple({
+                        body: 'My Notification Body',
+                        title: 'Notification Title',
+                        config: {}
+                    });
+                },
                 addsell(product){
                     var added=false;
                     var tempProduct = JSON.parse(JSON.stringify(product));
@@ -169,7 +179,9 @@
                 grandtotalcalculation(discount){
                    var tempGrandtotal=0;
                      var disc=0
-                    var disc = parseInt(discount, 10);
+                    if(discount<1) {
+                        discount = 0;
+                    }var disc = parseInt(discount, 10);
                     var  tempsub =parseInt(this.subtotal, 10);
                     tempGrandtotal=tempsub - disc;
                     this.grandtotal = tempGrandtotal;
@@ -179,54 +191,53 @@
                 },
                 updateSales()
                 {
-                  //  var formData = new FormData();
-                   // formData.append('foo', 'bar');
-                    //this.$http.post('/api', formData)
+                  var pr=false
                     var id =Math.floor(Math.random()*90000) + 10000;
-
+                    var disc =this.discount;
+                    if(this.subtotal<1)
+                        this.displayNotification()
+                    if(disc<1) {
+                        disc = 0;
+                    }
                     axios.post('api/sales', {
                         sale_id:id,
                         subtotal: this.subtotal,
                         grandtotal:this.grandtotal,
-                        discount:this.discount
+                        discount:disc
                     })
                         .then( (response => {
-                            console.log(response);
-                            this.sells.forEach(function (element) {
-                                console.log("storing")
+                            tempsells:[];
+                            var tempsell;
+                            var sellsdata = JSON.stringify(this.sells);
+                            axios.post('api/salesdetails',{
+                                sale_id:id,
+                                sells:sellsdata
+                            })
+                                .then((data)=>{
+                                    console.log(data)
+                                    pr=true
 
-                                axios.post('api/salesdetails', {
-                                    sale_id:id,
-                                    product_id: element.id,
-                                    quantity:element.quantity,
-                                    price:element.sellingprice
+                                    this.updateProducts()
+                                    console.log("check")
                                 })
-                                    .then(function (response) {
-                                        console.log(response);
-                                    })
-                                    .catch(function (error) {
-                                        console.log(error);
-                                    });
-
-                            });
+                                .catch(()=>{})
 
                             console.log("stored")
                         }))
                         .catch(function (error) {
                             console.log(error);
                         });
-                },
-                updateSalesDetails(sale_id, product_id, quantity,price)
-                {
 
-                    axios.post('api/salesdetails', {
-                        sale_id:sale_id,
-                        product_id: product_id,
-                        quantity:quantity,
-                        price:price
+                },
+                updateProducts()
+                {
+                    var productsdata = JSON.stringify(this.sells);
+                    axios.post('api/persistproduct',{
+                        products:productsdata
                     })
                         .then(function (response) {
                             console.log(response);
+                            console.log("updated")
                         })
                         .catch(function (error) {
                             console.log(error);
@@ -240,32 +251,13 @@
                 getProducts()
                 {
                     axios.get("api/product").then(({data}) => (this.products =data));
-                },
-                updateProduct()
-                {
-                    // this.$progress.start();
-
-                           this.form.put('api/product/'+this.form.id)
-                        .then(()=>
-                        {
-                            swal.fire(
-                                'Updated!',
-                                'Your Product has been updated.',
-                                'success'
-                            );
-                            // this.$progress.finish();
-                            $('#createProduct').modal('hide');
-                            Fire.$emit('afterCreate');
-                        })
-                        .catch(()=>
-                        {
-                            //  this.$Progress.fail();
-                        })
                 }
+
 
             },
         mounted() {
 
+    console.log(this.discount)
                    },
         created() {
             Fire.$on('searching', () => {
