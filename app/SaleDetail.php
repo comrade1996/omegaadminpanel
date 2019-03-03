@@ -8,6 +8,8 @@ class SaleDetail extends Model
 {
     protected $fillable = ['sale_id', 'product_id', 'quantity', 'price'];
 
+    protected $table = 'sale_details';
+
     public function Sale()
     {
         return $this->belongsTo(Sales::class);

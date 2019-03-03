@@ -6,7 +6,14 @@
                     <div class="card-header">
                         <h3 class="card-title">Sales Details Table</h3>
                         <div class="card-tools">
+                            <form @submit.prevent="dateFilter(startdate,enddate)">
+                                Start Date<input type="date" data-provide="datepicker" name="startdate" v-model="startdate" required>
+                                    End Date
+                                    <input type="date" name="enddate" v-model="enddate" required>
 
+                                <button type="submit" class="btn btn-primary">search</button>
+                                <button onclick="getSalesDetails()" class="btn btn-primary">all</button>
+                            </form>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -21,11 +28,11 @@
                                 <th>Created At</th>
                                 <th>Modify</th>
                             </tr>
-                            <tr v-for="saledetail in salesDetails.data" :key="saledetail.id">
+                            <tr  v-for="saledetail in salesDetails">
                                 <td>{{saledetail.id}}</td>
                                 <td>{{saledetail.sale_id | capitalize}}</td>
-                                <td>{{saledetail.product.name | capitalize}}</td>
-                                <td>{{saledetail.product.quantity | capitalize}}</td>
+                                <td>{{saledetail.product_id }}</td>
+                                <td>{{saledetail.quantity}}</td>
                                 <td>{{saledetail.created_at | readableDate }}</td>
                                 <td>{{saledetail.updated_at | readableDate }}</td>
                             </tr>
@@ -33,10 +40,7 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
-                        <pagination :data="salesDetails"
-                                    @pagination-change-page="getResults"></pagination>
-                    </div>
+
                 </div>
                 <!-- /.card -->
             </div>
@@ -50,17 +54,31 @@
         data() {
 
             return {
-                editmode: true,
-                salesDetails: {}
+                salesDetails: {},
+                    startdate:'',
+                enddate:''
             }
         },
         methods:
             {
-                getResults(page = 1) {
-                    axios.get('api/salesdetails?page=' + page)
-                        .then(response => {
-                            this.salesDetails = response.data;
-                        });},
+                dateFilter(startdate,enddate)
+                {
+                    console.log("original data")
+                    console.log(this.salesDetails)
+
+                    axios.post('api/filtersalesdetails/' ,{
+                        startdate:startdate,
+                        enddate:enddate
+                    })
+                        .then((data) => {
+                            console.log("resonse data")
+                            console.log(data)
+                            this.salesDetails=data.data
+                        })
+                        .catch((response) => {
+                         console.log(response)
+                        })
+                },
                 getSalesDetails() {
                     axios.get("api/salesdetails").then(({data}) => (this.salesDetails = data.data));
                     console.log(this.salesDetails)

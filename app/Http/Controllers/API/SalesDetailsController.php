@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\SaleDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
 
 class SalesDetailsController extends Controller
 {
@@ -107,8 +108,9 @@ class SalesDetailsController extends Controller
         {
             $salesDetails= SaleDetail::where(function ($query) use($search)
             {
-                $query->where('name','LIKE',"%$search%")
-                    ->orWhere('description','LIKE',"%$search%");
+                $query->where('sale_id','LIKE',"%$search%")
+                    ->orWhere('productname','LIKE',"%$search%")
+                ->orWhere('price','LIKE',"%$search%");
             })->paginate(10);
             return $salesDetails;
         }
@@ -132,5 +134,18 @@ class SalesDetailsController extends Controller
         }
 
         return['message' => 'SalesDetails updated'];
+    }
+    public function dateFilter(Request $request)
+    {
+        $this->validate($request,
+            [
+                'startdate' => 'required|',
+                'enddate' => 'required'
+            ]);
+
+        $startdate =$request['startdate'];
+        $enddate =$request['enddate'];
+            $salesDetails = SaleDetail::whereBetween('created_at',[$startdate, $enddate])->get();
+            return $salesDetails;
     }
 }
