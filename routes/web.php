@@ -14,5 +14,11 @@
 
 Auth::routes();
 
+// Admin auth routes
+Route::get('admin/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login.form');
+Route::post('admin/login', 'Auth\AdminLoginController@login')->name('admin.login');
+
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('{path}', 'HomeController@index')->where('path','([A-z\d-\/_.]+)?');
+
