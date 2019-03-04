@@ -6,20 +6,21 @@
                     <div class="card-header">
                         <h3 class="card-title">Sales Details Table</h3>
                         <div class="card-tools">
+
                             <form @submit.prevent="dateFilter(startdate,enddate)">
                                 Start Date<input type="date" data-provide="datepicker" name="startdate" v-model="startdate" required>
                                     End Date
                                     <input type="date" name="enddate" v-model="enddate" required>
 
                                 <button type="submit" class="btn btn-primary">search</button>
-                                <button onclick="getSalesDetails()" class="btn btn-primary">all</button>
+                                <button type="button" @click="getSalesDetails" class="btn btn-primary">all</button>
                             </form>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                        <table class="table table-hover">
-                            <tbody>
+                        <table id="example"  class="table table-striped table-bordered">
+                            <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Sale Invoice</th>
@@ -28,13 +29,15 @@
                                 <th>Created At</th>
                                 <th>Modify</th>
                             </tr>
+                        </thead>
+                            <tbody>
                             <tr  v-for="saledetail in salesDetails">
-                                <td>{{saledetail.id}}</td>
-                                <td>{{saledetail.sale_id | capitalize}}</td>
-                                <td>{{saledetail.product_id }}</td>
-                                <td>{{saledetail.quantity}}</td>
-                                <td>{{saledetail.created_at | readableDate }}</td>
-                                <td>{{saledetail.updated_at | readableDate }}</td>
+                                <td v-if="saledetail.quantity>0 || null">{{saledetail.id}}</td>
+                                <td v-if="saledetail.quantity>0 || null">{{saledetail.sale_id | capitalize}}</td>
+                                <td v-if="saledetail.quantity>0 || null">{{saledetail.product.name }}</td>
+                                <td v-if="saledetail.quantity>0 || null">{{saledetail.quantity}}</td>
+                                <td v-if="saledetail.quantity>0 || null">{{saledetail.created_at  }}</td>
+                                <td v-if="saledetail.quantity>0 || null">{{saledetail.updated_at  }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -80,6 +83,8 @@
                         })
                 },
                 getSalesDetails() {
+                    this.startdate=''
+                    this.enddate=''
                     axios.get("api/salesdetails").then(({data}) => (this.salesDetails = data.data));
                     console.log(this.salesDetails)
                 }
@@ -90,9 +95,10 @@
         created() {
             Fire.$on('searching', () => {
                 let query =this.$parent.search;
-                axios.get('api/findsalesdetails?q='+query)
+                axios.get('api/findSaleDetail?q='+query)
                     .then((data)=>{
                         this.salesDetails = data.data
+                        console.log(this.salesDetails)
                     })
                     .catch(()=>{})
             });
@@ -104,4 +110,5 @@
 
         }
     }
+
 </script>

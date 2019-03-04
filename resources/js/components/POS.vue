@@ -1,6 +1,7 @@
 <template>
 
     <div class="container">
+        <tostini-plate class="tostini-plate"/>
         <div class="row mt-5">
             <div class="col-md-6">
                 <div class="card">
@@ -49,6 +50,8 @@
                         <h3 class="card-title">Sells</h3>
                     </div>
                     <!-- /.card-header -->
+
+                    <div id="printMe" >
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody><tr>
@@ -83,8 +86,11 @@
                             <td>{{grandtotal}}</td>
                         </tr>
                         </tbody></table>
+                        </div>
+                    <button class="btn btn-flat btn-success print" @click="updateSales">Submit</button>
 
-                    <button class="btn btn-flat btn-success" @click="updateSales">Submit</button>
+                    <button v-print="'#printMe'">Submit</button>
+
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -151,13 +157,13 @@
                     var removed=false;
                     var tempProduct=product;
                     this.sells.forEach(function (element) {
-                        if (element.id == tempProduct.id && element.quantity>0) {
+                        if (element.id == tempProduct.id && element.quantity>0 &&!removed) {
                             element.quantity--;
                             product.quantity++;
                             removed = true
                         }
-                        if (element.id == tempProduct.id && element.quantity==1) {
-                            this.sells.slice(indexOf(element))
+                        if (element.id == tempProduct.id && element.quantity==0 && !removed) {
+                            this.sells.slice(indexOf(element),1)
                             removed = true
                         }
 
@@ -194,8 +200,6 @@
                   var pr=false
                     var id =Math.floor(Math.random()*90000) + 10000;
                     var disc =this.discount;
-                    if(this.subtotal<1)
-                        this.displayNotification()
                     if(disc<1) {
                         disc = 0;
                     }
@@ -270,8 +274,17 @@
             });
             this.getProducts();
             Fire.$on('afterCreate',()=>{this.getProducts()});
-
+            this.$tostini({
+                message: 'Delicious!',
+                type: 'success'
+            });
 
         }
     }
+
+    $(function() {
+        $("#printable").find('.print').on('click', function() {
+            $.print("#printable");
+        });
+    });
 </script>

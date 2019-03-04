@@ -16,7 +16,7 @@ class SalesDetailsController extends Controller
      */
     public function index()
     {
-        return SaleDetail::latest()->paginate(10);
+        return SaleDetail::latest()->paginate(1000000);
     }
 
     /**
@@ -109,13 +109,13 @@ class SalesDetailsController extends Controller
             $salesDetails= SaleDetail::where(function ($query) use($search)
             {
                 $query->where('sale_id','LIKE',"%$search%")
-                    ->orWhere('productname','LIKE',"%$search%")
                 ->orWhere('price','LIKE',"%$search%");
-            })->paginate(10);
+            })->paginate(100);
             return $salesDetails;
         }
-
-        return $salesDetails=SaleDetail::latest()->paginate(10);
+        else {
+            return $salesDetails = SaleDetail::latest()->paginate(1000);
+        }
     }
 
     public function persist($sells,$id)
@@ -125,12 +125,15 @@ class SalesDetailsController extends Controller
         echo $sells[1];
         echo Request::get('q');
         foreach ($sells as $sell) {
+            if($sell->quantity ==0){
             $tempSell =new SaleDetail();
             $tempSell->id = $sellid;
             $tempSell->quantity = $sell->quantity;
             $tempSell->product_id = $sell->id;
             $tempSell->price = $sell->sellingprice;
             $tempSell->save();
+            }
+            echo $sell->quantity;
         }
 
         return['message' => 'SalesDetails updated'];

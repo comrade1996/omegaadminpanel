@@ -22,7 +22,12 @@ import Snotify from 'vue-snotify';
 import 'vue-snotify/styles/material.css'; // or dark.css or simple.css
 
 Vue.use(Snotify);
+import Print from 'vue-print-nb'
 
+Vue.use(Print);
+
+const vTostini = require('v-tostini');
+Vue.use(vTostini);
 /*
 Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
     theme: "bubble",
