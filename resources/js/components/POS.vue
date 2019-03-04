@@ -1,7 +1,6 @@
 <template>
 
     <div class="container">
-        <tostini-plate class="tostini-plate"/>
         <div class="row mt-5">
             <div class="col-md-6">
                 <div class="card">
@@ -42,6 +41,7 @@
                 <!-- /.card -->
             </div>
 
+            <tile  v-if="this.isLoading"></tile >
 
             <!-- /.Sells begin -->
             <div class="col-md-5">
@@ -87,9 +87,9 @@
                         </tr>
                         </tbody></table>
                         </div>
-                    <button class="btn btn-flat btn-success print" @click="updateSales">Submit</button>
-
-                    <button v-print="'#printMe'">Submit</button>
+                    <button class="btn btn-flat btn-success" @click="updateSales">Submit</button>
+                    <button class="btn btn-flat btn-info" v-print="'#printMe'">Print</button>
+                    <button class="btn btn-flat btn-light" @click="clearSales">Reset</button>
 
                     <!-- /.card-body -->
                 </div>
@@ -111,6 +111,7 @@
 
 
             return{
+                isLoading: false,
                  subtotal,
              grandtotal,
                 discount:'',
@@ -120,33 +121,36 @@
         },
         methods:
             {
-                displayNotification() {
-                    console.log("notification")
-                    $('#erorrtype').toast('show')
-                    this.$snotify.simple({
-                        body: 'My Notification Body',
-                        title: 'Notification Title',
-                        config: {}
-                    });
+
+                clearSales() {
+                    this.$router.go()
                 },
                 addsell(product){
                     var added=false;
+                    var found=false;
                     var tempProduct = JSON.parse(JSON.stringify(product));
                         this.sells.forEach(function (element) {
-                            if (element.id == tempProduct.id && product.quantity>0) {
+                            if (element.id == tempProduct.id) {
+                                found=true
+                                if( product.quantity>0){
                                 element.quantity++;
                                 product.quantity--;
                                 added = true
+                                }
+                                else this.$toastr.error('Not egnough quantity', 'error')
                             }
+
                         });
-                if(!added && product.quantity>0)
+                if(!added && product.quantity>0 && !found)
                     {
                         tempProduct.quantity=1;
                         product.quantity--;
 
                         this.sells.push(tempProduct)
-                    }
-                  //  this.$toasted.global.quantity();
+                    }else
+
+
+                    //  this.$toasted.global.quantity();
                     console.log(product.quantity)
                     this.subtotalcalculation();
                     this.grandtotalcalculation(this.discount)
@@ -197,19 +201,26 @@
                 },
                 updateSales()
                 {
+
                   var pr=false
                     var id =Math.floor(Math.random()*90000) + 10000;
                     var disc =this.discount;
                     if(disc<1) {
                         disc = 0;
                     }
+                    if(this.subtotal>1)
+                    {
+                        this.isLoading=true
+                        this.$Progress.get()
                     axios.post('api/sales', {
                         sale_id:id,
                         subtotal: this.subtotal,
                         grandtotal:this.grandtotal,
                         discount:disc
                     })
-                        .then( (response => {
+                        .then(
+
+                            (response => {
                             tempsells:[];
                             var tempsell;
                             var sellsdata = JSON.stringify(this.sells);
@@ -224,27 +235,41 @@
                                     this.updateProducts()
                                     console.log("check")
                                 })
-                                .catch(()=>{})
+                                .catch(()=>{
+                                    this.isLoading=false
+                                })
 
                             console.log("stored")
                         }))
                         .catch(function (error) {
                             console.log(error);
+                            this.isLoading=false
+                            this.$Progress.fail()
                         });
 
-                },
+                }},
                 updateProducts()
                 {
                     var productsdata = JSON.stringify(this.sells);
                     axios.post('api/persistproduct',{
                         products:productsdata
                     })
-                        .then(function (response) {
+                        .then( (response=> {
                             console.log(response);
                             console.log("updated")
-                        })
+                            this.$Progress.finish()
+                            this.isLoading=false
+                            swal.fire(
+                                'Sold!',
+                                'Your file has been Solded.',
+                                'success'
+                            )
+
+                        }))
                         .catch(function (error) {
                             console.log(error);
+                            this.isLoading=false
+                            this.$Progress.fail()
                         });
                 },
                 getResults(page = 1) {
@@ -274,10 +299,6 @@
             });
             this.getProducts();
             Fire.$on('afterCreate',()=>{this.getProducts()});
-            this.$tostini({
-                message: 'Delicious!',
-                type: 'success'
-            });
 
         }
     }

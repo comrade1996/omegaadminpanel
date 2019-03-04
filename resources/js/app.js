@@ -25,9 +25,14 @@ Vue.use(Snotify);
 import Print from 'vue-print-nb'
 
 Vue.use(Print);
+import VueToastr2 from 'vue-toastr-2'
+import 'vue-toastr-2/dist/vue-toastr-2.min.css'
+window.toastr = require('toastr')
+Vue.use(VueToastr2)
 
-const vTostini = require('v-tostini');
-Vue.use(vTostini);
+import Vue from 'vue'
+import VueSpinners from 'vue-spinners'
+Vue.use(VueSpinners)
 /*
 Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
     theme: "bubble",
