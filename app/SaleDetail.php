@@ -7,20 +7,27 @@ use Illuminate\Database\Eloquent\Model;
 class SaleDetail extends Model
 {
     protected $fillable = ['sale_id', 'product_id', 'quantity', 'price'];
-    public $timestamps = false;
+    protected   $productName;
+    protected $table = 'sale_details';
+    protected $with=['product'];
 
-    public function order()
+    public function Sale()
     {
         return $this->belongsTo(Sales::class);
     }
 
     public function product()
     {
-        return $this->belongsTo('App\Product', 'product_id', 'product_id');
+        return $this->belongsTo('App\Product');
     }
 
     public function getProducts()
     {
         $products = collect();
+    }
+
+    public function getProductName()
+    {
+        $productName = $this->product()->name;
     }
 }

@@ -17,13 +17,22 @@ window.Form = Form;
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
-import Toasted from 'vue-toasted';
+import Snotify from 'vue-snotify';
+// You also need to import the styles. If you're using webpack's css-loader, you can do so here:
+import 'vue-snotify/styles/material.css'; // or dark.css or simple.css
 
-Vue.use(Toasted,{
-    iconPack : 'material' // set your iconPack, defaults to material. material|fontawesome|custom-class
-});
+Vue.use(Snotify);
+import Print from 'vue-print-nb'
 
+Vue.use(Print);
+import VueToastr2 from 'vue-toastr-2'
+import 'vue-toastr-2/dist/vue-toastr-2.min.css'
+window.toastr = require('toastr')
+Vue.use(VueToastr2)
 
+import Vue from 'vue'
+import VueSpinners from 'vue-spinners'
+Vue.use(VueSpinners)
 /*
 Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
     theme: "bubble",
@@ -125,7 +134,7 @@ const app = new Vue({
         searchit:_.debounce(()=>
         {
             Fire.$emit('searching')
-        },800)
+        },500)
     }
 });
 

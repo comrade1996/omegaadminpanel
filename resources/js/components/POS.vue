@@ -1,4 +1,5 @@
 <template>
+
     <div class="container">
         <div class="row mt-5">
             <div class="col-md-6">
@@ -40,6 +41,8 @@
                 <!-- /.card -->
             </div>
 
+            <tile  v-if="this.isLoading"></tile >
+
             <!-- /.Sells begin -->
             <div class="col-md-5">
                 <div class="card">
@@ -47,6 +50,8 @@
                         <h3 class="card-title">Sells</h3>
                     </div>
                     <!-- /.card-header -->
+
+                    <div id="printMe" >
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody><tr>
@@ -77,12 +82,15 @@
                         </tr>
                         <tr>
                             <td>{{subtotal}}</td>
-                            <td><input type="number" ref="discount" data-value="0" @input="grandtotalcalculation(discount)"   v-model="discount"></td>
+                            <td><input type="number"  value="0" @input="grandtotalcalculation(discount)"   v-model="discount"></td>
                             <td>{{grandtotal}}</td>
                         </tr>
                         </tbody></table>
-
+                        </div>
                     <button class="btn btn-flat btn-success" @click="updateSales">Submit</button>
+                    <button class="btn btn-flat btn-info" v-print="'#printMe'">Print</button>
+                    <button class="btn btn-flat btn-light" @click="clearSales">Reset</button>
+
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -103,6 +111,7 @@
 
 
             return{
+                isLoading: false,
                  subtotal,
              grandtotal,
                 discount:'',
@@ -113,24 +122,35 @@
         methods:
             {
 
+                clearSales() {
+                    this.$router.go()
+                },
                 addsell(product){
                     var added=false;
+                    var found=false;
                     var tempProduct = JSON.parse(JSON.stringify(product));
                         this.sells.forEach(function (element) {
-                            if (element.id == tempProduct.id && product.quantity>0) {
+                            if (element.id == tempProduct.id) {
+                                found=true
+                                if( product.quantity>0){
                                 element.quantity++;
                                 product.quantity--;
                                 added = true
+                                }
+                                else this.$toastr.error('Not egnough quantity', 'error')
                             }
+
                         });
-                if(!added && product.quantity>0)
+                if(!added && product.quantity>0 && !found)
                     {
                         tempProduct.quantity=1;
                         product.quantity--;
 
                         this.sells.push(tempProduct)
-                    }
-                  //  this.$toasted.global.quantity();
+                    }else
+
+
+                    //  this.$toasted.global.quantity();
                     console.log(product.quantity)
                     this.subtotalcalculation();
                     this.grandtotalcalculation(this.discount)
@@ -141,13 +161,13 @@
                     var removed=false;
                     var tempProduct=product;
                     this.sells.forEach(function (element) {
-                        if (element.id == tempProduct.id && element.quantity>0) {
+                        if (element.id == tempProduct.id && element.quantity>0 &&!removed) {
                             element.quantity--;
                             product.quantity++;
                             removed = true
                         }
-                        if (element.id == tempProduct.id && element.quantity==1) {
-                            this.sells.slice(indexOf(element))
+                        if (element.id == tempProduct.id && element.quantity==0 && !removed) {
+                            this.sells.slice(indexOf(element),1)
                             removed = true
                         }
 
@@ -169,7 +189,9 @@
                 grandtotalcalculation(discount){
                    var tempGrandtotal=0;
                      var disc=0
-                    var disc = parseInt(discount, 10);
+                    if(discount<1) {
+                        discount = 0;
+                    }var disc = parseInt(discount, 10);
                     var  tempsub =parseInt(this.subtotal, 10);
                     tempGrandtotal=tempsub - disc;
                     this.grandtotal = tempGrandtotal;
@@ -179,57 +201,75 @@
                 },
                 updateSales()
                 {
-                  //  var formData = new FormData();
-                   // formData.append('foo', 'bar');
-                    //this.$http.post('/api', formData)
-                    var id =Math.floor(Math.random()*90000) + 10000;
 
+                  var pr=false
+                    var id =Math.floor(Math.random()*90000) + 10000;
+                    var disc =this.discount;
+                    if(disc<1) {
+                        disc = 0;
+                    }
+                    if(this.subtotal>1)
+                    {
+                        this.isLoading=true
+                        this.$Progress.get()
                     axios.post('api/sales', {
                         sale_id:id,
                         subtotal: this.subtotal,
                         grandtotal:this.grandtotal,
-                        discount:this.discount
+                        discount:disc
                     })
-                        .then( (response => {
-                            console.log(response);
-                            this.sells.forEach(function (element) {
-                                console.log("storing")
+                        .then(
 
-                                axios.post('api/salesdetails', {
-                                    sale_id:id,
-                                    product_id: element.id,
-                                    quantity:element.quantity,
-                                    price:element.sellingprice
+                            (response => {
+                            tempsells:[];
+                            var tempsell;
+                            var sellsdata = JSON.stringify(this.sells);
+                            axios.post('api/salesdetails',{
+                                sale_id:id,
+                                sells:sellsdata
+                            })
+                                .then((data)=>{
+                                    console.log(data)
+                                    pr=true
+
+                                    this.updateProducts()
+                                    console.log("check")
                                 })
-                                    .then(function (response) {
-                                        console.log(response);
-                                    })
-                                    .catch(function (error) {
-                                        console.log(error);
-                                    });
-
-                            });
+                                .catch(()=>{
+                                    this.isLoading=false
+                                })
 
                             console.log("stored")
                         }))
                         .catch(function (error) {
                             console.log(error);
+                            this.isLoading=false
+                            this.$Progress.fail()
                         });
-                },
-                updateSalesDetails(sale_id, product_id, quantity,price)
-                {
 
-                    axios.post('api/salesdetails', {
-                        sale_id:sale_id,
-                        product_id: product_id,
-                        quantity:quantity,
-                        price:price
+                }},
+                updateProducts()
+                {
+                    var productsdata = JSON.stringify(this.sells);
+                    axios.post('api/persistproduct',{
+                        products:productsdata
                     })
-                        .then(function (response) {
+                        .then( (response=> {
                             console.log(response);
-                        })
+                            console.log("updated")
+                            this.$Progress.finish()
+                            this.isLoading=false
+                            swal.fire(
+                                'Sold!',
+                                'Your file has been Solded.',
+                                'success'
+                            )
+
+                        }))
                         .catch(function (error) {
                             console.log(error);
+                            this.isLoading=false
+                            this.$Progress.fail()
                         });
                 },
                 getResults(page = 1) {
@@ -240,32 +280,13 @@
                 getProducts()
                 {
                     axios.get("api/product").then(({data}) => (this.products =data));
-                },
-                updateProduct()
-                {
-                    // this.$progress.start();
-
-                           this.form.put('api/product/'+this.form.id)
-                        .then(()=>
-                        {
-                            swal.fire(
-                                'Updated!',
-                                'Your Product has been updated.',
-                                'success'
-                            );
-                            // this.$progress.finish();
-                            $('#createProduct').modal('hide');
-                            Fire.$emit('afterCreate');
-                        })
-                        .catch(()=>
-                        {
-                            //  this.$Progress.fail();
-                        })
                 }
+
 
             },
         mounted() {
 
+    console.log(this.discount)
                    },
         created() {
             Fire.$on('searching', () => {
@@ -279,7 +300,12 @@
             this.getProducts();
             Fire.$on('afterCreate',()=>{this.getProducts()});
 
-
         }
     }
+
+    $(function() {
+        $("#printable").find('.print').on('click', function() {
+            $.print("#printable");
+        });
+    });
 </script>

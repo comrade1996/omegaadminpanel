@@ -29,3 +29,7 @@ Route::get('findExpensesCategory','API\ExpensesCategoryController@search');
 Route::get('findExpenses','API\ExpensesController@search');
 Route::get('findSales','API\SalesController@search');
 Route::get('findProduct','API\ProductController@search');
+Route::get('findSaleDetail','API\SalesDetailsController@search');
+Route::get('storesalesdetails','API\SalesDetailsController@persist');
+Route::post('filtersalesdetails','API\SalesDetailsController@dateFilter');
+Route::post('persistproduct','API\ProductController@persist');
