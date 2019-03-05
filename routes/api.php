@@ -21,6 +21,7 @@ Route::apiResources(['category'=>'API\CategoryController']);
 Route::apiResources(['expensescategory'=>'API\ExpensesCategoryController']);
 Route::apiResources(['expenses'=>'API\ExpensesController']);
 Route::apiResources(['sales'=>'API\SalesController']);
+Route::apiResources(['salesdetails'=>'API\SalesDetailsController']);
 Route::apiResources(['product'=>'API\ProductController']);
 Route::get('findUser','API\UserController@search');
 Route::get('findCategory','API\CategoryController@search');

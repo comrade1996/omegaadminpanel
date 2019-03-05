@@ -34,8 +34,8 @@
                                 <td>{{product.company | capitalize}}</td>
                                 <td>{{product.category.name | capitalize}}</td>
                                 <td>{{product.edate | readableDate }}</td>
-                                <td>{{product.created_at | readableDate }}</td>
-                                <td>{{product.updated_at | readableDate }}</td>
+                                <td>{{product.created_at }}</td>
+                                <td>{{product.updated_at }}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(product)">
                                         <i class="fas fa-pencil-alt text-blue"></i>
