@@ -89,7 +89,8 @@
                     console.log(this.salesDetails)
                 }
             },
-        mounted() {
+       async mounted() {
+            this.getSalesDetails();
             console.log('Component mounted.')
         },
         created() {
@@ -102,10 +103,11 @@
                     })
                     .catch(()=>{})
             });
-            this.getSalesDetails();
+
             Fire.$on('afterCreate', () => {
                 this.getSalesDetails()
             });
+
             // setInterval(()=>this.getExpensesCategories(), 3000);
 
         }

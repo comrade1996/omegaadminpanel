@@ -124,8 +124,7 @@
                 users: {},
                 items: [
                     {id: 1, label: 'Admin'},
-                    {id: 2, label: 'User'},
-                    {id: 3, label: 'Author'}
+                    {id: 0, label: 'User'}
                 ],
                 form: new Form({
                     id: '',
