@@ -6,37 +6,39 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Products</h3>
+                        <input placeholder="Search by Product Name" class="form-control" v-model="filters.name.value"/>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                        <table class="table table-hover">
-                            <tbody><tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Expire Date</th>
-                                <th>Options</th>
+                        <v-table :data="products"
+                                 :filters="filters"
+                                 class="table table-hover">
+                            <thead slot="head">
+                            <tr>
+                                <v-th  sortKey="id">ID</v-th>
+                                <v-th  sortKey="name">Name</v-th>
+                                <v-th  sortKey="sellingprice">Price</v-th>
+                                <v-th  sortKey="quantity">Quantity</v-th>
+                                <v-th  sortKey="edate">Expire Date</v-th>
+                                <v-th>Options</v-th>
                             </tr>
-                            <tr v-for="product in products.data" :key="product.id">
-                                <td>{{product.id}}</td>
-                                <td>{{product.name}}</td>
-                                <td>{{product.sellingprice}}</td>
-                                <td>{{product.quantity }}</td>
-                                <td>{{product.edate | readableDate }}</td>
+                            </thead>
+                            <tbody slot="body" slot-scope="{displayData}">
+                            <v-tr v-for="row in displayData" :key="row.guid">
+                                <td>{{row.id}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.sellingprice}}</td>
+                                <td>{{row.quantity }}</td>
+                                <td>{{row.edate | readableDate }}</td>
                                 <td>
-                                    <button  @click="addsell(product)"><i class="fas fa-plus-circle text-green"></i></button>
-                                    /
-                                    <button  @click="removesell(product)"> <i class="fas fa-minus-circle text-red"></i></button>
+                                    <button  @click="addsell(row)"><i class="fas fa-plus-circle text-green"></i></button>
+                                    <button  @click="removesell(row)"> <i class="fas fa-minus-circle text-red"></i></button>
                                 </td>
-                            </tr>
-                            </tbody></table>
+                            </v-tr>
+                            </tbody></v-table>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
-                        <pagination :data="products"
-                                    @pagination-change-page="getResults"></pagination>
-                    </div>
+
                 </div>
                 <!-- /.card -->
             </div>
@@ -111,6 +113,9 @@
 
 
             return{
+                filters: {
+                    name: { value: '', keys: ['name'] }
+                },
                 isLoading: false,
                  subtotal,
              grandtotal,
@@ -126,6 +131,7 @@
                     this.$router.go()
                 },
                 addsell(product){
+                    console.log(product)
                     var added=false;
                     var found=false;
                     var tempProduct = JSON.parse(JSON.stringify(product));
@@ -279,7 +285,7 @@
                         });},
                 getProducts()
                 {
-                    axios.get("api/product").then(({data}) => (this.products =data));
+                    axios.get("api/product").then(({data}) => (this.products =data.data));
                 }
 
 

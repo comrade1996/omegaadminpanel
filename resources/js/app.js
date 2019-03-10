@@ -17,11 +17,8 @@ window.Form = Form;
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
-import Snotify from 'vue-snotify';
-// You also need to import the styles. If you're using webpack's css-loader, you can do so here:
-import 'vue-snotify/styles/material.css'; // or dark.css or simple.css
-
-Vue.use(Snotify);
+import SmartTable from 'vuejs-smart-table'
+Vue.use(SmartTable)
 import Print from 'vue-print-nb'
 
 Vue.use(Print);
@@ -29,6 +26,7 @@ import VueToastr2 from 'vue-toastr-2'
 import 'vue-toastr-2/dist/vue-toastr-2.min.css'
 window.toastr = require('toastr')
 Vue.use(VueToastr2)
+
 
 import Vue from 'vue'
 import VueSpinners from 'vue-spinners'

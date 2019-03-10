@@ -54,7 +54,7 @@ class SalesDetailsController extends Controller
             $tempSell->save();
         }
 
-        return['message' => 'SalesDetails updated'];
+        redirect( view('invoice', compact($sells,$sellid)));
 
     }
 
@@ -114,7 +114,7 @@ class SalesDetailsController extends Controller
             return $salesDetails;
         }
         else {
-            return $salesDetails = SaleDetail::latest()->paginate(1000);
+            return $salesDetails = SaleDetail::latest()->paginate(100000);
         }
     }
 

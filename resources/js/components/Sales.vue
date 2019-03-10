@@ -5,46 +5,46 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Sales Table</h3>
+                        <input placeholder="Search by Invoice ID" class="form-control" v-model="filters.sale_id.value"/>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New sales <i class="fas fa-sales-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                        <table class="table table-hover">
-                            <tbody><tr>
-                                <th> Invoice ID</th>
-                                <th>Sub Total</th>
-                                <th>Discount</th>
-                                <th>Grand Total</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
-                                <th>Options</th>
+                        <v-table :data="sales"  :filters="filters"
+                                 class="table table-hover">
+                            <thead slot="head">
+                            <tr>
+                                <v-th sortKey="id"> Invoice ID</v-th>
+                                <v-th sortKey="subtotal">Sub Total</v-th>
+                                <v-th sortKey="discount">Discount</v-th>
+                                <v-th sortKey="grandtotal">Grand Total</v-th>
+                                <v-th sortKey="created_at">Created At</v-th>
+                                <v-th sortKey="updated_at">Modify</v-th>
+                                <v-th>Options</v-th>
                             </tr>
-                            <tr v-for="sale in sales.data" :key="sale.id">
-                                <td>{{sale.id}}</td>
-                                <td>{{sale.subtotal}}</td>
-                                <td>{{sale.discount}}</td>
-                                <td>{{sale.grandtotal}}</td>
-                                <td>{{sale.created_at | readableDate }}</td>
-                                <td>{{sale.updated_at | readableDate }}</td>
+                            </thead>
+                            <tbody slot="body" slot-scope="{displayData}">
+                            <v-tr v-for="row in displayData" :key="row.guid">
+                                <td>{{row.id}}</td>
+                                <td>{{row.subtotal}}</td>
+                                <td>{{row.discount}}</td>
+                                <td>{{row.grandtotal}}</td>
+                                <td>{{row.created_at | readableDate }}</td>
+                                <td>{{row.updated_at | readableDate }}</td>
                                 <td>
-                                    <a href="#" @click="openEditModal(sale)">
+                                    <a href="#" @click="openEditModal(row)">
                                         <i class="fas fa-pencil-alt text-blue"></i>
                                     </a>
                                     /
-                                    <a href="#" @click="deleteSales(sale.id)">
+                                    <a href="#" @click="deleteSales(row.id)">
                                         <i class="fas fa-trash text-red"></i>
                                     </a>
                                 </td>
-                            </tr>
-                            </tbody></table>
+                            </v-tr>
+                            </tbody></v-table>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
-                        <pagination :data="sales"
-                                    @pagination-change-page="getResults"></pagination>
-                    </div>
                 </div>
                 <!-- /.card -->
             </div>
@@ -98,6 +98,9 @@
         {
 
             return{
+                filters: {
+                    sale_id: { value: '', keys: ['id'] }
+                },
                 editmode:true,
                 sales:{},
                 form:new Form({
@@ -133,7 +136,7 @@
                 },
                 getSales()
                 {
-                    axios.get("api/sales").then(({data}) => (this.sales =data));
+                    axios.get("api/sales").then(({data}) => (this.sales =data.data));
                 },
                 createSales()
                 {

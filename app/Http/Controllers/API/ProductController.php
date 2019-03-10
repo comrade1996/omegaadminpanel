@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return Product::latest()->paginate(10);
+        return Product::latest()->paginate(100000);
     }
 
     /**

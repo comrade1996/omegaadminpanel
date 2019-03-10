@@ -5,6 +5,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Sales Details Table</h3>
+                        <input placeholder="Search by Invoice ID" class="form-control" v-model="filters.sale_id.value"/>
                         <div class="card-tools">
 
                             <form @submit.prevent="dateFilter(startdate,enddate)">
@@ -20,28 +21,30 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                        <table id="example" class="table table-striped table-bordered">
-                            <thead>
+                            <v-table :data="salesDetails"  :filters="filters"
+                                     class="table table-hover">
+                            <thead slot="head">
                             <tr>
-                                <th>ID</th>
-                                <th>Sale Invoice</th>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
+                                <v-th sortKey="id">ID</v-th>
+                                <v-th sortKey="sale_id">Sale Invoice</v-th>
+                                <v-th sortKey="product.name">Product</v-th>
+                                <v-th sortKey="quantity">Quantity</v-th>
+                                <v-th sortKey="created_at">Created At</v-th>
+                                <v-th sortKey="updated_at">Modify</v-th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr v-for="saledetail in salesDetails">
-                                <td v-if="saledetail.quantity>0 || null">{{saledetail.id}}</td>
-                                <td v-if="saledetail.quantity>0 || null">{{saledetail.sale_id | capitalize}}</td>
-                                <td v-if="saledetail.quantity>0 || null">{{saledetail.product.name }}</td>
-                                <td v-if="saledetail.quantity>0 || null">{{saledetail.quantity}}</td>
-                                <td v-if="saledetail.quantity>0 || null">{{saledetail.created_at }}</td>
-                                <td v-if="saledetail.quantity>0 || null">{{saledetail.updated_at }}</td>
-                            </tr>
+                                <tbody slot="body" slot-scope="{displayData}">
+                            <v-tr v-for="row in displayData" :key="row.guid">
+                                <td v-if=" row.quantity>0 || null">{{ row.id}}</td>
+                                <td v-if=" row.quantity>0 || null">{{ row.sale_id}}</td>
+                                <td v-if=" row.quantity>0 || null">{{ row.product.name }}</td>
+                                <td v-if=" row.quantity>0 || null">{{ row.quantity}}</td>
+                                <td v-if=" row.quantity>0 || null">{{ row.created_at }}</td>
+                                <td v-if=" row.quantity>0 || null">{{ row.updated_at }}</td>
+                            </v-tr>
                             </tbody>
-                        </table>
+                        </v-table>
+
                     </div>
                     <!-- /.card-body -->
 
@@ -58,7 +61,10 @@
         data() {
 
             return {
-                salesDetails: {},
+                filters: {
+                    sale_id: { value: '', keys: ['sale_id'] }
+                },
+                salesDetails: [],
                 startdate: '',
                 enddate: ''
             }
@@ -89,11 +95,12 @@
                     console.log(this.salesDetails)
                 }
             },
-       async mounted() {
-            this.getSalesDetails();
+     mounted() {
+         this.getSalesDetails()
             console.log('Component mounted.')
         },
         created() {
+
             Fire.$on('searching', () => {
                 let query = this.$parent.search;
                 axios.get('api/findSaleDetail?q=' + query)
