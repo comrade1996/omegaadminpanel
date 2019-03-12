@@ -2622,8 +2622,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2730,24 +2730,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
+    var _ref;
+
     var subtotal;
     var grandtotal;
-    return {
+    return _ref = {
+      subtotal: '',
+      grandtotal: '',
       filters: {
         name: {
           value: '',
           keys: ['name']
         }
       },
-      isLoading: false,
-      subtotal: subtotal,
-      grandtotal: grandtotal,
-      discount: '',
-      products: {},
-      sells: []
-    };
+      globalId: '',
+      isLoading: false
+    }, _defineProperty(_ref, "subtotal", subtotal), _defineProperty(_ref, "grandtotal", grandtotal), _defineProperty(_ref, "discount", ''), _defineProperty(_ref, "products", {}), _defineProperty(_ref, "sells", []), _ref;
   },
   methods: {
+    check: function check() {
+      var _this = this;
+
+      swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirm'
+      }).then(function (result) {
+        if (result.value) {
+          _this.updateSales();
+        }
+      });
+    },
+    int: function int() {
+      var x = JSON.stringify(this.sells);
+      var y = this.globalId;
+      var a = this.discount;
+      var i = this.subtotal;
+      var z = this.grandtotal;
+      window.open('api/invoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank'); //axios.get("api/invoice").then(({data}) => (console.log(data+"aaaaaaaaaa")));
+    },
     clearSales: function clearSales() {
       this.$router.go();
     },
@@ -2817,11 +2842,12 @@ __webpack_require__.r(__webpack_exports__);
       this.grandtotal = tempGrandtotal;
     },
     updateSales: function updateSales() {
-      var _this = this;
+      var _this2 = this;
 
       var pr = false;
       var id = Math.floor(Math.random() * 90000) + 10000;
       var disc = this.discount;
+      this.globalId = id;
 
       if (disc < 1) {
         disc = 0;
@@ -2839,7 +2865,7 @@ __webpack_require__.r(__webpack_exports__);
           tempsells: [];
 
           var tempsell;
-          var sellsdata = JSON.stringify(_this.sells);
+          var sellsdata = JSON.stringify(_this2.sells);
           axios.post('api/salesdetails', {
             sale_id: id,
             sells: sellsdata
@@ -2847,11 +2873,11 @@ __webpack_require__.r(__webpack_exports__);
             console.log(data);
             pr = true;
 
-            _this.updateProducts();
+            _this2.updateProducts();
 
             console.log("check");
           }).catch(function () {
-            _this.isLoading = false;
+            _this2.isLoading = false;
           });
           console.log("stored");
         }).catch(function (error) {
@@ -2862,7 +2888,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     updateProducts: function updateProducts() {
-      var _this2 = this;
+      var _this3 = this;
 
       var productsdata = JSON.stringify(this.sells);
       axios.post('api/persistproduct', {
@@ -2871,10 +2897,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
         console.log("updated");
 
-        _this2.$Progress.finish();
+        _this3.$Progress.finish();
 
-        _this2.isLoading = false;
+        _this3.isLoading = false;
         swal.fire('Sold!', 'Your file has been Solded.', 'success');
+
+        _this3.int();
+
+        _this3.clearSales();
       }).catch(function (error) {
         console.log(error);
         this.isLoading = false;
@@ -2882,19 +2912,19 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getResults: function getResults() {
-      var _this3 = this;
+      var _this4 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('api/product?page=' + page).then(function (response) {
-        _this3.users = response.data;
+        _this4.users = response.data;
       });
     },
     getProducts: function getProducts() {
-      var _this4 = this;
+      var _this5 = this;
 
-      axios.get("api/product").then(function (_ref) {
-        var data = _ref.data;
-        return _this4.products = data.data;
+      axios.get("api/product").then(function (_ref2) {
+        var data = _ref2.data;
+        return _this5.products = data.data;
       });
     }
   },
@@ -2902,17 +2932,17 @@ __webpack_require__.r(__webpack_exports__);
     console.log(this.discount);
   },
   created: function created() {
-    var _this5 = this;
+    var _this6 = this;
 
     Fire.$on('searching', function () {
-      var query = _this5.$parent.search;
+      var query = _this6.$parent.search;
       axios.get('api/findProduct?q=' + query).then(function (data) {
-        _this5.products = data.data;
+        _this6.products = data.data;
       }).catch(function () {});
     });
     this.getProducts();
     Fire.$on('afterCreate', function () {
-      _this5.getProducts();
+      _this6.getProducts();
     });
   }
 });
@@ -66842,34 +66872,9 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-flat btn-success",
-                on: { click: _vm.updateSales }
+                on: { click: _vm.check }
               },
               [_vm._v("Submit")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                directives: [
-                  {
-                    name: "print",
-                    rawName: "v-print",
-                    value: "#printMe",
-                    expression: "'#printMe'"
-                  }
-                ],
-                staticClass: "btn btn-flat btn-info"
-              },
-              [_vm._v("Print")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-flat btn-light",
-                on: { click: _vm.clearSales }
-              },
-              [_vm._v("Reset")]
             )
           ])
         ])

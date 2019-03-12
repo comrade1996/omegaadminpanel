@@ -25,6 +25,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
+                @if (Auth::user()->type == 1)
                 <li class="nav-item">
                     <router-link to="/dashboard" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt text-blue"></i>
@@ -33,6 +34,7 @@
                         </p>
                     </router-link>
                 </li>
+                @endif
                 <li class="nav-item">
                     <router-link to="/pos" class="nav-link">
                         <i class="nav-icon fas fa-cash-register text-blue"></i>
@@ -41,6 +43,7 @@
                         </p>
                     </router-link>
                 </li>
+                @if (Auth::user()->type == 1)
                 <li class="nav-item has-treeview  ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog text-green"></i>
@@ -141,6 +144,7 @@
                         </p>
                     </router-link>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                        onclick="event.preventDefault();

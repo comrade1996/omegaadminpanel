@@ -33,6 +33,6 @@ Route::get('findSaleDetail','API\SalesDetailsController@search');
 Route::get('storesalesdetails','API\SalesDetailsController@persist');
 Route::post('filtersalesdetails','API\SalesDetailsController@dateFilter');
 Route::post('persistproduct','API\ProductController@persist');
-Route::post('invoice', function () {
-    return view('invoice',id, data);
+Route::get('invoice', function () {
+    return view('invoice');
 });

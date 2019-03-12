@@ -89,9 +89,7 @@
                         </tr>
                         </tbody></table>
                         </div>
-                    <button class="btn btn-flat btn-success" @click="updateSales">Submit</button>
-                    <button class="btn btn-flat btn-info" v-print="'#printMe'">Print</button>
-                    <button class="btn btn-flat btn-light" @click="clearSales">Reset</button>
+                    <button class="btn btn-flat btn-success" @click="check">Submit</button>
 
                     <!-- /.card-body -->
                 </div>
@@ -108,14 +106,18 @@
     export default {
         data()
         {
-           var subtotal;
-               var grandtotal;
+          var subtotal;
+           var grandtotal;
 
 
             return{
+
+                subtotal:'',
+             grandtotal:'',
                 filters: {
                     name: { value: '', keys: ['name'] }
                 },
+                globalId:'',
                 isLoading: false,
                  subtotal,
              grandtotal,
@@ -126,7 +128,33 @@
         },
         methods:
             {
+                check()
+                {
+                    swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Confirm'
+                    }).then((result) => {
+                        if (result.value) {
+                           this.updateSales()
+                        }
+                    })
+                },
+                int()
+                {
 
+                    var x=JSON.stringify(this.sells);
+                    var y = this.globalId;
+                    var a = this.discount;
+                    var i = this.subtotal;
+                    var z = this.grandtotal;
+                    window.open( 'api/invoice?id='+y+'&sells='+x+'&subtotal='+i+'&discount='+a+'&grandtotal='+z,'_blank');
+                    //axios.get("api/invoice").then(({data}) => (console.log(data+"aaaaaaaaaa")));
+                },
                 clearSales() {
                     this.$router.go()
                 },
@@ -211,6 +239,7 @@
                   var pr=false
                     var id =Math.floor(Math.random()*90000) + 10000;
                     var disc =this.discount;
+                    this.globalId=id;
                     if(disc<1) {
                         disc = 0;
                     }
@@ -270,7 +299,8 @@
                                 'Your file has been Solded.',
                                 'success'
                             )
-
+                            this.int();
+                            this.clearSales();
                         }))
                         .catch(function (error) {
                             console.log(error);

@@ -54,7 +54,7 @@ class SalesDetailsController extends Controller
             $tempSell->save();
         }
 
-        redirect( view('invoice', compact($sells,$sellid)));
+        return['message' => 'SalesDetails stored'];
 
     }
 
