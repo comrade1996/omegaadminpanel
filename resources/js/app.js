@@ -68,7 +68,8 @@ const routes = [
     { path: '/sales', component: require('./components/Sales.vue').default },
     { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
-    { path: '/pos', component: require('./components/POS.vue').default }
+    { path: '/pos', component: require('./components/POS.vue').default },
+    { path: '/', component: require('./components/POS.vue').default }
   ];
 const router = new VueRouter({
     mode: 'history',

@@ -84940,6 +84940,9 @@ var routes = [{
 }, {
   path: '/pos',
   component: __webpack_require__(/*! ./components/POS.vue */ "./resources/js/components/POS.vue").default
+}, {
+  path: '/',
+  component: __webpack_require__(/*! ./components/POS.vue */ "./resources/js/components/POS.vue").default
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
   mode: 'history',
