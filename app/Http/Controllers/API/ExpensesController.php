@@ -44,8 +44,8 @@ class ExpensesController extends Controller
             ]);
 
         return Expenses::create([
-            'amount' => $request['amount'],
-            'category_id' => $request['category']
+            'expensescategory_id' => $request['category'],
+            'amount' => $request['amount']
         ]);
     }
 
@@ -98,10 +98,25 @@ class ExpensesController extends Controller
      * @return array
      * @throws \Exception
      */
-    public function destroy(Expenses $expenses)
+    public function destroy($id)
     {
+        $expenses = Expenses::findOrFail($id);
         $expenses->delete();
         return['message' => 'Expenses Deleted'];
 
+    }
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $expenses= Expenses::where(function ($query) use($search)
+            {
+                $query->where('amount','LIKE',"%$search%")
+                    ->orWhere('name','LIKE',"%$search%");
+            })->paginate(10);
+            return $expenses;
+        }
+
+        return $expenses=Expenses::latest()->paginate(10);
     }
 }

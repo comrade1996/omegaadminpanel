@@ -4,7 +4,7 @@
     <a href="#" class="brand-link">
         <img src="./img/logo.png" alt="laraStart Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">Lara Start</span>
+        <span class="brand-text font-weight-light">House of Oud</span>
     </a>
 
     <!-- Sidebar -->
@@ -25,6 +25,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
+                @if (Auth::user()->type == 1)
                 <li class="nav-item">
                     <router-link to="/dashboard" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt text-blue"></i>
@@ -33,6 +34,16 @@
                         </p>
                     </router-link>
                 </li>
+                @endif
+                <li class="nav-item">
+                    <router-link to="/pos" class="nav-link">
+                        <i class="nav-icon fas fa-cash-register text-blue"></i>
+                        <p>
+                            POS
+                        </p>
+                    </router-link>
+                </li>
+                @if (Auth::user()->type == 1)
                 <li class="nav-item has-treeview  ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog text-green"></i>
@@ -110,6 +121,14 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <router-link to="/sales" class="nav-link">
+                        <i class="nav-icon fas fa-money-bill-alt text-green"></i>
+                        <p>
+                            All Sales
+                        </p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
                     <router-link to="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user text-orange"></i>
                         <p>
@@ -117,6 +136,15 @@
                         </p>
                     </router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link to="/developer" class="nav-link">
+                        <i class="nav-icon fas fa-cogs text-orange"></i>
+                        <p>
+                            Developer
+                        </p>
+                    </router-link>
+                </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                        onclick="event.preventDefault();

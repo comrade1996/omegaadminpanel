@@ -6,49 +6,61 @@
                     <div class="card-header">
                         <h3 class="card-title">Products Table</h3>
                         <div class="card-tools">
+                            <div class="row">
+                                <div class="col-md-7">
+                            <input placeholder="Search by Product Name" class="form-control" v-model="filters.name.value" />
+                                </div>
+                                    <div class="col-md-4 mr-1">
                             <button class="btn btn-primary" @click="openCreateModal"> New Product <i class="fas fa-Product-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                        <table class="table table-hover">
-                            <tbody><tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Purchase Price</th>
-                                <th>Selling Price</th>
-                                <th>Quantity</th>
-                                <th>Company</th>
-                                <th>Category</th>
-                                <th>Expire Date</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
-                                <th>Options</th>
+                        <v-table :data="products"  :filters="filters"
+                                 class="table table-hover">
+                            <thead slot="head">
+                            <tr>
+                                <v-th sortKey="id">ID</v-th>
+                                <v-th sortKey="name">Name</v-th>
+                                <v-th sortKey="purchaseprice">Purchase Price</v-th>
+                                <v-th sortKey="sellingprice">Selling Price</v-th>
+                                <v-th sortKey="quantity">Quantity</v-th>
+                                <v-th sortKey="company">Company</v-th>
+                                <v-th sortKey="category.name">Category</v-th>
+                                <v-th sortKey="edate">Expire Date</v-th>
+                                <v-th sortKey="created_at">Created At</v-th>
+                                <v-th sortKey="updated_at">Modify</v-th>
+                                <v-th>Options</v-th>
                             </tr>
-                            <tr v-for="product in products" :key="product.id">
-                                <td>{{product.id}}</td>
-                                <td>{{product.name}}</td>
-                                <td>{{product.purchaseprice}}</td>
-                                <td>{{product.sellingprice}}</td>
-                                <td>{{product.quantity | capitalize}}</td>
-                                <td>{{product.company | capitalize}}</td>
-                                <td>{{product.category_id | capitalize}}</td>
-                                <td>{{product.edate | readableDate }}</td>
-                                <td>{{product.created_at | readableDate }}</td>
-                                <td>{{product.updated_at | readableDate }}</td>
+                            </thead>
+                            <tbody slot="body" slot-scope="{displayData}">
+                            <v-tr v-for="row in displayData" :key="row.guid">
+                                <td>{{row.id}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.purchaseprice}}</td>
+                                <td>{{row.sellingprice}}</td>
+                                <td>{{row.quantity}}</td>
+                                <td>{{row.company | capitalize}}</td>
+                                <td>{{row.category.name | capitalize}}</td>
+                                <td>{{row.edate | readableDate }}</td>
+                                <td>{{row.created_at }}</td>
+                                <td>{{row.updated_at }}</td>
                                 <td>
-                                    <a href="#" @click="openEditModal(product)">
+                                    <a href="#" @click="openEditModal(row)">
                                         <i class="fas fa-pencil-alt text-blue"></i>
                                     </a>
                                     /
-                                    <a href="#" @click="deleteProduct(product.id)">
+                                    <a href="#" @click="deleteProduct(row.id)">
                                         <i class="fas fa-trash text-red"></i>
                                     </a>
                                 </td>
-                            </tr>
-                            </tbody></table>
+                            </v-tr>
+                            </tbody></v-table>
                     </div>
                     <!-- /.card-body -->
+
                 </div>
                 <!-- /.card -->
             </div>
@@ -74,21 +86,21 @@
 
                         <div class="form-group">
                             <label>Purchase Price</label>
-                            <input v-model="form.purchaseprice" type="number" name="purchaseprice"
+                            <input v-model="form.purchaseprice" type="text" name="purchaseprice"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('purchaseprice') }">
                             <has-error :form="form" field="purchaseprice"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Selling Price</label>
-                            <input v-model="form.sellingprice" type="number" name="sellingprice"
+                            <input v-model="form.sellingprice" type="text" name="sellingprice"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('sellingprice') }">
                             <has-error :form="form" field="sellingprice"></has-error>
                         </div>
 
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input v-model="form.quantity" type="number" name="quantity"
+                            <input v-model="form.quantity" type="text" name="quantity"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('quantity') }">
                             <has-error :form="form" field="quantity"></has-error>
                         </div>
@@ -135,7 +147,16 @@
         data()
         {
 
+            currentPage: 1;
+                totalPages: 0;
             return{
+                filters: {
+
+                    name: { value: '', keys: ['name'] },
+                    company: { value: '', keys: ['company'] },
+                    category: { value: '', keys: ['category.name'] }
+
+                },
                 editmode:true,
                 products:{},
                 categories: [{}],
@@ -154,6 +175,11 @@
         },
         methods:
             {
+                getResults(page = 1) {
+                    axios.get('api/product?page=' + page)
+                        .then(response => {
+                            this.users = response.data;
+                        });},
                 openCreateModal()
                 {
                     this.editmode=false;
@@ -255,6 +281,14 @@
             console.log('Component mounted.')
         },
         created() {
+            Fire.$on('searching', () => {
+                let query =this.$parent.search;
+                axios.get('api/findProduct?q='+query)
+                    .then((data)=>{
+                        this.products = data.data
+                    })
+                    .catch(()=>{})
+            });
             this.getProducts();
             Fire.$on('afterCreate',()=>{this.getProducts()});
             this.getCategories();

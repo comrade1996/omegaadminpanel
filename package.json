@@ -26,10 +26,21 @@
     },
     "dependencies": {
         "admin-lte": "^3.0.0-alpha.2",
+        "laravel-vue-pagination": "^2.2.0",
         "moment": "^2.24.0",
         "sweetalert2": "^8.0.5",
+        "toastr": "^2.1.4",
+        "v-tostini": "^1.0.0",
         "vform": "^1.0.0",
+        "vue-dual-list": "^1.0.0",
+        "vue-print-nb": "^1.0.3",
         "vue-progressbar": "^0.7.5",
-        "vue-router": "^3.0.2"
+        "vue-router": "^3.0.2",
+        "vue-snotify": "^3.2.1",
+        "vue-spinners": "^1.0.2",
+        "vue-toasted": "^1.1.26",
+        "vue-toastr-2": "0.0.10",
+        "vuejs-paginator": "^2.0.2",
+        "vuejs-smart-table": "0.0.3"
     }
 }

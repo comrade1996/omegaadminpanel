@@ -13,9 +13,9 @@ class UserController extends Controller
     {
         return User::latest()->paginate(10);
     }
-
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created re
+source in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -84,5 +84,20 @@ class UserController extends Controller
         $user->delete();
 
         return ['message' => 'user Deleted'];
+    }
+
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $users= User::where(function ($query) use($search)
+            {
+                $query->where('name','LIKE',"%$search%")
+                        ->orWhere('email','LIKE',"%$search%");
+            })->paginate(10);
+            return $users;
+        }
+
+        return $users=User::latest()->paginate(10);
     }
 }

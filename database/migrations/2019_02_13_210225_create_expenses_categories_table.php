@@ -13,7 +13,7 @@ class CreateExpensesCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expenses_categories', function (Blueprint $table) {
+        Schema::create('expensescategories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('description')->nullable();
@@ -30,6 +30,6 @@ class CreateExpensesCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expensesCategory');
+        Schema::dropIfExists('expensescategories');
     }
 }

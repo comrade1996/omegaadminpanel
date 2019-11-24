@@ -9,13 +9,16 @@ class Product extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
+     protected $fillable = [
         'name', 'purchaseprice','sellingprice','quantity','company','edate','category_id'
     ];
 
 
+    protected $with=['category'];
     public function category()
     {
-        return $this->hasOne('App\Category');
+        return $this->belongsTo('App\Category');
     }
+
+
 }

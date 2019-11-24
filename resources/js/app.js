@@ -10,14 +10,33 @@ window.Vue = require('vue');
 import {Form, HasError, AlertError} from 'vform'
 import moment from 'moment'
 
+
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 window.Form = Form;
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
+import SmartTable from 'vuejs-smart-table'
+Vue.use(SmartTable)
+import Print from 'vue-print-nb'
+
+Vue.use(Print);
+import VueToastr2 from 'vue-toastr-2'
+import 'vue-toastr-2/dist/vue-toastr-2.min.css'
+window.toastr = require('toastr')
+Vue.use(VueToastr2)
 
 
+import Vue from 'vue'
+import VueSpinners from 'vue-spinners'
+Vue.use(VueSpinners)
+/*
+Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
+    theme: "bubble",
+    fullWidth:true,
+    duration:800
+})*/
 import VueProgressBar from 'vue-progressbar';
 
 Vue.use(VueProgressBar, {
@@ -43,12 +62,15 @@ const routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/categories', component: require('./components/Categories.vue').default },
+    { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/products', component: require('./components/Products.vue').default },
     { path: '/expenses', component: require('./components/Expenses.vue').default },
+    { path: '/sales', component: require('./components/Sales.vue').default },
     { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default }
+    { path: '/users', component: require('./components/Users.vue').default },
+    { path: '/pos', component: require('./components/POS.vue').default },
+    { path: '/', component: require('./components/POS.vue').default }
   ];
-
 const router = new VueRouter({
     mode: 'history',
     routes
@@ -77,7 +99,22 @@ window.Fire = Fire;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+Vue.component('pagination', require('laravel-vue-pagination'));
 
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
@@ -88,5 +125,15 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data:{
+        search:''
+    },
+    methods:{
+        searchit:_.debounce(()=>
+        {
+            Fire.$emit('searching')
+        },500)
+    }
 });
+

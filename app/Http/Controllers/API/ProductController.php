@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return Product::latest()->paginate(10);
+        return Product::latest()->paginate(100000);
     }
 
     /**
@@ -89,5 +89,39 @@ class ProductController extends Controller
     {
         $product->delete();
         return['message' => 'Product Deleted'];
+    }
+
+    public function persist(Request $request)
+    {
+        $products[] = json_decode($request['products']);
+        echo gettype($products);
+        print_r($products);
+        echo count($products);
+        for($i=0;$i<count($products);$i++) {
+            for ($j = 0; $j < count($products[$i]); $j++) {
+                $tempProduct = new Product();
+                $tempProduct = Product::findOrFail($products[$i][$j]->id);
+                $tempProduct->quantity = $tempProduct->quantity - $products[$i][$j]->quantity;
+                $tempProduct->save();
+            }
+        }
+        return['message' => 'Product ss updated'];
+    }
+    public function search()
+    {
+        if ($search = \Request::get('q'))
+        {
+            $products= Product::where(function ($query) use($search)
+            {
+                $query->where('name','LIKE',"%$search%")
+                    ->orWhere('purchaseprice','LIKE',"%$search%")
+                    ->orWhere('sellingprice','LIKE',"%$search%")
+                    ->orWhere('company','LIKE',"%$search%")
+                    ->orWhere('quantity','LIKE',"%$search%");
+            })->paginate(10);
+            return $products;
+        }
+
+        return $products=Product::latest()->paginate(10);
     }
 }
