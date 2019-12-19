@@ -62,10 +62,10 @@
                                 <th>Quantity</th>
                                 <th>Price</th>
                             </tr>
-                            <tr v-for="sell in sells" :key="sell.id" v-if="sell.quantity>0">
+                            <tr v-for="sell in sells" :key="sell.id" >
                                 <td>{{sell.id}}</td>
                                 <td>{{sell.name}}</td>
-                                <td >{{sell.quantity }}</td>
+                                <td v-if="sell.quantity>0">{{sell.quantity }}</td>
                                 <td>{{sell.sellingprice}}</td>
                             </tr>
 

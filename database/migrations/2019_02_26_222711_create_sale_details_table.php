@@ -19,6 +19,7 @@ class CreateSaleDetailsTable extends Migration
             $table->unsignedInteger('product_id');
             $table->double('price');
             $table->unsignedInteger('quantity');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

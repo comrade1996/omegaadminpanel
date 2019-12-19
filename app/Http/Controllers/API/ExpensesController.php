@@ -40,12 +40,14 @@ class ExpensesController extends Controller
         $this->validate($request,
             [
                 'amount' => 'required|numeric',
-                'category' => 'required|numeric'
+                'category' => 'required|numeric',
+
             ]);
 
         return Expenses::create([
             'expensescategory_id' => $request['category'],
-            'amount' => $request['amount']
+            'amount' => $request['amount'],
+
         ]);
     }
 
@@ -85,7 +87,8 @@ class ExpensesController extends Controller
         $this->validate($request,
             [
                 'amount' => 'required|numeric',
-                'category' => 'required|numeric'
+                'category' => 'required|numeric',
+
             ]);
 
         $expenses->update($request->all());

@@ -4,9 +4,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Categories Table</h3>
+                        <h3 class="card-title">Units Table</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Category <i class="fas fa-Category-plus"></i></button>
+                            <button class="btn btn-primary" @click="openCreateModal"> New unit <i class="fas fa-Category-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -15,25 +15,22 @@
                             <tbody><tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Description</th>
                                 <th>Created At</th>
                                 <th>Modify</th>
-                                <th>created by</th>
-
+                                <th>Created Py</th>
                             </tr>
-                            <tr v-for="category in categories.data" :key="category.id">
-                                <td>{{category.id}}</td>
-                                <td>{{category.name | capitalize}}</td>
-                                <td>{{category.description | capitalize}}</td>
-                                <td>{{category.created_at | readableDate }}</td>
-                                <td>{{category.updated_at | readableDate }}</td>
+                            <tr v-for="unit in units.data" :key="unit.id">
+                                <td>{{unit.id}}</td>
+                                <td>{{unit.name | capitalize}}</td>
+                                <td>{{unit.created_at | readableDate }}</td>
+                                <td>{{unit.updated_at | readableDate }}</td>
                                 <td>{{unit.created_by}}</td>
                                 <td>
-                                    <a href="#" @click="openEditModal(category)">
+                                    <a href="#" @click="openEditModal(unit)">
                                         <i class="fas fa-pencil-alt text-blue"></i>
                                     </a>
                                     /
-                                    <a href="#" @click="deleteCategory(category.id)">
+                                    <a href="#" @click="deleteUnit(unit.id)">
                                         <i class="fas fa-trash text-red"></i>
                                     </a>
                                 </td>
@@ -42,7 +39,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <pagination :data="categories"
+                        <pagination :data="units"
                                     @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
@@ -50,16 +47,16 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal fade" id="createCategory" tabindex="-1" role="dialog" aria-labelledby="createCategoryTitle" aria-hidden="true">
+        <div class="modal fade" id="createUnit" tabindex="-1" role="dialog" aria-labelledby="createUnitTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createCategoryTitle">Create Category</h5>
+                        <h5 class="modal-title" id="createUnitTitle">Create Unit</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editmode ? updateCategory() : createCategory()">
+                    <form @submit.prevent="editmode ? updateUnit() : createUnit()">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>Name</label>
@@ -67,13 +64,13 @@
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
                         </div>
-
+<!--
                         <div class="form-group">
                             <label>Description</label>
                             <input v-model="form.description" type="text" name="description"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
                             <has-error :form="form" field="description"></has-error>
-                        </div>
+                        </div> -->
 
                     </div>
                     <div class="modal-footer">
@@ -94,18 +91,18 @@
 
             return{
                 editmode:true,
-                categories:{},
+                units:{},
                 form:new Form({
                     id:'',
-                    name:'',
-                    description:''
+                    name:''
+                    // description:''
                 })
             }
         },
         methods:
             {
                 getResults(page = 1) {
-                    axios.get('api/category?page=' + page)
+                    axios.get('api/unit?page=' + page)
                         .then(response => {
                             this.users = response.data;
                         });},
@@ -115,31 +112,31 @@
 
                     this.form.clear();
                     this.form.reset();
-                    $('#createCategory').modal('show');
+                    $('#createUnit').modal('show');
                 },
-                openEditModal(Category)
+                openEditModal(Unit)
                 {
                     this.editmode=true;
                     this.form.clear();
                     this.form.reset();
-                    $('#createCategory').modal('show');
-                    this.form.fill(Category);
+                    $('#createUnit').modal('show');
+                    this.form.fill(Unit);
                 },
-                getCategories()
+                getUnits()
                 {
-                    axios.get("api/category").then(({data}) => (this.categories =data));
+                    axios.get("api/unit").then(({data}) => (this.units =data));
                 },
-                createCategory()
+                createUnit()
                 {
 
-                    this.form.post('api/category')
+                    this.form.post('api/unit')
                         .then(()=>{
                             this.$Progress.start();
                             Fire.$emit('afterCreate');
-                            $('#createCategory').modal('hide')
+                            $('#createUnit').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'Category Created successfully'
+                                title: 'Unit Created successfully'
                             })
                             this.$Progress.finish();
 
@@ -148,20 +145,20 @@
 
                         })
                   },
-                updateCategory()
+                updateUnit()
                 {
                    // this.$progress.start();
                     console.log("hoola");
-                    this.form.put('api/category/'+this.form.id)
+                    this.form.put('api/unit/'+this.form.id)
                         .then(()=>
                         {
                             swal.fire(
                                 'Updated!',
-                                'Your Category has been updated.',
+                                'Your Unit has been updated.',
                                 'success'
                             )
                            // this.$progress.finish();
-                            $('#createCategory').modal('hide');
+                            $('#createUnit').modal('hide');
                             Fire.$emit('afterCreate');
                         })
                         .catch(()=>
@@ -169,7 +166,7 @@
                           //  this.$Progress.fail();
                         })
                 },
-                deleteCategory(id)
+                deleteUnit(id)
                 {
                     swal.fire({
                         title: 'Are you sure?',
@@ -181,7 +178,7 @@
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                         if(result.value) {
-                            this.form.delete('api/category/' + id)
+                            this.form.delete('api/unit/' + id)
                                 .then(() => {
                                     swal.fire(
                                         'Deleted!',
@@ -208,15 +205,15 @@
         created() {
             Fire.$on('searching', () => {
                 let query =this.$parent.search;
-                axios.get('api/findCategory?q='+query)
+                axios.get('api/findUnit?q='+query)
                     .then((data)=>{
-                        this.categories = data.data
+                        this.units = data.data
                     })
                     .catch(()=>{})
             });
-            this.getCategories();
-            Fire.$on('afterCreate',()=>{this.getCategories()});
-            //setInterval(()=>this.getCategories(), 3000);
+            this.getUnits();
+            Fire.$on('afterCreate',()=>{this.getUnits()});
+            //setInterval(()=>this.getUnits(), 3000);
 
         }
     }

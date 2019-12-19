@@ -17,6 +17,7 @@ class CreateExpensesCategoriesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('description')->nullable();
+            $table->string('created_by');
             $table->timestamps();
 
             $table->softDeletes();

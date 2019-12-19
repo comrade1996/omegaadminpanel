@@ -3,10 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 class SaleDetail extends Model
 {
-    protected $fillable = ['sale_id', 'product_id', 'quantity', 'price'];
+    protected $fillable = ['sale_id', 'product_id', 'quantity', 'price','created_by'];
     protected   $productName;
     protected $table = 'sale_details';
     protected $with=['product'];
@@ -30,4 +31,16 @@ class SaleDetail extends Model
     {
         $productName = $this->product()->name;
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        Category::saving(function ($model) {
+
+                $model->created_by = Auth::user()->name;
+
+
+        });
+    }
+
 }

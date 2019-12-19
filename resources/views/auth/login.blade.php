@@ -122,12 +122,16 @@
     <div class="inputGroup inputGroup1">
         <label for="loginEmail" id="loginEmailLabel">Email</label>
         <input type="email"  name="email" id="loginEmail" maxlength="254" />
-
+        @if($errors->has('email'))
+    <div class="error">{{ $errors->first('email') }}</div>
+@endif
     </div>
     <div class="inputGroup inputGroup2">
         <label for="loginPassword" id="loginPasswordLabel">Password</label>
         <input name="password" type="password" id="loginPassword"  />
-
+        @if($errors->has('password'))
+    <div class="error">{{ $errors->first('password') }}</div>
+@endif
         <label id="showPasswordToggle" for="showPasswordCheck">Show
             <input  id="showPasswordCheck" type="checkbox"/>
             <div class="indicator"></div>

@@ -28,8 +28,9 @@ class ProductController extends Controller
                 'purchaseprice' => 'required|numeric',
                 'sellingprice' => 'required|numeric',
                 'category' => 'required|numeric',
+                'unit' => 'required|numeric',
                 'quantity' => 'required|numeric',
-                'edate' => 'required|date|after:today'
+                'edate' => 'required|date|after:today',
             ]);
 
         return Product::create([
@@ -37,6 +38,7 @@ class ProductController extends Controller
             'purchaseprice' => $request['purchaseprice'],
             'sellingprice' => $request['sellingprice'],
             'category_id' => $request['category'],
+            'unit_id' => $request['unit'],
             'quantity' => $request['quantity'],
             'edate' => $request['edate'],
             'company' => $request['company']
@@ -71,6 +73,7 @@ class ProductController extends Controller
                 'purchaseprice' => 'required|numeric',
                 'sellingprice' => 'required|numeric',
                 'category' => 'required|numeric',
+                'unit' =>  'required|numeric',
                 'quantity' => 'required|numeric',
                 'edate' => 'required|date|after:today'
             ]);

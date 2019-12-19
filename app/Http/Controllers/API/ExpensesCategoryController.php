@@ -41,13 +41,15 @@ class ExpensesCategoryController extends Controller
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
-                'description' => 'required|string'
+                'description' => 'required|string',
+
 
             ]);
 
         return ExpensesCategory::create([
             'name' => $request['name'],
-            'description' => $request['description']
+            'description' => $request['description'],
+
         ]);
 
     }
@@ -89,6 +91,7 @@ class ExpensesCategoryController extends Controller
             [
                 'name' => 'required|string|max:191',
                 'description' => 'required|string'
+
             ]);
         $test = $request->all();
 

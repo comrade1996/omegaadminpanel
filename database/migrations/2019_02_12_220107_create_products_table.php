@@ -16,6 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('category_id');
+            $table->unsignedInteger('unit_id');
             $table->string('name');
             $table->float('purchaseprice');
             $table->float('sellingprice');
@@ -23,11 +24,11 @@ class CreateProductsTable extends Migration
             $table->string('company')->nullable();
             $table->date('edate');
             $table->string('photo')->default('profile.png')->nullable();
+            $table->string('created_by');
             $table->timestamps();
-
             $table->softDeletes();
-
             $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

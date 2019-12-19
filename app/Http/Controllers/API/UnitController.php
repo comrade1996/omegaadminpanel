@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Category;
+use App\Unit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CategoryController extends Controller
+class UnitController extends Controller
 {
     public function index()
     {
-        return Category::latest()->paginate(10);
+        return Unit::latest()->paginate(10);
     }
 
     /**
@@ -25,15 +25,11 @@ class CategoryController extends Controller
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
-                'description' => 'required|string'
 
             ]);
 
-        return Category::create([
+        return Unit::create([
             'name' => $request['name'],
-            'description' => $request['description'],
-
-
         ]);
 
     }
@@ -53,47 +49,43 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param Category $category
+     * @param Unit $Unit
      * @return void
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Unit $unit)
     {
         $this->validate($request,
             [
-                'name' => 'required|string|max:191',
-                'description' => 'required|string',
-
-
+                'name' => 'required|string|max:191'
             ]);
 
-        $category->update($request->all());
+        $unit->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Category $category
+     * @param Unit $Unit
      * @return array
      * @throws \Exception
      */
-    public function destroy(Category $category)
+    public function destroy(Unit $unit)
     {
-        $category->delete();
-        return['message' => 'Category Deleted'];
+        $unit->delete();
+        return['message' => 'Unit Deleted'];
     }
     public function search()
     {
         if ($search = \Request::get('q'))
         {
-            $categories= Category::where(function ($query) use($search)
+            $units= Unit::where(function ($query) use($search)
             {
                 $query->where('name','LIKE',"%$search%")
-                    ->orWhere('description','LIKE',"%$search%");
             })->paginate(10);
-            return $categories;
+            return $units;
         }
 
-        return $categories=Category::latest()->paginate(10);
+        return $units=Unit::latest()->paginate(10);
     }
 }

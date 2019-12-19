@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::apiResources(['user'=>'API\UserController']);
 Route::apiResources(['category'=>'API\CategoryController']);
+Route::apiResources(['unit'=>'API\UnitController']);
 Route::apiResources(['expensescategory'=>'API\ExpensesCategoryController']);
 Route::apiResources(['expenses'=>'API\ExpensesController']);
 Route::apiResources(['sales'=>'API\SalesController']);
@@ -25,6 +26,7 @@ Route::apiResources(['salesdetails'=>'API\SalesDetailsController']);
 Route::apiResources(['product'=>'API\ProductController']);
 Route::get('findUser','API\UserController@search');
 Route::get('findCategory','API\CategoryController@search');
+Route::get('findUnit','API\UnitController@search');
 Route::get('findExpensesCategory','API\ExpensesCategoryController@search');
 Route::get('findExpenses','API\ExpensesController@search');
 Route::get('findSales','API\SalesController@search');

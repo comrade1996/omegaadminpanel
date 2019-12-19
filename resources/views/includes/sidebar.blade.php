@@ -88,6 +88,14 @@
                                 </p>
                             </router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link to="/units" class="nav-link">
+                                <i class="nav-icon fas fa-warehouse text-teal"></i>
+                                <p>
+                                    Units
+                                </p>
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
 

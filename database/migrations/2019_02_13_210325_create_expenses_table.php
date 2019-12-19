@@ -17,6 +17,7 @@ class CreateExpensesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('expensescategory_id');
             $table->float('amount');
+            $table->string('created_by');
             $table->timestamps();
 
             $table->softDeletes();

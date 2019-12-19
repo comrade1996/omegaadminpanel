@@ -31,6 +31,7 @@
                                 <v-th sortKey="quantity">Quantity</v-th>
                                 <v-th sortKey="created_at">Created At</v-th>
                                 <v-th sortKey="updated_at">Modify</v-th>
+
                             </tr>
                             </thead>
                                 <tbody slot="body" slot-scope="{displayData}">

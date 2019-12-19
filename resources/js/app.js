@@ -65,6 +65,7 @@ const routes = [
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/products', component: require('./components/Products.vue').default },
     { path: '/expenses', component: require('./components/Expenses.vue').default },
+    { path: '/units', component: require('./components/Units.vue').default },
     { path: '/sales', component: require('./components/Sales.vue').default },
     { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },

@@ -4,21 +4,37 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 class Product extends Model
 {
     use SoftDeletes;
 
      protected $fillable = [
-        'name', 'purchaseprice','sellingprice','quantity','company','edate','category_id'
+        'name', 'purchaseprice','sellingprice','quantity','company','edate','category_id','unit_id','created_by'
     ];
 
 
-    protected $with=['category'];
+    protected $with=['category','unit'];
+
     public function category()
     {
         return $this->belongsTo('App\Category');
     }
+    public function unit()
+    {
+        return $this->belongsTo('App\Unit');
+    }
 
+    protected static function boot()
+    {
+        parent::boot();
+        Category::saving(function ($model) {
+
+                $model->created_by = Auth::user()->name;
+
+
+        });
+    }
 
 }

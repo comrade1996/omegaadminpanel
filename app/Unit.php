@@ -5,19 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Auth;
-class Expenses extends Model
+
+class Unit extends Model
 {
     use SoftDeletes;
-
     protected $fillable = [
-        'amount','expensescategory_id','created_by'
+        'name','created_by'
     ];
-
-    protected $with=['expensescategory'];
-    public function expensescategory()
-    {
-        return $this->belongsTo('App\ExpensesCategory');
-    }
 
     protected static function boot()
     {

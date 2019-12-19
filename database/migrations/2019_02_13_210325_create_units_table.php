@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesTable extends Migration
+class CreateUnitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateSalesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->unique();
-            $table->double('subtotal');
-            $table->double('discount')->default(0);
-            $table->double('grandtotal');
+        Schema::create('units', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
             $table->string('created_by');
-            $table->softDeletes();
             $table->timestamps();
+
+            $table->softDeletes();
+
         });
     }
 
@@ -31,6 +31,6 @@ class CreateSalesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('units');
     }
 }
