@@ -17,7 +17,7 @@
                                 <th>Name</th>
                                 <th>Created At</th>
                                 <th>Modify</th>
-                                <th>Created Py</th>
+                                <th>Created by</th>
                             </tr>
                             <tr v-for="unit in units.data" :key="unit.id">
                                 <td>{{unit.id}}</td>
@@ -93,7 +93,7 @@
                 editmode:true,
                 units:{},
                 form:new Form({
-                    id:'',
+                    // id:'',
                     name:''
                     // description:''
                 })

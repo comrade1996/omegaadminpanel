@@ -20,6 +20,8 @@
                                 <th>Description</th>
                                 <th>Created At</th>
                                 <th>Modify</th>
+                                <th>created by</th>
+                                <th>options</th>
                             </tr>
                             <tr v-for="category in ExpensesCategories.data" :key="category.id">
                                 <td>{{category.id}}</td>
@@ -27,6 +29,7 @@
                                 <td>{{category.description | capitalize}}</td>
                                 <td>{{category.created_at | readableDate }}</td>
                                 <td>{{category.updated_at | readableDate }}</td>
+                                <td>{{category.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(category)">
                                         <i class="fas fa-pencil-alt text-blue"></i>

@@ -60,6 +60,7 @@ window.toast = toast;
 
 const routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+    { path: '/saledetails', component: require('./components/SaleDetails.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/categories', component: require('./components/Categories.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },

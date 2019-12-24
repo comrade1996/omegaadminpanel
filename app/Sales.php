@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
 
 class Sales extends Model
 {
@@ -23,7 +24,7 @@ class Sales extends Model
     protected static function boot()
     {
         parent::boot();
-        Category::saving(function ($model) {
+        Sales::saving(function ($model) {
 
                 $model->created_by = Auth::user()->name;
 

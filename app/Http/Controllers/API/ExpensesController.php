@@ -122,4 +122,18 @@ class ExpensesController extends Controller
 
         return $expenses=Expenses::latest()->paginate(10);
     }
+
+    public function dateFilter(Request $request)
+    {
+        $this->validate($request,
+            [
+                'startdate' => 'required|',
+                'enddate' => 'required'
+            ]);
+
+        $startdate =$request['startdate'];
+        $enddate =$request['enddate'];
+            $expenses = Expenses::whereBetween('created_at',[$startdate, $enddate])->get();
+            return $expenses;
+    }
 }

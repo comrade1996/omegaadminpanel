@@ -18,6 +18,7 @@
                                 <th>Amount</th>
                                 <th>Created At</th>
                                 <th>Modify</th>
+                                <th>created by</th>
                                 <th>Options</th>
                             </tr>
                             <tr v-for="expenses in expensess.data" :key="expenses.id">
@@ -26,6 +27,7 @@
                                 <td>{{expenses.amount}}</td>
                                 <td>{{expenses.created_at | readableDate }}</td>
                                 <td>{{expenses.updated_at | readableDate }}</td>
+                                <td>{{expenses.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(expenses)">
                                         <i class="fas fa-pencil-alt text-blue"></i>

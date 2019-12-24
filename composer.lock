@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f911c0254f82707d91205de76dec1ae9",
+    "content-hash": "af2b4ccd90d004ba16468b08516b2bd8",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -3512,6 +3512,57 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2017-11-27T11:13:29+00:00"
+        },
+        {
+            "name": "velitsol/userstamps",
+            "version": "v0.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hmshafeeq/userstamps.git",
+                "reference": "92e43f49fb98384c87dd18fe4ee218da35fbb7ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hmshafeeq/userstamps/zipball/92e43f49fb98384c87dd18fe4ee218da35fbb7ef",
+                "reference": "92e43f49fb98384c87dd18fe4ee218da35fbb7ef",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.*",
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "VelitSol\\Userstamps\\UserstampServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "VelitSol\\Userstamps\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muhammad Shafeeq",
+                    "email": "hmshafeeq@gmail.com"
+                }
+            ],
+            "description": "A simple package to insert and load userstamps for a model automatically, it provides an eloquent trait to use in your models.",
+            "keywords": [
+                "created_by",
+                "eloquent",
+                "laravel",
+                "updated_by",
+                "userstamps"
+            ],
+            "time": "2019-03-15T12:43:43+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

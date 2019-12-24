@@ -14,11 +14,10 @@ class CreateUnitsTable extends Migration
     public function up()
     {
         Schema::create('units', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('name');
             $table->string('created_by');
             $table->timestamps();
-
             $table->softDeletes();
 
         });

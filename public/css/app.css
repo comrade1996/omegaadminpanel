@@ -13134,6 +13134,10 @@ a.text-muted:hover {
   color: #e3342f;
 }
 
+.backgroundAlert {
+  background: #ab6060 !important;
+}
+
 .text-green {
   color: green;
 }

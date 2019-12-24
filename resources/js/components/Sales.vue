@@ -21,6 +21,7 @@
                                 <v-th sortKey="grandtotal">Grand Total</v-th>
                                 <v-th sortKey="created_at">Created At</v-th>
                                 <v-th sortKey="updated_at">Modify</v-th>
+                                <v-th >Created by</v-th>
                                 <v-th>Options</v-th>
                             </tr>
                             </thead>
@@ -32,6 +33,7 @@
                                 <td>{{row.grandtotal}}</td>
                                 <td>{{row.created_at | readableDate }}</td>
                                 <td>{{row.updated_at | readableDate }}</td>
+                                <td>{{row.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(row)">
                                         <i class="fas fa-pencil-alt text-blue"></i>

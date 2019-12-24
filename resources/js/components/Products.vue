@@ -30,6 +30,7 @@
                                 <v-th sortKey="company">Company</v-th>
                                 <v-th sortKey="category.name">Category</v-th>
                                 <v-th sortKey="edate">Expire Date</v-th>
+                                <v-th sortKey="created_by">Created by</v-th>
                                 <v-th sortKey="created_at">Created At</v-th>
                                 <v-th sortKey="updated_at">Modify</v-th>
                                 <v-th>Options</v-th>
@@ -41,10 +42,11 @@
                                 <td>{{row.name}}</td>
                                 <td>{{row.purchaseprice}}</td>
                                 <td>{{row.sellingprice}}</td>
-                                <td>{{row.quantity}}</td>
+                                <td :class="{backgroundAlert:row.quantity>15}">{{row.quantity}} {{row.unit.name }}</td>
                                 <td>{{row.company | capitalize}}</td>
                                 <td>{{row.category.name | capitalize}}</td>
-                                <td>{{row.edate | readableDate }}</td>
+                                <td :class="{backgroundAlert:expdatediff(row.edate)>90}">{{row.edate | readableDate }}</td>
+                                <td>{{row.created_by }}</td>
                                 <td>{{row.created_at }}</td>
                                 <td>{{row.updated_at }}</td>
                                 <td>
@@ -124,6 +126,17 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Unit</label>
+                            <select v-model="form.unit" name="unit" class="form-control" :class="{ 'is-invalid': form.errors.has('unit') }">
+                                <option value="">Select unit for Product</option>
+                                <option v-for="unit in units" :value="unit.id">
+                                    {{ unit.name | capitalize}}
+                                </option>
+                            </select>
+                            <has-error :form="form" field="unit"></has-error>
+                        </div>
+
+                        <div class="form-group">
                             <label>Expire Date</label>
                             <input type="date"  v-model="form.edate" name="edate"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('edate') }">
@@ -154,12 +167,16 @@
 
                     name: { value: '', keys: ['name'] },
                     company: { value: '', keys: ['company'] },
-                    category: { value: '', keys: ['category.name'] }
+                    category: { value: '', keys: ['category.name'] },
+                    unit: { value: '', keys: ['unit.name'] }
+
 
                 },
                 editmode:true,
                 products:{},
                 categories: [{}],
+                units: [{}],
+
                 form:new Form({
                     id:'',
                     name:'',
@@ -168,6 +185,7 @@
                     quantity:'',
                     edate:'',
                     company:'',
+                    unit:'',
                     category:'',
                     photo:''
                 })
@@ -175,6 +193,27 @@
         },
         methods:
             {
+
+
+                            expdatediff(date){
+                                const moment = require('moment')
+                //     console.log(date)
+                //  var startDate = moment(date ).format("DD.MM.YYYY");
+                //  console.log(startDate)
+                // var endDate =  moment().format("DD.MM.YYYY")
+                // console.log(endDate)
+
+                var given = moment(date, "YYYY-MM-DD");
+                var current = moment().startOf('day');
+                console.log(current)
+                //Difference in number of days
+                var result =moment.duration(given.diff(current)).asDays();
+                console.log(result)
+                return result
+                }
+,
+
+
                 getResults(page = 1) {
                     axios.get('api/product?page=' + page)
                         .then(response => {
@@ -203,6 +242,10 @@
                 getCategories()
                 {
                     axios.get("api/category").then(({data}) => (this.categories =data.data));
+                },
+                getUnits()
+                {
+                    axios.get("api/unit").then(({data}) => (this.units =data.data));
                 },
                 createProduct()
                 {
@@ -294,6 +337,9 @@
             this.getCategories();
             Fire.$on('afterCreate',()=>{this.getCategories()});
             console.log(this.categories)
+            this.getUnits();
+            Fire.$on('afterCreate',()=>{this.getUnits()});
+            console.log(this.units)
             //setInterval(()=>this.getProducts(), 3000);
 
         }

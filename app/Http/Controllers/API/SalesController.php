@@ -136,4 +136,18 @@ class SalesController extends Controller
 
         return $sales=Sales::latest()->paginate(10);
     }
+
+    public function dateFilter(Request $request)
+    {
+        $this->validate($request,
+            [
+                'startdate' => 'required|',
+                'enddate' => 'required'
+            ]);
+
+        $startdate =$request['startdate'];
+        $enddate =$request['enddate'];
+            $sales = Sales::whereBetween('created_at',[$startdate, $enddate])->get();
+            return $sales;
+    }
 }

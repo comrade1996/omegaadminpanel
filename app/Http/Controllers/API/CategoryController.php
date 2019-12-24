@@ -82,6 +82,8 @@ class CategoryController extends Controller
         $category->delete();
         return['message' => 'Category Deleted'];
     }
+
+
     public function search()
     {
         if ($search = \Request::get('q'))

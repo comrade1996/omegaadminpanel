@@ -137,6 +137,14 @@
                     </router-link>
                 </li>
                 <li class="nav-item">
+                    <router-link to="/saledetails" class="nav-link">
+                        <i class="nav-icon fas fa-money-bill-alt text-green"></i>
+                        <p>
+                            Sales Details
+                        </p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
                     <router-link to="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user text-orange"></i>
                         <p>

@@ -75,17 +75,17 @@ class UnitController extends Controller
         $unit->delete();
         return['message' => 'Unit Deleted'];
     }
-    public function search()
-    {
-        if ($search = \Request::get('q'))
-        {
-            $units= Unit::where(function ($query) use($search)
-            {
-                $query->where('name','LIKE',"%$search%")
-            })->paginate(10);
-            return $units;
-        }
+    // public function search()
+    // {
+    //     if ($search = \Request::get('q'))
+    //     {
+    //         $units= Unit::where(function ($query) use($search)
+    //         {
+    //             $query->where('name','LIKE',"%$search%")
+    //         })->paginate(10);
+    //         return $units;
+    //     }
 
-        return $units=Unit::latest()->paginate(10);
-    }
+    //     return $units=Unit::latest()->paginate(10);
+    // }
 }

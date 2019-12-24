@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
 
 class SaleDetail extends Model
 {
@@ -35,7 +36,7 @@ class SaleDetail extends Model
     protected static function boot()
     {
         parent::boot();
-        Category::saving(function ($model) {
+        SaleDetail::saving(function ($model) {
 
                 $model->created_by = Auth::user()->name;
 

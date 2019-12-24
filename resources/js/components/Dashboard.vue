@@ -4,8 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Sales Details Table</h3>
-                        <input placeholder="Search by Invoice ID" class="form-control" v-model="filters.sale_id.value"/>
+                        <h3 class="card-title">Dashboard Table</h3>
                         <div class="card-tools">
 
                             <form @submit.prevent="dateFilter(startdate,enddate)">
@@ -21,30 +20,25 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                            <v-table :data="salesDetails"  :filters="filters"
-                                     class="table table-hover">
-                            <thead slot="head">
+                            <table class="table table-hover">
+                            <thead>
                             <tr>
-                                <v-th sortKey="id">ID</v-th>
-                                <v-th sortKey="sale_id">Sale Invoice</v-th>
-                                <v-th sortKey="product.name">Product</v-th>
-                                <v-th sortKey="quantity">Quantity</v-th>
-                                <v-th sortKey="created_at">Created At</v-th>
-                                <v-th sortKey="updated_at">Modify</v-th>
+                                <th >Total Sales</th>
+                                <th >Total Expenses</th>
+                                <th > Net Profit</th>
+                                <th >Quantity</th>
 
                             </tr>
                             </thead>
-                                <tbody slot="body" slot-scope="{displayData}">
-                            <v-tr v-for="row in displayData" :key="row.guid">
-                                <td v-if=" row.quantity>0 || null">{{ row.id}}</td>
-                                <td v-if=" row.quantity>0 || null">{{ row.sale_id}}</td>
-                                <td v-if=" row.quantity>0 || null">{{ row.product.name }}</td>
-                                <td v-if=" row.quantity>0 || null">{{ row.quantity}}</td>
-                                <td v-if=" row.quantity>0 || null">{{ row.created_at }}</td>
-                                <td v-if=" row.quantity>0 || null">{{ row.updated_at }}</td>
-                            </v-tr>
+                                <tbody >
+                            <tr>
+                                <td>{{this.totalSales}}</td>
+                                <td>{{this.totalExpenses}}</td>
+                                <td>{{this.totalSales - this.totalExpenses}}</td>
+                                <td>{{this.quantity}}</td>
+                            </tr>
                             </tbody>
-                        </v-table>
+                        </table>
 
                     </div>
                     <!-- /.card-body -->
@@ -62,10 +56,14 @@
         data() {
 
             return {
-                filters: {
-                    sale_id: { value: '', keys: ['sale_id'] }
-                },
+
                 salesDetails: [],
+                sales: [],
+                expenses: [],
+                totalSales:0,
+                totalExpenses:0,
+                netProfit:0,
+                quantity:0,
                 startdate: '',
                 enddate: ''
             }
@@ -83,24 +81,92 @@
                         .then((data) => {
                             console.log("resonse data")
                             console.log(data)
-                            this.salesDetails = data.data
+                            this.salesDetails = data.data,
+                            this.claluateExpenses,
+                    this.claluateQuantity,
+                    this.claluatetotalSale
+                        })
+                        .catch((response) => {
+                            console.log(response)
+                        })
+
+
+                  axios.post('api/filterexpenses/', {
+                        startdate: startdate,
+                        enddate: enddate
+                    })
+                        .then((data) => {
+                            console.log("resonse data")
+                            console.log(data)
+                            this.expenses = data.data
+                        })
+                        .catch((response) => {
+                            console.log(response)
+                        })
+
+
+
+                        axios.post('api/filtersales/', {
+                        startdate: startdate,
+                        enddate: enddate
+                    })
+                        .then((data) => {
+                            console.log("resonse data")
+                            console.log(data)
+                            this.sales = data.data
                         })
                         .catch((response) => {
                             console.log(response)
                         })
                 },
+                claluatetotalSale()
+                {
+
+                    this.totalSales=0;
+                    this.sales.forEach(element => {
+                            console.log("total salesssssss")
+                    console.log(element)
+                        this.totalSales = this.totalSales+element.grandtotal
+                    });
+
+                },
+                claluateExpenses()
+                {
+
+                    this.totalExpenses=0;
+                    this.expenses.forEach(element => {
+                        this.totalExpenses = this.totalExpenses+Number(element.amount)
+                    });
+                },
+                claluateQuantity()
+                {
+
+                    this.quantity=0;
+                    this.salesDetails.forEach(element => {
+                        this.quantity = this.quantity+element.quantity
+                    });
+                },
                 getSalesDetails() {
                     this.startdate = ''
                     this.enddate = ''
-                    axios.get("api/salesdetails").then(({data}) => (this.salesDetails = data.data));
+                    axios.get("api/salesdetails").then(({data}) => (this.salesDetails = data.data,console.log(data.data)));
+                    axios.get("api/sales").then(({data}) => (this.sales = data.data));
+                    axios.get("api/expenses").then(({data}) => (this.expenses = data.data));
                     console.log(this.salesDetails)
+                    console.log(this.sales)
+                    console.log(this.expenses)
+                      this.claluateExpenses(),
+                    this.claluateQuantity(),
+                    this.claluatetotalSale()
                 }
             },
      mounted() {
-         this.getSalesDetails()
             console.log('Component mounted.')
+         this.getSalesDetails()
+
         },
         created() {
+                this.getSalesDetails()
 
             Fire.$on('searching', () => {
                 let query = this.$parent.search;
@@ -114,8 +180,10 @@
             });
 
             Fire.$on('afterCreate', () => {
-                this.getSalesDetails()
+         this.getSalesDetails()
+
             });
+         this.getSalesDetails()
 
             // setInterval(()=>this.getExpensesCategories(), 3000);
 

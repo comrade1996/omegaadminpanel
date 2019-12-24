@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+
 
 class ExpensesCategory extends Model
 {
@@ -18,7 +19,7 @@ class ExpensesCategory extends Model
     protected static function boot()
     {
         parent::boot();
-        Category::saving(function ($model) {
+        ExpensesCategory::saving(function ($model) {
 
                 $model->created_by = Auth::user()->name;
 

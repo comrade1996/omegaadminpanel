@@ -13,10 +13,12 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
+
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('category_id');
+            $table->engine = "InnoDB";
+            $table->BigIncrements('id');
             $table->unsignedInteger('unit_id');
+            $table->unsignedInteger('category_id');
             $table->string('name');
             $table->float('purchaseprice');
             $table->float('sellingprice');
