@@ -10,9 +10,9 @@
         </li>
 
     </ul>
-
+<button onclick="{{changeLang()}}">lang</button>
     <!-- SEARCH FORM -->
-    <div class="form-inline ml-3">
+    {{-- <div class="form-inline ml-3">
         <div class="input-group input-group-sm">
             <input class="form-control form-control-navbar" @keyup="searchit" v-model="search" type="search" placeholder="Search"
                    aria-label="Search">
@@ -22,7 +22,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div id="time" style="margin-left:5%"></div>
 </nav>
 

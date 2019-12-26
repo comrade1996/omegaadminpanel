@@ -9,6 +9,18 @@ require('./bootstrap');
 window.Vue = require('vue');
 import {Form, HasError, AlertError} from 'vform'
 import moment from 'moment'
+import VueInternationalization from 'vue-i18n';
+import Locale from './vue-i18n-locales.generated';
+
+Vue.use(VueInternationalization);
+
+const lang = document.documentElement.lang.substr(0, 2);
+// or however you determine your current app locale
+
+const i18n = new VueInternationalization({
+    locale: lang,
+    messages: Locale
+});
 
 
 Vue.component(HasError.name, HasError);
@@ -69,6 +81,7 @@ const routes = [
     { path: '/units', component: require('./components/Units.vue').default },
     { path: '/sales', component: require('./components/Sales.vue').default },
     { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
+    { path: '/missingitems', component: require('./components/MissingItems.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/pos', component: require('./components/POS.vue').default },
     { path: '/', component: require('./components/POS.vue').default }
@@ -128,6 +141,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     router,
+    i18n,
     data:{
         search:''
     },

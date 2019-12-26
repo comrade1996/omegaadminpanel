@@ -1,5 +1,5 @@
 <!-- Main Footer -->
-<footer class="main-footer">
+<footer class="main-footer" >
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
         <i class="fas fa-laptop-code"></i> with <i class="fas fa-heart"></i> by Omair

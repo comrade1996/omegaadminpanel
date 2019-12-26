@@ -36,7 +36,7 @@
                                 <td>{{row.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(row)">
-                                        <i class="fas fa-pencil-alt text-blue"></i>
+                                        <i class="far fa-check-circle"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteSales(row.id)">

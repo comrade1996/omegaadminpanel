@@ -14,7 +14,7 @@
                         <table class="table table-hover">
                             <tbody><tr>
                                 <th>ID</th>
-                                <th>Name</th>
+                                <th>{{ $t('sidebar.name') }}</th>
                                 <th>Description</th>
                                 <th>Created At</th>
                                 <th>Modify</th>

@@ -4,7 +4,7 @@
     <a href="#" class="brand-link">
         <img src="./img/logo.png" alt="laraStart Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">House of Oud</span>
+        <span class="brand-text font-weight-light">Pharmacy</span>
     </a>
 
     <!-- Sidebar -->
@@ -30,7 +30,7 @@
                     <router-link to="/dashboard" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt text-blue"></i>
                         <p>
-                            Dashboard
+                            {{ __('sidebar.dashboard') }}
                         </p>
                     </router-link>
                 </li>
@@ -39,7 +39,8 @@
                     <router-link to="/pos" class="nav-link">
                         <i class="nav-icon fas fa-cash-register text-blue"></i>
                         <p>
-                            POS
+                            {{ __('sidebar.pos') }}
+
                         </p>
                     </router-link>
                 </li>
@@ -48,7 +49,8 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog text-green"></i>
                         <p>
-                            Managment
+                            {{ __('sidebar.management') }}
+
                             <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
@@ -56,7 +58,7 @@
                         <li class="nav-item">
                             <router-link to="/users" class="nav-link">
                                 <i class="fas fa-users nav-icon text-teal"></i>
-                                <p>Users</p>
+                                <p> {{ __('sidebar.users') }} </p>
                             </router-link>
                         </li>
                     </ul>
@@ -65,7 +67,8 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-boxes text-green"></i>
                         <p>
-                            Products
+                            {{ __('sidebar.products') }}
+
                             <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
@@ -74,7 +77,7 @@
                             <router-link to="/products" class="nav-link">
                                 <i class="nav-icon fas fa-box text-teal"></i>
                                 <p>
-                                    Products List
+                                    {{ __('sidebar.productslist') }}
                                 </p>
                             </router-link>
                         </li>
@@ -84,7 +87,7 @@
                             <router-link to="/categories" class="nav-link">
                                 <i class="nav-icon fas fa-warehouse text-teal"></i>
                                 <p>
-                                    Products Categories
+                                    {{ __('sidebar.productscategories') }}
                                 </p>
                             </router-link>
                         </li>
@@ -92,7 +95,7 @@
                             <router-link to="/units" class="nav-link">
                                 <i class="nav-icon fas fa-warehouse text-teal"></i>
                                 <p>
-                                    Units
+                                    {{ __('sidebar.units') }}
                                 </p>
                             </router-link>
                         </li>
@@ -103,7 +106,7 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice-dollar text-red"></i>
                         <p>
-                            Expenses
+                            {{ __('sidebar.expenses') }}
                             <i class="right fa fa-angle-left"></i>
                         </p>
                     </a>
@@ -112,7 +115,8 @@
                             <router-link to="/expenses" class="nav-link">
                                 <i class="nav-icon fas fa-coins text-pink"></i>
                                 <p>
-                                    Expenses List
+                                    {{ __('sidebar.expenseslist') }}
+
                                 </p>
                             </router-link>
                         </li>
@@ -122,7 +126,8 @@
                             <router-link to="/expensescategories" class="nav-link">
                                 <i class="nav-icon fas fa-warehouse text-pink"></i>
                                 <p>
-                                    Expenses Categories
+                                    {{ __('sidebar.expensescategories') }}
+
                                 </p>
                             </router-link>
                         </li>
@@ -132,7 +137,8 @@
                     <router-link to="/sales" class="nav-link">
                         <i class="nav-icon fas fa-money-bill-alt text-green"></i>
                         <p>
-                            All Sales
+                            {{ __('sidebar.allsales') }}
+
                         </p>
                     </router-link>
                 </li>
@@ -140,7 +146,17 @@
                     <router-link to="/saledetails" class="nav-link">
                         <i class="nav-icon fas fa-money-bill-alt text-green"></i>
                         <p>
-                            Sales Details
+                            {{ __('sidebar.salesdetails') }}
+
+                        </p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/missingitems" class="nav-link">
+                        <i class="nav-icon fas fa-money-bill-alt text-green"></i>
+                        <p>
+                            {{ __('sidebar.missingitems') }}
+
                         </p>
                     </router-link>
                 </li>
@@ -148,7 +164,8 @@
                     <router-link to="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user text-orange"></i>
                         <p>
-                            Profile
+                            {{ __('sidebar.profile') }}
+
                         </p>
                     </router-link>
                 </li>
@@ -156,7 +173,8 @@
                     <router-link to="/developer" class="nav-link">
                         <i class="nav-icon fas fa-cogs text-orange"></i>
                         <p>
-                            Developer
+                            {{ __('sidebar.developer') }}
+
                         </p>
                     </router-link>
                 </li>
@@ -167,7 +185,8 @@
                   document.getElementById('logout-form').submit();">
                         <i class="nav-icon fas fa-power-off text-red"></i>
                         <p>
-                            {{ __('Logout') }}
+                            {{ __('sidebar.logout') }}
+
                         </p>
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

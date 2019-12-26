@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSaleDetailsTable extends Migration
+class CreateMissingItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateSaleDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sale_details', function (Blueprint $table) {
+        Schema::create('missingitems', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('sale_id');
-            $table->unsignedInteger('product_id');
-            $table->double('price');
-            $table->unsignedInteger('quantity');
+            $table->string('name');
+            $table->string('description')->nullable();
             $table->string('created_by');
-            $table->softDeletes();
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 
@@ -32,6 +31,6 @@ class CreateSaleDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sale_details');
+        Schema::dropIfExists('missingitems');
     }
 }

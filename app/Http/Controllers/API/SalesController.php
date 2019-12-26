@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Sales;
+use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\SaleDetail;
 use Illuminate\Support\Facades\Auth;
 use phpseclib\Math\BigInteger;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
@@ -116,6 +119,17 @@ class SalesController extends Controller
     public function destroy($id)
     {
         $Sales = Sales::findOrFail($id);
+        $salesQuery = SaleDetail::where('id', '=',$id)->get();
+        foreach ($salesQuery as $saleQuery) {
+            // $tempProduct = new Product();
+            $tempProduct = Product::findOrFail($saleQuery->product_id);
+            dd($tempProduct);
+            // $tempProduct->quantity = $tempProduct->quantity + $saleQuery->quantity;
+            // $tempProduct->save();
+            $affectedRows = SaleDetail::where('sale_id','=',$id)->delete();
+            var_dump($affectedRows);
+            // var_dump($saleQuery);
+        }
         $Sales->delete();
         return['message' => 'Sales Deleted'];
 

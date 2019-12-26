@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "af2b4ccd90d004ba16468b08516b2bd8",
+    "content-hash": "0306808cb00455f8e8d1e4047784c797",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -745,6 +745,59 @@
             ],
             "description": "Highlight PHP code in terminal",
             "time": "2018-09-29T18:48:56+00:00"
+        },
+        {
+            "name": "kg-bot/laravel-localization-to-vue",
+            "version": "v1.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kg-bot/laravel-localization-to-vue.git",
+                "reference": "e408847ac5d278327c261685716bdc11cf5d9c8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kg-bot/laravel-localization-to-vue/zipball/e408847ac5d278327c261685716bdc11cf5d9c8c",
+                "reference": "e408847ac5d278327c261685716bdc11cf5d9c8c",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.*|^6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "KgBot\\LaravelLocalization\\LaravelLocalizationServiceProvider"
+                    ],
+                    "aliases": {
+                        "ExportLocalization": "KgBot\\LaravelLocalization\\Facades\\ExportLocalizations"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "KgBot\\LaravelLocalization\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stefan Ninic",
+                    "email": "ninicstefan94@gmail.com"
+                }
+            ],
+            "description": "Laravel package used to collect all localization files from resources/lang directory and sub-directories and make them available as JSON file",
+            "keywords": [
+                "Vue.js",
+                "json",
+                "laravel",
+                "localization",
+                "trans"
+            ],
+            "time": "2019-12-17T12:35:37+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4024,6 +4077,59 @@
                 "test"
             ],
             "time": "2016-01-20T08:20:44+00:00"
+        },
+        {
+            "name": "martinlindhe/laravel-vue-i18n-generator",
+            "version": "0.1.42",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/martinlindhe/laravel-vue-i18n-generator.git",
+                "reference": "f546c3f520d085f508b73933000da95ad528e1f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/martinlindhe/laravel-vue-i18n-generator/zipball/f546c3f520d085f508b73933000da95ad528e1f1",
+                "reference": "f546c3f520d085f508b73933000da95ad528e1f1",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "~5.1.0|~5.2.0|~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|~6.0",
+                "illuminate/support": "~5.1.0|~5.2.0|~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|~6.0",
+                "php": ">=5.5.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MartinLindhe\\VueInternationalizationGenerator\\GeneratorProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MartinLindhe\\VueInternationalizationGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Lindhe",
+                    "email": "martin@ubique.se"
+                }
+            ],
+            "description": "Generates a vue-i18n compatible include file from your Laravel translations.",
+            "homepage": "http://github.com/martinlindhe/laravel-vue-i18n-generator",
+            "keywords": [
+                "laravel",
+                "vue-i18n"
+            ],
+            "time": "2019-10-22T05:26:37+00:00"
         },
         {
             "name": "mockery/mockery",

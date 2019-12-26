@@ -19,6 +19,7 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::apiResources(['user'=>'API\UserController']);
     Route::apiResources(['unit'=>'API\UnitController']);
     Route::apiResources(['expensescategory'=>'API\ExpensesCategoryController']);
+    Route::apiResources(['missingitem'=>'API\MissingItemController']);
     Route::apiResources(['expenses'=>'API\ExpensesController']);
     Route::apiResources(['sales'=>'API\SalesController']);
     Route::apiResources(['salesdetails'=>'API\SalesDetailsController']);
@@ -27,6 +28,7 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::get('findCategory','API\CategoryController@search');
     Route::get('findUnit','API\UnitController@search');
     Route::get('findExpensesCategory','API\ExpensesCategoryController@search');
+    Route::get('findmissingitem','API\MissingItemController@search');
     Route::get('findExpenses','API\ExpensesController@search');
     Route::get('findSales','API\SalesController@search');
     Route::get('findProduct','API\ProductController@search');

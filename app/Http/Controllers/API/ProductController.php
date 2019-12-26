@@ -108,7 +108,7 @@ class ProductController extends Controller
                 $tempProduct->save();
             }
         }
-        return['message' => 'Product ss updated'];
+        return['message' => 'Product updated'];
     }
     public function search()
     {
