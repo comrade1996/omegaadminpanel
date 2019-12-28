@@ -237,9 +237,9 @@
                 {
 
                   var pr=false
-                    var id =Math.floor(Math.random()*90000) + 10000;
+                    // var id =Math.floor(Math.random()*90000) + 10000;
                     var disc =this.discount;
-                    this.globalId=id;
+                    // this.globalId=id;
                     if(disc<1) {
                         disc = 0;
                     }
@@ -248,7 +248,7 @@
                         this.isLoading=true
                         this.$Progress.get()
                     axios.post('api/sales', {
-                        sale_id:id,
+                        // sale_id:id,
                         subtotal: this.subtotal,
                         grandtotal:this.grandtotal,
                         discount:disc
@@ -256,18 +256,24 @@
                         .then(
 
                             (response => {
+
+                                this.globalId = response.data;
+                                console.log("meee")
+                                console.log(response.data)
+                                console.log(this.globalId)
                             tempsells:[];
                             var tempsell;
                             var sellsdata = JSON.stringify(this.sells);
                             axios.post('api/salesdetails',{
-                                sale_id:id,
+                                sale_id:this.globalId,
                                 sells:sellsdata
                             })
                                 .then((data)=>{
                                     console.log(data)
                                     pr=true
-
-                                    this.updateProducts()
+                                    this.int();
+                            this.clearSales();
+                                    // this.updateProducts()
                                     console.log("check")
                                 })
                                 .catch(()=>{
@@ -283,31 +289,7 @@
                         });
 
                 }},
-                updateProducts()
-                {
-                    var productsdata = JSON.stringify(this.sells);
-                    axios.post('api/persistproduct',{
-                        products:productsdata
-                    })
-                        .then( (response=> {
-                            console.log(response);
-                            console.log("updated")
-                            this.$Progress.finish()
-                            this.isLoading=false
-                            swal.fire(
-                                'Sold!',
-                                'Your file has been Solded.',
-                                'success'
-                            )
-                            this.int();
-                            this.clearSales();
-                        }))
-                        .catch(function (error) {
-                            console.log(error);
-                            this.isLoading=false
-                            this.$Progress.fail()
-                        });
-                },
+
                 getResults(page = 1) {
                     axios.get('api/product?page=' + page)
                         .then(response => {

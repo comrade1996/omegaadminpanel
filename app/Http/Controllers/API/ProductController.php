@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\SaleDetail;
+use App\Sales;
 
 class ProductController extends Controller
 {
@@ -96,18 +98,28 @@ class ProductController extends Controller
 
     public function persist(Request $request)
     {
-        $products[] = json_decode($request['products']);
-        echo gettype($products);
-        print_r($products);
-        echo count($products);
-        for($i=0;$i<count($products);$i++) {
-            for ($j = 0; $j < count($products[$i]); $j++) {
-                $tempProduct = new Product();
-                $tempProduct = Product::findOrFail($products[$i][$j]->id);
-                $tempProduct->quantity = $tempProduct->quantity - $products[$i][$j]->quantity;
-                $tempProduct->save();
-            }
+        $Sales = Sales::findOrFail($request['id']);
+        $Sales->verified= 1;
+        $Sales->save();
+        $salesQuery = SaleDetail::where('sale_id', '=',$request['id'])->get();
+        foreach ($salesQuery as $saleQuery) {
+            $tempProduct = Product::findOrFail($saleQuery->product_id);
+            $tempProduct->quantity = $tempProduct->quantity - $saleQuery->quantity;
+            $tempProduct->save();
+            $saleQuery->verified = 1;
+            $saleQuery->save();
         }
+        // echo gettype($products);
+        // print_r($products);
+        // echo count($products);
+        // for($i=0;$i<count($products);$i++) {
+        //     for ($j = 0; $j < count($products[$i]); $j++) {
+        //         $tempProduct = new Product();
+        //         $tempProduct = Product::findOrFail($products[$i][$j]->id);
+        //         $tempProduct->quantity = $tempProduct->quantity - $products[$i][$j]->quantity;
+        //         $tempProduct->save();
+        //     }
+        // }
         return['message' => 'Product updated'];
     }
     public function search()

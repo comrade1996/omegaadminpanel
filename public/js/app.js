@@ -2058,7 +2058,10 @@ __webpack_require__.r(__webpack_exports__);
       this.sales.forEach(function (element) {
         console.log("total salesssssss");
         console.log(element);
-        _this2.totalSales = _this2.totalSales + element.grandtotal;
+
+        if (element.verified == 1) {
+          _this2.totalSales = _this2.totalSales + element.grandtotal;
+        }
       });
     },
     claluateExpenses: function claluateExpenses() {
@@ -2074,7 +2077,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.quantity = 0;
       this.salesDetails.forEach(function (element) {
-        _this4.quantity = _this4.quantity + element.quantity;
+        if (element.verified == 1) {
+          _this4.quantity = _this4.quantity + element.quantity;
+        }
       });
     },
     getSalesDetails: function getSalesDetails() {
@@ -3079,10 +3084,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateSales: function updateSales() {
       var _this2 = this;
 
-      var pr = false;
-      var id = Math.floor(Math.random() * 90000) + 10000;
-      var disc = this.discount;
-      this.globalId = id;
+      var pr = false; // var id =Math.floor(Math.random()*90000) + 10000;
+
+      var disc = this.discount; // this.globalId=id;
 
       if (disc < 1) {
         disc = 0;
@@ -3092,23 +3096,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.isLoading = true;
         this.$Progress.get();
         axios.post('api/sales', {
-          sale_id: id,
+          // sale_id:id,
           subtotal: this.subtotal,
           grandtotal: this.grandtotal,
           discount: disc
         }).then(function (response) {
+          _this2.globalId = response.data;
+          console.log("meee");
+          console.log(response.data);
+          console.log(_this2.globalId);
+
           tempsells: [];
 
           var tempsell;
           var sellsdata = JSON.stringify(_this2.sells);
           axios.post('api/salesdetails', {
-            sale_id: id,
+            sale_id: _this2.globalId,
             sells: sellsdata
           }).then(function (data) {
             console.log(data);
             pr = true;
 
-            _this2.updateProducts();
+            _this2.int();
+
+            _this2.clearSales(); // this.updateProducts()
+
 
             console.log("check");
           }).catch(function () {
@@ -3122,44 +3134,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       }
     },
-    updateProducts: function updateProducts() {
-      var _this3 = this;
-
-      var productsdata = JSON.stringify(this.sells);
-      axios.post('api/persistproduct', {
-        products: productsdata
-      }).then(function (response) {
-        console.log(response);
-        console.log("updated");
-
-        _this3.$Progress.finish();
-
-        _this3.isLoading = false;
-        swal.fire('Sold!', 'Your file has been Solded.', 'success');
-
-        _this3.int();
-
-        _this3.clearSales();
-      }).catch(function (error) {
-        console.log(error);
-        this.isLoading = false;
-        this.$Progress.fail();
-      });
-    },
     getResults: function getResults() {
-      var _this4 = this;
+      var _this3 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('api/product?page=' + page).then(function (response) {
-        _this4.users = response.data;
+        _this3.users = response.data;
       });
     },
     getProducts: function getProducts() {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get("api/product").then(function (_ref2) {
         var data = _ref2.data;
-        return _this5.products = data.data;
+        return _this4.products = data.data;
       });
     }
   },
@@ -3167,17 +3155,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     console.log(this.discount);
   },
   created: function created() {
-    var _this6 = this;
+    var _this5 = this;
 
     Fire.$on('searching', function () {
-      var query = _this6.$parent.search;
+      var query = _this5.$parent.search;
       axios.get('api/findProduct?q=' + query).then(function (data) {
-        _this6.products = data.data;
+        _this5.products = data.data;
       }).catch(function () {});
     });
     this.getProducts();
     Fire.$on('afterCreate', function () {
-      _this6.getProducts();
+      _this5.getProducts();
     });
   }
 });
@@ -3844,7 +3832,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4019,6 +4006,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4084,19 +4073,26 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$Progress.finish();
       }).catch(function () {});
     },
-    updateSales: function updateSales() {
-      // this.$progress.start();
-      console.log("hoola");
-      this.form.put('api/sales/' + this.form.id).then(function () {
-        swal.fire('Updated!', 'Your sales has been updated.', 'success'); // this.$progress.finish();
+    updateProducts: function updateProducts(id) {
+      var _this4 = this;
 
-        $('#createsales').modal('hide');
-        Fire.$emit('afterCreate');
-      }).catch(function () {//  this.$Progress.fail();
+      axios.post('api/persistproduct', {
+        id: id
+      }).then(function (response) {
+        console.log(response);
+        console.log("updated"); // swal.fire(
+        //     'Sold!',
+        //     'Your file has been Solded.',
+        //     'success'
+        // )
+
+        _this4.$router.go();
+      }).catch(function (error) {
+        console.log(error);
       });
     },
     deleteSales: function deleteSales(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       swal.fire({
         title: 'Are you sure?',
@@ -4108,7 +4104,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          _this4.form.delete('api/sales/' + id).then(function () {
+          _this5.form.delete('api/sales/' + id).then(function () {
             swal.fire('Deleted!', 'Your file has been deleted.', 'success');
             Fire.$emit('afterCreate');
           }).catch(function () {
@@ -4122,17 +4118,17 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component mounted.');
   },
   created: function created() {
-    var _this5 = this;
+    var _this6 = this;
 
     Fire.$on('searching', function () {
-      var query = _this5.$parent.search;
+      var query = _this6.$parent.search;
       axios.get('api/findSales?q=' + query).then(function (data) {
-        _this5.sales = data.data;
+        _this6.sales = data.data;
       }).catch(function () {});
     });
     this.getSales();
     Fire.$on('afterCreate', function () {
-      _this5.getSales();
+      _this6.getSales();
     }); //setInterval(()=>this.getsaless(), 3000);
   }
 });
@@ -71556,46 +71552,48 @@ var render = function() {
                         return _c(
                           "tbody",
                           {},
-                          [
-                            _vm._l(displayData, function(row) {
-                              return _c("v-tr", { key: row.guid }, [
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.id))])
+                          _vm._l(displayData, function(row) {
+                            return _c("v-tr", { key: row.guid }, [
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.id))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.sale_id))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.product.name))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.quantity))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.created_at))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.updated_at))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              row.quantity > 0 || null
+                                ? _c("td", [_vm._v(_vm._s(row.created_by))])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c("td", [
+                                row.verified == 1
+                                  ? _c("p", [_vm._v("verified")])
                                   : _vm._e(),
                                 _vm._v(" "),
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.sale_id))])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.product.name))])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.quantity))])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.created_at))])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.updated_at))])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                row.quantity > 0 || null
-                                  ? _c("td", [_vm._v(_vm._s(row.created_by))])
+                                row.verified == 0
+                                  ? _c("p", [_vm._v("Not verified")])
                                   : _vm._e()
                               ])
-                            }),
-                            _vm._v(" "),
-                            _c("v-tr", [
-                              _c("td", [_vm._v("2345344r")]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v("ottom")])
                             ])
-                          ],
-                          2
+                          }),
+                          1
                         )
                       }
                     }
@@ -71630,7 +71628,9 @@ var render = function() {
                           _vm._v("Modify")
                         ]),
                         _vm._v(" "),
-                        _c("v-th", [_vm._v("Created by")])
+                        _c("v-th", [_vm._v("Created by")]),
+                        _vm._v(" "),
+                        _c("v-th", [_vm._v("verifiy")])
                       ],
                       1
                     )
@@ -71741,25 +71741,26 @@ var render = function() {
                               _c("td", [_vm._v(_vm._s(row.created_by))]),
                               _vm._v(" "),
                               _c("td", [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.openEditModal(row)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c("i", {
-                                      staticClass: "far fa-check-circle"
-                                    })
-                                  ]
-                                ),
-                                _vm._v(
-                                  "\n                                /\n                                "
-                                ),
+                                row.verified == 1
+                                  ? _c("p", [_vm._v("verified")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                row.verified == 0
+                                  ? _c(
+                                      "button",
+                                      {
+                                        on: {
+                                          click: function($event) {
+                                            _vm.updateProducts(row.id)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("verify")]
+                                    )
+                                  : _vm._e()
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [
                                 _c(
                                   "a",
                                   {
@@ -71815,6 +71816,8 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("v-th", [_vm._v("Created by")]),
+                        _vm._v(" "),
+                        _c("v-th", [_vm._v("verify Sale")]),
                         _vm._v(" "),
                         _c("v-th", [_vm._v("Options")])
                       ],

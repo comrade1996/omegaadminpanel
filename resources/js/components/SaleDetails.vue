@@ -33,6 +33,7 @@
                                 <v-th sortKey="created_at">Created At</v-th>
                                 <v-th sortKey="updated_at">Modify</v-th>
                                 <v-th>Created by</v-th>
+                                <v-th>verifiy</v-th>
                             </tr>
                             </thead>
                                 <tbody slot="body" slot-scope="{displayData}">
@@ -44,12 +45,10 @@
                                 <td v-if=" row.quantity>0 || null">{{ row.created_at }}</td>
                                 <td v-if=" row.quantity>0 || null">{{ row.updated_at }}</td>
                                 <td v-if=" row.quantity>0 || null">{{ row.created_by }}</td>
-
+                                <td><p v-if="row.verified==1">verified</p>
+                                <p v-if="row.verified==0">Not verified</p>
+                                </td>
                             </v-tr>
-                                 <v-tr>
-                                <td>2345344r</td>
-                                <td>ottom</td>
-                                 </v-tr>
                             </tbody>
                         </v-table>
 
@@ -97,6 +96,7 @@
                             console.log(response)
                         })
                 },
+
                 getSalesDetails() {
                     this.startdate = ''
                     this.enddate = ''

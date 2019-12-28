@@ -17,6 +17,7 @@ class CreateSalesTable extends Migration
             $table->unsignedBigInteger('id')->unique();
             $table->double('subtotal');
             $table->double('discount')->default(0);
+            $table->double('verified')->default(0);
             $table->double('grandtotal');
             $table->string('created_by');
             $table->softDeletes();

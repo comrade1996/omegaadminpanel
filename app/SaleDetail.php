@@ -11,7 +11,7 @@ class SaleDetail extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['sale_id', 'product_id', 'quantity', 'price','created_by'];
+    protected $fillable = ['sale_id', 'product_id', 'quantity', 'price','created_by','verified'];
     protected   $productName;
     protected $table = 'sale_details';
     protected $with=['product'];

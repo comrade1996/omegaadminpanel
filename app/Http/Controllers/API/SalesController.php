@@ -44,7 +44,6 @@ class SalesController extends Controller
     {
         $this->validate($request,
             [
-                'sale_id'=> 'required|numeric',
                 'subtotal' => 'required|numeric',
                 'discount' => 'numeric',
                 'grandtotal' => 'required|numeric'
@@ -54,7 +53,7 @@ class SalesController extends Controller
             $saleid = rand(pow(10, $digits-1), pow(10, $digits)-1);
        // = mt_rand(100000, 999999);
         if( $request['subtotal']>0){
-        return Sales::create([
+        Sales::create([
             'id'=> $saleid,
             'subtotal' => $request['subtotal'],
             'discount' => $request['discount'],
@@ -62,6 +61,7 @@ class SalesController extends Controller
 
 
         ]);
+        return $saleid;
         }
 
     }
@@ -119,15 +119,16 @@ class SalesController extends Controller
     public function destroy($id)
     {
         $Sales = Sales::findOrFail($id);
-        $salesQuery = SaleDetail::where('id', '=',$id)->get();
+        $salesQuery = SaleDetail::where('sale_id', '=',$id)->get();
         foreach ($salesQuery as $saleQuery) {
             // $tempProduct = new Product();
             $tempProduct = Product::findOrFail($saleQuery->product_id);
-            dd($tempProduct);
-            // $tempProduct->quantity = $tempProduct->quantity + $saleQuery->quantity;
-            // $tempProduct->save();
-            $affectedRows = SaleDetail::where('sale_id','=',$id)->delete();
-            var_dump($affectedRows);
+            // dd($tempProduct);
+            $tempProduct->quantity = $tempProduct->quantity + $saleQuery->quantity;
+            $tempProduct->save();
+            // $affectedRows = SaleDetail::where('sale_id','=',$id)->delete();
+            // var_dump($affectedRows);
+            $saleQuery->delete();
             // var_dump($saleQuery);
         }
         $Sales->delete();

@@ -22,6 +22,7 @@
                                 <v-th sortKey="created_at">Created At</v-th>
                                 <v-th sortKey="updated_at">Modify</v-th>
                                 <v-th >Created by</v-th>
+                                <v-th>verify Sale</v-th>
                                 <v-th>Options</v-th>
                             </tr>
                             </thead>
@@ -35,10 +36,11 @@
                                 <td>{{row.updated_at | readableDate }}</td>
                                 <td>{{row.created_by}}</td>
                                 <td>
-                                    <a href="#" @click="openEditModal(row)">
-                                        <i class="far fa-check-circle"></i>
-                                    </a>
-                                    /
+                                    <p v-if="row.verified==1">verified</p>
+                                    <button v-if="row.verified==0" @click="updateProducts(row.id)">verify</button>
+
+                                </td>
+                                <td>
                                     <a href="#" @click="deleteSales(row.id)">
                                         <i class="fas fa-trash text-red"></i>
                                     </a>
@@ -159,26 +161,24 @@
 
                         })
                 },
-                updateSales()
+                updateProducts(id)
                 {
-                    // this.$progress.start();
-                    console.log("hoola");
-                    this.form.put('api/sales/'+this.form.id)
-                        .then(()=>
-                        {
-                            swal.fire(
-                                'Updated!',
-                                'Your sales has been updated.',
-                                'success'
-                            )
-                            // this.$progress.finish();
-                            $('#createsales').modal('hide');
-                            Fire.$emit('afterCreate');
-                        })
-                        .catch(()=>
-                        {
-                            //  this.$Progress.fail();
-                        })
+                    axios.post('api/persistproduct',{
+                        id:id
+                    })
+                        .then( (response=> {
+                            console.log(response);
+                            console.log("updated")
+                            // swal.fire(
+                            //     'Sold!',
+                            //     'Your file has been Solded.',
+                            //     'success'
+                            // )
+                                this.$router.go()
+                        }))
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 },
                 deleteSales(id)
                 {

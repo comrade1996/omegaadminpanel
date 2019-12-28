@@ -18,6 +18,7 @@ class CreateSaleDetailsTable extends Migration
             $table->unsignedBigInteger('sale_id');
             $table->unsignedInteger('product_id');
             $table->double('price');
+            $table->double('verified')->default(0);
             $table->unsignedInteger('quantity');
             $table->string('created_by');
             $table->softDeletes();

@@ -126,7 +126,9 @@
                     this.sales.forEach(element => {
                             console.log("total salesssssss")
                     console.log(element)
+                    if(element.verified==1){
                         this.totalSales = this.totalSales+element.grandtotal
+                    }
                     });
 
                 },
@@ -143,7 +145,9 @@
 
                     this.quantity=0;
                     this.salesDetails.forEach(element => {
+                    if(element.verified==1){
                         this.quantity = this.quantity+element.quantity
+                    }
                     });
                 },
                 getSalesDetails() {

@@ -12,7 +12,7 @@ class Sales extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'subtotal','discount','grandtotal','id','created_by'
+        'subtotal','discount','grandtotal','id','created_by','verified'
     ];
 
 
