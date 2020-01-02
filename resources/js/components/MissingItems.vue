@@ -4,9 +4,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Missing Items Table</h3>
+                        <h3 class="card-title">المنتجات الناقصة</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Item <i
+                            <button class="btn btn-primary" @click="openCreateModal"> منتج جديد <i
                                 class="fas fa-Item-plus"></i></button>
                         </div>
                     </div>
@@ -15,13 +15,13 @@
                         <table class="table table-hover">
                             <tbody>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
-                                <th>created by</th>
-                                <th>options</th>
+                                <th>المعرف</th>
+                                <th>الاسم</th>
+                                <th>الوصف</th>
+                                <th>تاريخ الانشاء</th>
+                                <th>تاريخ التعديل</th>
+                                <th>اسم المنشئ</th>
+                                <th>العمليات</th>
                             </tr>
                             <tr v-for="item in Items.data" :key="item.id">
                                 <td>{{item.id}}</td>
@@ -32,11 +32,11 @@
                                 <td>{{item.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(item)">
-                                        <i class="fas fa-pencil-alt text-blue"></i>
+                                        <i class="fa fa-pencil-square-o"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteItem(item.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -58,7 +58,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createItemTitle">Create Item</h5>
+                        <h5 class="modal-title" id="createItemTitle">انشاء منتج</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -66,14 +66,14 @@
                     <form @submit.prevent="editmode ? updateItem() : createItem()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Name</label>
+                                <label>الاسم</label>
                                 <input v-model="form.name" type="text" name="name"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                                 <has-error :form="form" field="name"></has-error>
                             </div>
 
                             <div class="form-group">
-                                <label>Description</label>
+                                <label>الوصف</label>
                                 <input v-model="form.description" type="text" name="description"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
                                 <has-error :form="form" field="description"></has-error>
@@ -81,8 +81,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">اغلاق</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -138,7 +138,7 @@
                             $('#createItem').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'Item Created successfully'
+                                title: 'تم الانشاء بنجاح'
                             });
                             this.$Progress.finish();
 
@@ -156,8 +156,8 @@
                     this.form.put('api/missingitem/' + this.form.id)
                         .then(() => {
                             swal.fire(
-                                'Updated!',
-                                'Your Item has been updated.',
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
                                 'success'
                             )
                             // this.$progress.finish();
@@ -170,28 +170,28 @@
                 },
                 deleteItem(id) {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'هل انت متأكد؟',
+                        text: "لن تستطيع التراجع",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'امسح!'
                     }).then((result) => {
                         if (result.value) {
                             this.form.delete('api/missingitem/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'لقد تم المسح بنجاح.',
                                         'success'
                                     )
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        '  تم المسح بنجاح.',
                                         'warning'
                                     )
                                 })

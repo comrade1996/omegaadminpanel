@@ -12,16 +12,22 @@ class Product extends Model
     use SoftDeletes;
 
      protected $fillable = [
-        'name', 'purchaseprice','sellingprice','quantity','company','edate','category_id','unit_id','created_by'
+         'name', 'purchaseprice', 'sellingprice', 'quantity', 'company_id', 'edate', 'category_id', 'unit_id', 'created_by'
     ];
 
 
-    protected $with=['category','unit'];
+    protected $with = ['category', 'unit', 'company'];
 
     public function category()
     {
         return $this->belongsTo('App\Category');
     }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Company');
+    }
+
     public function unit()
     {
         return $this->belongsTo('App\Unit');

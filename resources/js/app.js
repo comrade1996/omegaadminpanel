@@ -12,6 +12,11 @@ import moment from 'moment'
 import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated';
 
+import VueGoogleCharts from 'vue-google-charts'
+
+Vue.use(VueGoogleCharts)
+
+
 Vue.use(VueInternationalization);
 
 const lang = document.documentElement.lang.substr(0, 2);
@@ -70,6 +75,7 @@ const toast = swal.mixin({
 
 window.toast = toast;
 
+
 const routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/saledetails', component: require('./components/SaleDetails.vue').default },
@@ -79,6 +85,7 @@ const routes = [
     { path: '/products', component: require('./components/Products.vue').default },
     { path: '/expenses', component: require('./components/Expenses.vue').default },
     { path: '/units', component: require('./components/Units.vue').default },
+    {path: '/company', component: require('./components/Company.vue').default},
     { path: '/sales', component: require('./components/Sales.vue').default },
     { path: '/expensescategories', component: require('./components/ExpensesCategories.vue').default },
     { path: '/missingitems', component: require('./components/MissingItems.vue').default },

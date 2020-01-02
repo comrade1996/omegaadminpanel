@@ -4,14 +4,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Products Table</h3>
+                        <h3 class="card-title">المنتجات</h3>
                         <div class="card-tools">
                             <div class="row">
                                 <div class="col-md-7">
                             <input placeholder="Search by Product Name" class="form-control" v-model="filters.name.value" />
                                 </div>
                                     <div class="col-md-4 mr-1">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Product <i class="fas fa-Product-plus"></i></button>
+                                        <button class="btn btn-primary" @click="openCreateModal">انشاء منتج <i
+                                            class="fas fa-Product-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -22,18 +23,18 @@
                                  class="table table-hover">
                             <thead slot="head">
                             <tr>
-                                <v-th sortKey="id">ID</v-th>
-                                <v-th sortKey="name">Name</v-th>
-                                <v-th sortKey="purchaseprice">Purchase Price</v-th>
-                                <v-th sortKey="sellingprice">Selling Price</v-th>
-                                <v-th sortKey="quantity">Quantity</v-th>
-                                <v-th sortKey="company">Company</v-th>
-                                <v-th sortKey="category.name">Category</v-th>
-                                <v-th sortKey="edate">Expire Date</v-th>
-                                <v-th sortKey="created_by">Created by</v-th>
-                                <v-th sortKey="created_at">Created At</v-th>
-                                <v-th sortKey="updated_at">Modify</v-th>
-                                <v-th>Options</v-th>
+                                <v-th sortKey="id">المعرف</v-th>
+                                <v-th sortKey="name">الاسم</v-th>
+                                <v-th sortKey="purchaseprice">سعر الشراء</v-th>
+                                <v-th sortKey="sellingprice">السعر البيع</v-th>
+                                <v-th sortKey="quantity">الكمية</v-th>
+                                <v-th sortKey="company">الشركة</v-th>
+                                <v-th sortKey="category.name">تصنيف المنتج</v-th>
+                                <v-th sortKey="edate">تاريخ الانتهاء</v-th>
+                                <v-th sortKey="created_by">اسم المنشئ</v-th>
+                                <v-th sortKey="created_at">تاريخ الانشاء</v-th>
+                                <v-th sortKey="updated_at">تاريخ التعديل</v-th>
+                                <v-th>العمليات</v-th>
                             </tr>
                             </thead>
                             <tbody slot="body" slot-scope="{displayData}">
@@ -42,8 +43,8 @@
                                 <td>{{row.name}}</td>
                                 <td>{{row.purchaseprice}}</td>
                                 <td>{{row.sellingprice}}</td>
-                                <td :class="{backgroundAlert:row.quantity>15}">{{row.quantity}} {{row.unit.name }}</td>
-                                <td>{{row.company | capitalize}}</td>
+                                <td :class="{backgroundAlert:row.quantity<15}">{{row.quantity}} {{row.unit.name }}</td>
+                                <td>{{row.company.name | capitalize}}</td>
                                 <td>{{row.category.name | capitalize}}</td>
                                 <td :class="{backgroundAlert:expdatediff(row.edate)>90}">{{row.edate | readableDate }}</td>
                                 <td>{{row.created_by }}</td>
@@ -51,11 +52,11 @@
                                 <td>{{row.updated_at }}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(row)">
-                                        <i class="fas fa-pencil-alt text-blue"></i>
+                                        <i class="fa fa-pencil-square-o"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteProduct(row.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red"></i>
                                     </a>
                                 </td>
                             </v-tr>
@@ -72,7 +73,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createProductTitle">Create Product</h5>
+                        <h5 class="modal-title" id="createProductTitle">انشاء المنتج</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -80,44 +81,49 @@
                     <form @submit.prevent="editmode ? updateProduct() : createProduct()">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>الاسم</label>
                             <input v-model="form.name" type="text" name="name"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Purchase Price</label>
+                            <label>سعر الشراء</label>
                             <input v-model="form.purchaseprice" type="text" name="purchaseprice"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('purchaseprice') }">
                             <has-error :form="form" field="purchaseprice"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Selling Price</label>
+                            <label>سعر البيع</label>
                             <input v-model="form.sellingprice" type="text" name="sellingprice"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('sellingprice') }">
                             <has-error :form="form" field="sellingprice"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Quantity</label>
+                            <label>الكمية</label>
                             <input v-model="form.quantity" type="text" name="quantity"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('quantity') }">
                             <has-error :form="form" field="quantity"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Company</label>
-                            <input v-model="form.company" type="text" name="company"
-                                   class="form-control" :class="{ 'is-invalid': form.errors.has('company') }">
+                            <label>الشركة</label>
+                            <select v-model="form.company" name="company" class="form-control"
+                                    :class="{ 'is-invalid': form.errors.has('company') }">
+                                <option value="">اختر الشركة للمنتج</option>
+                                <option v-for="company in companies" :value="company.id">
+                                    {{ company.name | capitalize}}
+                                </option>
+                            </select>
                             <has-error :form="form" field="company"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Category</label>
+                            <label>التصنيف</label>
                             <select v-model="form.category" name="category" class="form-control" :class="{ 'is-invalid': form.errors.has('category') }">
-                                <option value="">Select Category for Product</option>
+                                <option value="">اختر تصنيف للمنتج</option>
                                 <option v-for="category in categories" :value="category.id">
                                     {{ category.name | capitalize}}
                                 </option>
@@ -126,9 +132,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Unit</label>
+                            <label>وحدة قياس المنتج</label>
                             <select v-model="form.unit" name="unit" class="form-control" :class="{ 'is-invalid': form.errors.has('unit') }">
-                                <option value="">Select unit for Product</option>
+                                <option value="">اختر وحدة قياس للمنتج</option>
                                 <option v-for="unit in units" :value="unit.id">
                                     {{ unit.name | capitalize}}
                                 </option>
@@ -137,7 +143,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Expire Date</label>
+                            <label>تاريخ الانتهاء</label>
                             <input type="date"  v-model="form.edate" name="edate"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('edate') }">
                             <has-error :form="form" field="edate"></has-error>
@@ -145,8 +151,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">اغلاق</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
                     </div>
                     </form>
                 </div>
@@ -166,7 +172,7 @@
                 filters: {
 
                     name: { value: '', keys: ['name'] },
-                    company: { value: '', keys: ['company'] },
+                    company: {value: '', keys: ['company.name']},
                     category: { value: '', keys: ['category.name'] },
                     unit: { value: '', keys: ['unit.name'] }
 
@@ -175,6 +181,7 @@
                 editmode:true,
                 products:{},
                 categories: [{}],
+                companies: [{}],
                 units: [{}],
 
                 form:new Form({
@@ -246,6 +253,8 @@
                 getUnits()
                 {
                     axios.get("api/unit").then(({data}) => (this.units =data.data));
+                }, getCompanies() {
+                    axios.get("api/company").then(({data}) => (this.companies = data.data));
                 },
                 createProduct()
                 {
@@ -257,7 +266,7 @@
                             $('#createProduct').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'Product Created successfully'
+                                title: 'تم اﻹنشاء بنجاح'
                             })
                             this.$Progress.finish();
 
@@ -274,8 +283,8 @@
                         .then(()=>
                         {
                             swal.fire(
-                                'Updated!',
-                                'Your Product has been updated.',
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
                                 'success'
                             )
                            // this.$progress.finish();
@@ -290,28 +299,28 @@
                 deleteProduct(id)
                 {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'هل انت متأكد؟',
+                        text: "لن تستطيع التراجع",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'امسح!'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/product/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'لقد تم المسح بنجاح.',
                                         'success'
                                     )
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        '  تم المسح بنجاح.',
                                         'warning'
                                     )
                                 })
@@ -340,6 +349,11 @@
             this.getUnits();
             Fire.$on('afterCreate',()=>{this.getUnits()});
             console.log(this.units)
+            this.getCompanies();
+            Fire.$on('afterCreate', () => {
+                this.getCompanies()
+            });
+            console.log(this.companies)
             //setInterval(()=>this.getProducts(), 3000);
 
         }

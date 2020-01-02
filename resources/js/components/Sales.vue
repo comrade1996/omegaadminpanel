@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Sales Table</h3>
+                        <h3 class="card-title">المبيعات</h3>
                         <input placeholder="Search by Invoice ID" class="form-control" v-model="filters.sale_id.value"/>
                         <div class="card-tools">
                         </div>
@@ -15,15 +15,15 @@
                                  class="table table-hover">
                             <thead slot="head">
                             <tr>
-                                <v-th sortKey="id"> Invoice ID</v-th>
-                                <v-th sortKey="subtotal">Sub Total</v-th>
-                                <v-th sortKey="discount">Discount</v-th>
-                                <v-th sortKey="grandtotal">Grand Total</v-th>
-                                <v-th sortKey="created_at">Created At</v-th>
-                                <v-th sortKey="updated_at">Modify</v-th>
-                                <v-th >Created by</v-th>
-                                <v-th>verify Sale</v-th>
-                                <v-th>Options</v-th>
+                                <v-th sortKey="id"> رقم الفاتورة</v-th>
+                                <v-th sortKey="subtotal">المبلغ الكلي</v-th>
+                                <v-th sortKey="discount">الخصم</v-th>
+                                <v-th sortKey="grandtotal">المبلغ النهائي</v-th>
+                                <v-th sortKey="created_at">تاريخ الانشاء</v-th>
+                                <v-th sortKey="updated_at">تاريخ التعديل</v-th>
+                                <v-th>اسم المنشئ</v-th>
+                                <v-th>الحالة</v-th>
+                                <v-th>العمليات</v-th>
                             </tr>
                             </thead>
                             <tbody slot="body" slot-scope="{displayData}">
@@ -36,13 +36,14 @@
                                 <td>{{row.updated_at | readableDate }}</td>
                                 <td>{{row.created_by}}</td>
                                 <td>
-                                    <p v-if="row.verified==1">verified</p>
-                                    <button v-if="row.verified==0" @click="updateProducts(row.id)">verify</button>
+                                    <p v-if="row.verified==1">مصدقة</p>
+                                    <button v-if="row.verified==0" @click="updateProducts(row.id)"> تصديق الفاتورة
+                                    </button>
 
                                 </td>
                                 <td>
                                     <a href="#" @click="deleteSales(row.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red"></i>
                                     </a>
                                 </td>
                             </v-tr>
@@ -169,11 +170,11 @@
                         .then( (response=> {
                             console.log(response);
                             console.log("updated")
-                            // swal.fire(
-                            //     'Sold!',
-                            //     'Your file has been Solded.',
-                            //     'success'
-                            // )
+                            swal.fire(
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
+                                'success'
+                            )
                                 this.$router.go()
                         }))
                         .catch(function (error) {
@@ -183,28 +184,28 @@
                 deleteSales(id)
                 {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'هل انت متأكد؟',
+                        text: "لن تستطيع التراجع",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'امسح!'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/sales/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'لقد تم المسح بنجاح.',
                                         'success'
                                     )
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        '  تم المسح بنجاح.',
                                         'warning'
                                     )
                                 })

@@ -16,6 +16,7 @@ Auth::routes();
 
 Route::prefix('api')->middleware('auth')->group(function () {
     Route::apiResources(['category'=>'API\CategoryController']);
+    Route::apiResources(['company' => 'API\CompanyController']);
     Route::apiResources(['user'=>'API\UserController']);
     Route::apiResources(['unit'=>'API\UnitController']);
     Route::apiResources(['expensescategory'=>'API\ExpensesCategoryController']);
@@ -26,6 +27,7 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::apiResources(['product'=>'API\ProductController']);
     Route::get('findUser','API\UserController@search');
     Route::get('findCategory','API\CategoryController@search');
+    Route::get('findCompany', 'API\CompanyController@search');
     Route::get('findUnit','API\UnitController@search');
     Route::get('findExpensesCategory','API\ExpensesCategoryController@search');
     Route::get('findmissingitem','API\MissingItemController@search');
@@ -40,6 +42,10 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::post('persistproduct','API\ProductController@persist');
     Route::get('invoice', function () {
         return view('invoice');
+    });
+
+    Route::get('cashierinvoice', function () {
+        return view('cashierinvoice');
     });
 });
 

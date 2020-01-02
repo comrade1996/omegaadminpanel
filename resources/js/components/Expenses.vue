@@ -4,22 +4,23 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Expenses Table</h3>
+                        <h3 class="card-title">المنصرفات</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Expenses <i class="fas fa-expenses-plus"></i></button>
+                            <button class="btn btn-primary" @click="openCreateModal"> اصافة منصرف <i
+                                class="fas fa-expenses-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody><tr>
-                                <th>ID</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
-                                <th>created by</th>
-                                <th>Options</th>
+                                <th>المعرف</th>
+                                <th>نصنيف المنصرف</th>
+                                <th>قيمة المنصرف</th>
+                                <th>تاريخ الانشاء</th>
+                                <th>تاريخ التعديل</th>
+                                <th>اسم المنشئ</th>
+                                <th>العمليات</th>
                             </tr>
                             <tr v-for="expenses in expensess.data" :key="expenses.id">
                                 <td>{{expenses.id}}</td>
@@ -30,11 +31,11 @@
                                 <td>{{expenses.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(expenses)">
-                                        <i class="fas fa-pencil-alt text-blue"></i>
+                                        <i class="fa fa-pencil-square-o"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteexpenses(expenses.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -54,7 +55,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createexpensesTitle">Create expenses</h5>
+                        <h5 class="modal-title" id="createexpensesTitle">انشاء منصرف</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -62,9 +63,9 @@
                     <form @submit.prevent="editmode ? updateexpenses() : createexpenses()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Category</label>
+                                <label>التصنيف</label>
                                 <select v-model="form.category" name="category" class="form-control" :class="{ 'is-invalid': form.errors.has('category') }">
-                                    <option value="">Select Category for expenses</option>
+                                    <option value="">اختر تصنيف المنصرف</option>
                                     <option v-for="category in categories" :value="category.id">
                                         {{ category.name | capitalize}}
                                     </option>
@@ -72,7 +73,7 @@
                                 <has-error :form="form" field="category"></has-error>
                             </div>
                             <div class="form-group">
-                                <label>Amount</label>
+                                <label>القيمة</label>
                                 <input v-model="form.amount" type="text" name="amonut"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
                                 <has-error :form="form" field="amount"></has-error>
@@ -80,8 +81,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">اغلاق</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -147,7 +148,7 @@
                             $('#createexpenses').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'expenses Created successfully'
+                                title: 'تم انشاء المنصرف بنجاح'
                             })
                             this.$Progress.finish();
 
@@ -164,8 +165,8 @@
                         .then(()=>
                         {
                             swal.fire(
-                                'Updated!',
-                                'Your expenses has been updated.',
+                                'تم التغديل',
+                                'تم تعديل منصرفك بنجاح.',
                                 'success'
                             )
                             // this.$progress.finish();
@@ -180,28 +181,28 @@
                 deleteexpenses(id)
                 {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'هل انت متأكد؟',
+                        text: "لن تستطيع التراجع",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'امسح!'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/expenses/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'لقد تم المسح بنجاح.',
                                         'success'
                                     )
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        '  تم المسح بنجاح.',
                                         'warning'
                                     )
                                 })

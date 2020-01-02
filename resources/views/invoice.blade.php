@@ -23,13 +23,12 @@ $grandtotal = \Request::get('grandtotal');
 ?>
 <div id="app">
     <header>
-    <h1> House of Oud Invoice</h1>
+        <h1> Almohebeen Invoice</h1>
 </header>
 <article>
-    <address >
-        <p>House of Oud</p>
-        <p>Khartoum,Sharg alneeel<br>Oumdum Street, alhuda square 7</p>
-        <p>(249) 91600-5000</p>
+    <address>
+        <p>Khartoum,alkalakla sharg<br>
+        <p>(249) 27549029</p>
     </address>
     <table class="meta">
         <tr>
@@ -41,8 +40,8 @@ $grandtotal = \Request::get('grandtotal');
             <td><span >{{$date}}</span></td>
         </tr>
         <tr>
-            <th><span >Grand Total</span></th>
-            <td><span id="prefix" ></span><span>{{$grandtotal}}</span></td>
+            <th><span>Created by</span></th>
+            <td><span>{{Auth::user()->name}}</span></td>
         </tr>
     </table>
     <table class="inventory">

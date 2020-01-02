@@ -4,13 +4,13 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Dashboard Table</h3>
+                        <h3 class="card-title">الرئيسية</h3>
                         <div class="card-tools">
 
                             <form @submit.prevent="dateFilter(startdate,enddate)">
-                                Start Date<input type="date" data-provide="datepicker" name="startdate"
-                                                 v-model="startdate" required>
-                                End Date
+                                تاريخ البداية<input type="date" data-provide="datepicker" name="startdate"
+                                                    v-model="startdate" required>
+                                تاريخ النهاية
                                 <input type="date" name="enddate" v-model="enddate" required>
 
                                 <button type="submit" class="btn btn-primary">search</button>
@@ -23,10 +23,11 @@
                             <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th >Total Sales</th>
-                                <th >Total Expenses</th>
-                                <th > Net Profit</th>
-                                <th >Quantity</th>
+                                <th>مجموع المبيعات</th>
+                                <th>مجموع المنصرفات</th>
+                                <th> صافي الربح</th>
+                                <th>الكمية</th>
+                                <th>عدد عمليات البيع</th>
 
                             </tr>
                             </thead>
@@ -36,6 +37,7 @@
                                 <td>{{this.totalExpenses}}</td>
                                 <td>{{this.totalSales - this.totalExpenses}}</td>
                                 <td>{{this.quantity}}</td>
+                                <td>{{this.salesCounter}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -45,9 +47,21 @@
 
                 </div>
                 <!-- /.card -->
+
             </div>
         </div>
-
+        <div class="row col-md-12">
+            <GChart
+                type="ColumnChart"
+                :data="chartData"
+                :options="chartOptions"
+            />
+            <GChart
+                type="PieChart"
+                :data="datas"
+                :options="options"
+            />
+        </div>
     </div>
 </template>
 
@@ -57,6 +71,17 @@
 
             return {
 
+                chartData: [],
+                chartOptions: {
+                    chart: {
+                        title: 'Company Performance By months',
+                        subtitle: 'Sales, Expenses, and Profit in A year',
+                    }
+                }, datas: [], options: {
+                    title: 'Sales Per Product',
+                    is3D: true,
+                },
+                tempProducts: [],
                 salesDetails: [],
                 sales: [],
                 expenses: [],
@@ -64,12 +89,81 @@
                 totalExpenses:0,
                 netProfit:0,
                 quantity:0,
+                salesCounter: 0,
                 startdate: '',
                 enddate: ''
             }
         },
         methods:
             {
+
+                caluclateProductsReport() {
+                    this.datas = [];
+                    this.datas.push(['Sales', 'Sales per Product']);
+                    this.salesDetails.forEach(element => {
+
+                        if (!this.tempProducts.includes(element.product.name)) {
+                            this.tempProducts.push(element.product.name);
+                        }
+                    });
+
+
+                    this.tempProducts.forEach(element => {
+                        var tempcounter = 0;
+                        var pr = element;
+                        this.salesDetails.forEach(element => {
+
+                            if (pr == element.product.name) {
+                                tempcounter = tempcounter + element.quantity;
+                            }
+                        });
+
+                        this.datas.push([element, tempcounter]);
+                    });
+
+
+                    console.log("total saless names")
+                    console.log(this.tempProducts)
+                },
+                caluclateMonthlyReport() {
+                    this.chartData = [];
+                    this.chartData.push(['Month', 'Sales', 'Expenses', 'Profit']);
+                    var dates = [];
+                    this.sales.forEach(element => {
+
+                        if (!dates.includes(element.created_at.substring(5, 7))) {
+                            dates.push(element.created_at.substring(5, 7));
+                        }
+                    });
+
+
+                    dates.forEach(element => {
+                        var tempSalesCounter = 0;
+                        var tempExpensesCounter = 0;
+                        var date = element;
+                        var tempProfit = 0;
+                        this.sales.forEach(element => {
+
+                            if (date == element.updated_at.substring(5, 7)) {
+                                tempSalesCounter = tempSalesCounter + Number(element.grandtotal);
+
+                            }
+                        });
+
+                        this.expenses.forEach(element => {
+
+                            if (date == element.updated_at.substring(5, 7)) {
+                                tempExpensesCounter = tempExpensesCounter + Number(element.amount);
+                            }
+                        });
+                        tempProfit = tempSalesCounter - tempExpensesCounter;
+                        this.chartData.push([date, Number(tempSalesCounter), Number(tempExpensesCounter), Number(tempProfit)]);
+                    });
+
+
+                    console.log("total saless dates")
+                    console.log(this.chartData)
+                },
                 dateFilter(startdate, enddate) {
                     console.log("original data")
                     console.log(this.salesDetails)
@@ -82,9 +176,11 @@
                             console.log("resonse data")
                             console.log(data)
                             this.salesDetails = data.data,
-                            this.claluateExpenses,
-                    this.claluateQuantity,
-                    this.claluatetotalSale
+                                this.claluateExpenses(),
+                                this.claluateQuantity(),
+                                this.claluatetotalSale(),
+                                this.caluclateProductsReport(),
+                                this.caluclateMonthlyReport()
                         })
                         .catch((response) => {
                             console.log(response)
@@ -123,10 +219,12 @@
                 {
 
                     this.totalSales=0;
+                    this.salesCounter = 0;
                     this.sales.forEach(element => {
                             console.log("total salesssssss")
                     console.log(element)
                     if(element.verified==1){
+                        this.salesCounter++;
                         this.totalSales = this.totalSales+element.grandtotal
                     }
                     });
@@ -161,7 +259,10 @@
                     console.log(this.expenses)
                       this.claluateExpenses(),
                     this.claluateQuantity(),
-                    this.claluatetotalSale()
+                          this.claluatetotalSale(),
+                          this.caluclateProductsReport(),
+                          this.caluclateMonthlyReport()
+
                 }
             },
      mounted() {
@@ -189,7 +290,7 @@
             });
          this.getSalesDetails()
 
-            // setInterval(()=>this.getExpensesCategories(), 3000);
+            setTimeout(() => this.getSalesDetails(), 200);
 
         }
     }

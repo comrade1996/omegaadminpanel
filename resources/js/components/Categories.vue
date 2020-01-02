@@ -4,21 +4,22 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Categories Table</h3>
+                        <h3 class="card-title">جدول التصنيفات</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New Category <i class="fas fa-Category-plus"></i></button>
+                            <button class="btn btn-primary" @click="openCreateModal"> اضافة تصنيف <i
+                                class="fas fa-Category-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody><tr>
-                                <th>ID</th>
-                                <th>{{ $t('sidebar.name') }}</th>
-                                <th>Description</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
-                                <th>created by</th>
+                                <th>المعرف</th>
+                                <th>>اسم المنشئ</th>
+                                <th>الوصف</th>
+                                <th>تاريخ اﻹنشاء</th>
+                                <th>تاريخ التعديل</th>
+                                <th>>اسم المنشئ</th>
 
                             </tr>
                             <tr v-for="category in categories.data" :key="category.id">
@@ -30,11 +31,11 @@
                                 <td>{{category.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(category)">
-                                        <i class="fas fa-pencil-alt text-blue"></i>
+                                        <i class="fa fa-pencil-square-o"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteCategory(category.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash" style="color:red;"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -54,7 +55,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createCategoryTitle">Create Category</h5>
+                        <h5 class="modal-title" id="createCategoryTitle">اضافة تصنيف</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -62,14 +63,14 @@
                     <form @submit.prevent="editmode ? updateCategory() : createCategory()">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>الاسم</label>
                             <input v-model="form.name" type="text" name="name"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
                         </div>
 
                         <div class="form-group">
-                            <label>Description</label>
+                            <label>الوصف</label>
                             <input v-model="form.description" type="text" name="description"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('description') }">
                             <has-error :form="form" field="description"></has-error>
@@ -77,8 +78,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">اغلاق</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
                     </div>
                     </form>
                 </div>
@@ -139,7 +140,7 @@
                             $('#createCategory').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'Category Created successfully'
+                                title: 'تمت اضافة تصنيف بنجاح'
                             })
                             this.$Progress.finish();
 
@@ -156,8 +157,8 @@
                         .then(()=>
                         {
                             swal.fire(
-                                'Updated!',
-                                'Your Category has been updated.',
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
                                 'success'
                             )
                            // this.$progress.finish();
@@ -172,28 +173,28 @@
                 deleteCategory(id)
                 {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'هل انت متأكد؟',
+                        text: "لن تستطيع التراجع",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'امسح!'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/category/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'لقد تم المسح بنجاح.',
                                         'success'
                                     )
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        '  تم المسح بنجاح.',
                                         'warning'
                                     )
                                 })

@@ -4,20 +4,21 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Units Table</h3>
+                        <h3 class="card-title">وحدات القياس</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New unit <i class="fas fa-Category-plus"></i></button>
+                            <button class="btn btn-primary" @click="openCreateModal">وحدة جديدة <i
+                                class="fas fa-Category-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody><tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
-                                <th>Created by</th>
+                                <th>المعرف</th>
+                                <th>الاسم</th>
+                                <th>تاريخ الانشاء</th>
+                                <th>تاريخ التعديل</th>
+                                <th>اسم المنشئ</th>
                             </tr>
                             <tr v-for="unit in units.data" :key="unit.id">
                                 <td>{{unit.id}}</td>
@@ -27,11 +28,11 @@
                                 <td>{{unit.created_by}}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(unit)">
-                                        <i class="fas fa-pencil-alt text-blue"></i>
+                                        <i class="fa fa-pencil-square-o"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteUnit(unit.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -51,7 +52,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createUnitTitle">Create Unit</h5>
+                        <h5 class="modal-title" id="createUnitTitle">وحدة جديدة</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -59,7 +60,7 @@
                     <form @submit.prevent="editmode ? updateUnit() : createUnit()">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>الاسم</label>
                             <input v-model="form.name" type="text" name="name"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
@@ -74,8 +75,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">اغلاق</button>
+                        <button type="submit" class="btn btn-primary">حفظ</button>
                     </div>
                     </form>
                 </div>
@@ -136,7 +137,7 @@
                             $('#createUnit').modal('hide')
                             toast.fire({
                                 type: 'success',
-                                title: 'Unit Created successfully'
+                                title: 'تم الانشاء بنجاح'
                             })
                             this.$Progress.finish();
 
@@ -153,8 +154,8 @@
                         .then(()=>
                         {
                             swal.fire(
-                                'Updated!',
-                                'Your Unit has been updated.',
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
                                 'success'
                             )
                            // this.$progress.finish();
@@ -169,28 +170,28 @@
                 deleteUnit(id)
                 {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'مسح وحدة',
+                        text: "هل انت متأكد؟",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
                         confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/unit/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'تم المسح بنجاح',
                                         'success'
                                     )
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        'حدث خطأ حاول مرة اخرى',
                                         'warning'
                                     )
                                 })

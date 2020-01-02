@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->float('purchaseprice');
             $table->float('sellingprice');
             $table->mediumInteger('quantity');
-            $table->string('company')->nullable();
+            $table->unsignedInteger('company_id');
             $table->date('edate');
             $table->string('photo')->default('profile.png')->nullable();
             $table->string('created_by');
@@ -31,6 +31,7 @@ class CreateProductsTable extends Migration
             $table->softDeletes();
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

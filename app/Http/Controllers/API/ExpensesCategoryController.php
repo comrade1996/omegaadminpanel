@@ -105,8 +105,10 @@ class ExpensesCategoryController extends Controller
      * @return array
      * @throws \Exception
      */
-    public function destroy(ExpensesCategory $expensesCategory)
+    public function destroy($id)
     {
+        $expensesCategory = ExpensesCategory::findOrFail($id);
+
         $expensesCategory->delete();
         return['message' => 'Expenses Category Deleted'];
     }

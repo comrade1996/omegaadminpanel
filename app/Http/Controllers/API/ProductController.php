@@ -30,6 +30,7 @@ class ProductController extends Controller
                 'purchaseprice' => 'required|numeric',
                 'sellingprice' => 'required|numeric',
                 'category' => 'required|numeric',
+                'company' => 'required|numeric',
                 'unit' => 'required|numeric',
                 'quantity' => 'required|numeric',
                 'edate' => 'required|date|after:today',
@@ -43,7 +44,7 @@ class ProductController extends Controller
             'unit_id' => $request['unit'],
             'quantity' => $request['quantity'],
             'edate' => $request['edate'],
-            'company' => $request['company']
+            'company_id' => $request['company']
         ]);
 
     }

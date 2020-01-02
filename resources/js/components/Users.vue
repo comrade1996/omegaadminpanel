@@ -4,9 +4,9 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Users Table</h3>
+                        <h3 class="card-title">المستخدمين</h3>
                         <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> New User <i
+                            <button class="btn btn-primary" @click="openCreateModal"> انشاء مستخدم <i
                                 class="fas fa-user-plus"></i></button>
                         </div>
                     </div>
@@ -15,12 +15,12 @@
                         <table class="table table-hover">
                             <tbody>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Type</th>
-                                <th>Created At</th>
-                                <th>Modify</th>
+                                <th>المعرف</th>
+                                <th>الاسم</th>
+                                <th>البريد الالكتروني</th>
+                                <th>نوع المستخدم</th>
+                                <th>تاريخ الانشاء</th>
+                                <th>تاريخ التعديل</th>
                             </tr>
                             <tr v-for="user in users.data" :key="user.id">
                                 <td>{{user.id}}</td>
@@ -34,7 +34,7 @@
                                     </a>
                                     /
                                     <a href="#" @click="deleteUser(user.id)">
-                                        <i class="fas fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -56,7 +56,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="createUserTitle">Create User</h5>
+                        <h5 class="modal-title" id="createUserTitle">انشاء مستخدم</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -64,30 +64,30 @@
                     <form @submit.prevent="editmode ? updateUser() : createUser()">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Name</label>
+                                <label>الاسم</label>
                                 <input v-model="form.name" type="text" name="name"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                                 <has-error :form="form" field="name"></has-error>
                             </div>
                             <div class="form-group">
-                                <label>Email</label>
+                                <label>البريد الالكتروني</label>
                                 <input v-model="form.email" type="text" name="email"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                                 <has-error :form="form" field="email"></has-error>
                             </div>
 
                             <div class="form-group">
-                                <label>Password</label>
+                                <label>كلمة المرور</label>
                                 <input v-model="form.password" type="password" name="password"
                                        class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
                                 <has-error :form="form" field="password"></has-error>
                             </div>
 
                             <div class="form-group">
-                                <label>Role</label>
+                                <label>نوع المستخدم</label>
                                 <select v-model="form.type" name="type" class="form-control"
                                         :class="{ 'is-invalid': form.errors.has('type') }">
-                                    <option value="">Select Role for User</option>
+                                    <option value="">اختر نوع المستخدم</option>
                                     <option v-for="item in items" :value="item.id">
                                         {{ item.label }}
                                     </option>
@@ -96,7 +96,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Bio</label>
+                                <label>معلومات اضافية</label>
                                 <textarea v-model="form.bio" name="bio"
                                           class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }">
                                 </textarea>
@@ -105,8 +105,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">اغلاق</button>
+                            <button type="submit" class="btn btn-primary">حفظ</button>
                         </div>
                     </form>
                 </div>
@@ -124,6 +124,7 @@
                 users: {},
                 items: [
                     {id: 1, label: 'Admin'},
+                    {id: 2, label: 'Cashier'},
                     {id: 0, label: 'User'}
                 ],
                 form: new Form({
@@ -171,7 +172,7 @@
                             $('#createUser').modal('hide');
                             toast.fire({
                                 type: 'success',
-                                title: 'User Created successfully'
+                                title: 'تم اﻹنشاء بنجاح'
                             });
                             this.$Progress.finish();
                         })
@@ -185,8 +186,8 @@
                     this.form.put('api/user/' + this.form.id)
                         .then(() => {
                             swal.fire(
-                                'Updated!',
-                                'Your user has been updated.',
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
                                 'success'
                             )
                             // this.$progress.finish();
@@ -199,28 +200,28 @@
                 },
                 deleteUser(id) {
                     swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
+                        title: 'هل انت متأكد؟',
+                        text: "لن تستطيع التراجع",
                         type: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'امسح!'
                     }).then((result) => {
                         if (result.value) {
                             this.form.delete('api/user/' + id)
                                 .then(() => {
                                     swal.fire(
-                                        'Deleted!',
-                                        'Your file has been deleted.',
+                                        ' تم المسح ',
+                                        'لقد تم المسح بنجاح.',
                                         'success'
                                     );
                                     Fire.$emit('afterCreate');
                                 })
                                 .catch(() => {
                                     swal.fire(
-                                        'Failed!',
-                                        'Your file has been Filed.',
+                                        'فشل',
+                                        '  تم المسح بنجاح.',
                                         'warning'
                                     )
                                 });
