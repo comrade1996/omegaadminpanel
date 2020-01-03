@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('unit_id');
             $table->unsignedInteger('category_id');
             $table->string('name');
+            $table->string('barcode');
             $table->float('purchaseprice');
             $table->float('sellingprice');
             $table->mediumInteger('quantity');

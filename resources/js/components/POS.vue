@@ -132,6 +132,18 @@
         },
         methods:
             {
+
+                      // Create callback function to receive barcode when the scanner is already done
+      onBarcodeScanned (barcode) {
+        console.log(barcode)
+        // do something...
+      },
+      // Reset to the last barcode before hitting enter (whatever anything in the input box)
+      resetBarcode () {
+        let barcode = this.$barcodeScanner.getPreviousCode()
+        // do something...
+      },
+
                 check()
                 {
                     swal.fire({
@@ -301,6 +313,17 @@
                 getProducts()
                 {
                     axios.get("api/product").then(({data}) => (this.products =data.data));
+                },
+
+                addByBarcode(data)
+                {
+                    var dat=data 
+                    this.products.forEach(function (element) {
+                        if(element.barcode== dat)
+                        {
+                            this.addsell(element);
+                        }
+                    });
                 }
 
 
@@ -309,7 +332,61 @@
 
     console.log(this.discount)
                    },
+                    destroyed () {
+      // Remove listener when component is destroyed
+      this.$barcodeScanner.destroy()
+    },
         created() {
+            this.$barcodeScanner.init(this.onBarcodeScanned)
+             function setup ()
+          {
+              defaultScanner = new BarcodeReader(null,
+                   onBarcodeReaderComplete);
+          }
+          function onBarcodeReaderComplete ( result )
+         {
+              if (result.status == 0)
+              {
+                   // BarcodeReader object was successfully created.
+                   // Configure the symbologies needed.
+                   defaultScanner.set("Symbology", "Code39", "Enable",
+                        "true", onSetComplete);
+                   defaultScanner.set("Symbology", "Code128", "EnableCode128",
+                        "true", onSetComplete);
+
+                   // Add an event handler for the barcodedataready event
+                   defaultScanner.addEventListener("barcodedataready",
+                        onBarcodeDataReady, false);
+               }
+               else
+               {
+                    defaultScanner = null;
+                    alert('Failed to create BarcodeReader, '
+                         + result.message);
+               }
+          }
+
+          // Verify the symbology configuration.
+          function onSetComplete ( result )
+          {
+               if (result.status != 0)
+               {
+                    alert('set Family: ' + result.family + ', Key: ' +
+                         result.key + ', Option: ' + result.option +
+                         ', Value: ' + result.value + 'failed. ' +
+                         result.message);
+               }
+          }
+
+          // Handle barcode data when available.
+          function onBarcodeDataReady (data, type, time)
+          {
+              this.addByBarcode(data)
+              console.log("data");
+              console.log(data);
+          }
+
+
             Fire.$on('searching', () => {
                 let query =this.$parent.search;
                 axios.get('api/findProduct?q='+query)

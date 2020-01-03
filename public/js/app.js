@@ -3298,6 +3298,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, _defineProperty(_ref, "subtotal", subtotal), _defineProperty(_ref, "grandtotal", grandtotal), _defineProperty(_ref, "discount", ''), _defineProperty(_ref, "products", {}), _defineProperty(_ref, "sells", []), _ref;
   },
   methods: {
+    // Create callback function to receive barcode when the scanner is already done
+    onBarcodeScanned: function onBarcodeScanned(barcode) {
+      console.log(barcode); // do something...
+    },
+    // Reset to the last barcode before hitting enter (whatever anything in the input box)
+    resetBarcode: function resetBarcode() {
+      var barcode = this.$barcodeScanner.getPreviousCode(); // do something...
+    },
     check: function check() {
       var _this = this;
 
@@ -3459,13 +3467,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var data = _ref2.data;
         return _this4.products = data.data;
       });
+    },
+    addByBarcode: function addByBarcode(data) {
+      var dat = data;
+      this.products.forEach(function (element) {
+        if (element.barcode == dat) {
+          this.addsell(element);
+        }
+      });
     }
   },
   mounted: function mounted() {
     console.log(this.discount);
   },
+  destroyed: function destroyed() {
+    // Remove listener when component is destroyed
+    this.$barcodeScanner.destroy();
+  },
   created: function created() {
     var _this5 = this;
+
+    this.$barcodeScanner.init(this.onBarcodeScanned);
+
+    function setup() {
+      defaultScanner = new BarcodeReader(null, onBarcodeReaderComplete);
+    }
+
+    function onBarcodeReaderComplete(result) {
+      if (result.status == 0) {
+        // BarcodeReader object was successfully created.
+        // Configure the symbologies needed.
+        defaultScanner.set("Symbology", "Code39", "Enable", "true", onSetComplete);
+        defaultScanner.set("Symbology", "Code128", "EnableCode128", "true", onSetComplete); // Add an event handler for the barcodedataready event
+
+        defaultScanner.addEventListener("barcodedataready", onBarcodeDataReady, false);
+      } else {
+        defaultScanner = null;
+        alert('Failed to create BarcodeReader, ' + result.message);
+      }
+    } // Verify the symbology configuration.
+
+
+    function onSetComplete(result) {
+      if (result.status != 0) {
+        alert('set Family: ' + result.family + ', Key: ' + result.key + ', Option: ' + result.option + ', Value: ' + result.value + 'failed. ' + result.message);
+      }
+    } // Handle barcode data when available.
+
+
+    function onBarcodeDataReady(data, type, time) {
+      this.addByBarcode(data);
+      console.log("data");
+      console.log(data);
+    }
 
     Fire.$on('searching', function () {
       var query = _this5.$parent.search;
@@ -3659,6 +3713,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     currentPage: 1;
@@ -3670,6 +3732,10 @@ __webpack_require__.r(__webpack_exports__);
         name: {
           value: '',
           keys: ['name']
+        },
+        barcode: {
+          value: '',
+          keys: ['barcode']
         },
         company: {
           value: '',
@@ -3692,6 +3758,7 @@ __webpack_require__.r(__webpack_exports__);
       form: new Form({
         id: '',
         name: '',
+        barcode: '',
         purchaseprice: '',
         sellingprice: '',
         quantity: '',
@@ -3828,6 +3895,39 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     var _this8 = this;
+
+    this.$barcodeScanner.init(this.onBarcodeScanned);
+
+    function setup() {
+      defaultScanner = new BarcodeReader(null, onBarcodeReaderComplete);
+    }
+
+    function onBarcodeReaderComplete(result) {
+      if (result.status == 0) {
+        // BarcodeReader object was successfully created.
+        // Configure the symbologies needed.
+        defaultScanner.set("Symbology", "Code39", "Enable", "true", onSetComplete);
+        defaultScanner.set("Symbology", "Code128", "EnableCode128", "true", onSetComplete); // Add an event handler for the barcodedataready event
+
+        defaultScanner.addEventListener("barcodedataready", onBarcodeDataReady, false);
+      } else {
+        defaultScanner = null;
+        alert('Failed to create BarcodeReader, ' + result.message);
+      }
+    } // Verify the symbology configuration.
+
+
+    function onSetComplete(result) {
+      if (result.status != 0) {
+        alert('set Family: ' + result.family + ', Key: ' + result.key + ', Option: ' + result.option + ', Value: ' + result.value + 'failed. ' + result.message);
+      }
+    } // Handle barcode data when available.
+
+
+    function onBarcodeDataReady(data, type, time) {
+      console.log("data");
+      console.log(data);
+    }
 
     Fire.$on('searching', function () {
       var query = _this8.$parent.search;
@@ -65762,6 +65862,165 @@ var AlertSuccess_Component = normalizeComponent(
 
 /***/ }),
 
+/***/ "./node_modules/vue-barcode-scanner/index.js":
+/*!***************************************************!*\
+  !*** ./node_modules/vue-barcode-scanner/index.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const VueBarcodeScanner = {
+  install (Vue, options) {
+    /* global Audio */
+    // default plugin setting
+    let attributes = {
+      previouseCode: '',
+      barcode: '',
+      setting: {
+        sound: false,
+        soundSrc: '',
+        scannerSensitivity: 100,
+        requiredAttr: false
+      },
+      callback: null,
+      hasListener: false,
+      pressedTime: []
+    }
+
+    // initial plugin setting
+    if (options) {
+      attributes.setting.requiredAttr = options.requiredAttr || false
+      attributes.setting.sound = options.sound || attributes.setting.sound
+      attributes.setting.soundSrc = options.soundSrc || attributes.setting.soundSrc
+      attributes.setting.scannerSensitivity = options.sensitivity || attributes.setting.scannerSensitivity
+    }
+
+    Vue.prototype.$barcodeScanner = {}
+
+    Vue.prototype.$barcodeScanner.init = (callback) => {
+      // add listenter for scanner
+      // use keypress to separate lower/upper case character from scanner
+      addListener('keypress')
+      // use keydown only to detect Tab event (Tab cannot be detected using keypress)
+      addListener('keydown')
+      attributes.callback = callback
+    }
+
+    Vue.prototype.$barcodeScanner.destroy = () => {
+      // remove listener
+      removeListener('keypress')
+      removeListener('keydown')
+    }
+
+    Vue.prototype.$barcodeScanner.hasListener = () => {
+      return attributes.hasListener
+    }
+
+    Vue.prototype.$barcodeScanner.getPreviousCode = () => {
+       return attributes.previousCode
+    }
+
+    Vue.prototype.$barcodeScanner.setSensitivity = (sensitivity) => {
+      attributes.setting.scannerSensitivity = sensitivity
+    }
+
+    function addListener (type) {
+      if (attributes.hasListener) {
+        removeListener(type)
+      }
+      window.addEventListener(type, onInputScanned)
+      attributes.hasListener = true
+    }
+
+    function removeListener (type) {
+      if (attributes.hasListener) {
+        window.removeEventListener(type, onInputScanned)
+        attributes.hasListener = false
+      }
+    }
+
+    function onInputScanned (event) {
+      // ignore other keydown event that is not a TAB, so there are no duplicate keys
+      if (event.type === 'keydown' && event.keyCode != 9 ) {
+        return
+      }
+
+      if (checkInputElapsedTime(Date.now())) {
+        // check if field has 'data-barcode' attribute
+        let isBarcodeIdentifier = false
+        if (attributes.setting.requiredAttr) {
+          barcodeIdentifier = event.target.attributes.getNamedItem('data-barcode');
+        } else {
+          barcodeIdentifier = true
+        }
+        if (barcodeIdentifier && (event.keyCode === 13 || event.keyCode === 9) && attributes.barcode !== '') {
+          // scanner is done and trigger Enter/Tab then clear barcode and play the sound if it's set as true
+          attributes.callback(attributes.barcode)
+          // backup the barcode
+          attributes.previousCode = attributes.barcode
+          // clear textbox
+          attributes.barcode = ''
+          // clear pressedTime
+          attributes.pressedTime = []
+          // trigger sound
+          if (attributes.setting.sound) {
+            triggerSound()
+          }
+          // prevent TAB navigation for scanner
+          if (event.keyCode === 9) {
+            event.preventDefault()
+          }
+        } else {
+          // scan and validate each charactor
+          attributes.barcode += event.key
+        }
+      }
+    }
+
+    // check whether the keystrokes are considered as scanner or human
+    function checkInputElapsedTime (timestamp) {
+      // push current timestamp to the register
+      attributes.pressedTime.push(timestamp)
+      // when register is full (ready to compare)
+      if (attributes.pressedTime.length === 2) {
+        // compute elapsed time between 2 keystrokes
+        let timeElapsed = attributes.pressedTime[1] - attributes.pressedTime[0];
+        // too slow (assume as human)
+        if (timeElapsed >= attributes.setting.scannerSensitivity) {
+          // put latest key char into barcode
+          attributes.barcode = event.key
+          // remove(shift) first timestamp in register
+          attributes.pressedTime.shift()
+          // not fast enough
+          return false
+        }
+        // fast enough (assume as scanner)
+        else {
+          // reset the register
+          attributes.pressedTime = []
+        }
+      }
+      // not able to check (register is empty before pushing) or assumed as scanner
+      return true
+    }
+
+    // init audio and play
+    function triggerSound () {
+      let audio = new Audio(attributes.setting.soundSrc)
+      audio.play()
+    }
+  }
+}
+
+// // Automatic installation if Vue has been added to the global scope.
+// if (typeof window !== 'undefined' && window.Vue) {
+//   window.Vue.use(MyPlugin)
+// }
+
+module.exports = VueBarcodeScanner
+
+/***/ }),
+
 /***/ "./node_modules/vue-google-charts/dist/vue-google-charts.common.js":
 /*!*************************************************************************!*\
   !*** ./node_modules/vue-google-charts/dist/vue-google-charts.common.js ***!
@@ -71056,6 +71315,8 @@ var render = function() {
                             return _c("v-tr", { key: row.guid }, [
                               _c("td", [_vm._v(_vm._s(row.id))]),
                               _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(row.barcode))]),
+                              _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(row.name))]),
                               _vm._v(" "),
                               _c("td", [_vm._v(_vm._s(row.purchaseprice))]),
@@ -71163,6 +71424,10 @@ var render = function() {
                       [
                         _c("v-th", { attrs: { sortKey: "id" } }, [
                           _vm._v("المعرف")
+                        ]),
+                        _vm._v(" "),
+                        _c("v-th", { attrs: { sortKey: "barcode" } }, [
+                          _vm._v("الباركود")
                         ]),
                         _vm._v(" "),
                         _c("v-th", { attrs: { sortKey: "name" } }, [
@@ -71285,6 +71550,44 @@ var render = function() {
                         _vm._v(" "),
                         _c("has-error", {
                           attrs: { form: _vm.form, field: "name" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", [_vm._v("الباركود")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.barcode,
+                              expression: "form.barcode"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("barcode")
+                          },
+                          attrs: { type: "text", name: "barcode" },
+                          domProps: { value: _vm.form.barcode },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "barcode", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "barcode" }
                         })
                       ],
                       1
@@ -89603,21 +89906,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-i18n */ "./node_modules/vue-i18n/dist/vue-i18n.esm.js");
 /* harmony import */ var _vue_i18n_locales_generated__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./vue-i18n-locales.generated */ "./resources/js/vue-i18n-locales.generated.js");
 /* harmony import */ var vue_google_charts__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-google-charts */ "./node_modules/vue-google-charts/index.js");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var vuejs_smart_table__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuejs-smart-table */ "./node_modules/vuejs-smart-table/src/main.js");
-/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-print-nb */ "./node_modules/vue-print-nb/index.es5.js");
-/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_print_nb__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var vue_toastr_2__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-toastr-2 */ "./node_modules/vue-toastr-2/dist/vue-toastr-2.common.js");
-/* harmony import */ var vue_toastr_2__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_toastr_2__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var vue_toastr_2_dist_vue_toastr_2_min_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-toastr-2/dist/vue-toastr-2.min.css */ "./node_modules/vue-toastr-2/dist/vue-toastr-2.min.css");
-/* harmony import */ var vue_toastr_2_dist_vue_toastr_2_min_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_toastr_2_dist_vue_toastr_2_min_css__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var vue_spinners__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue-spinners */ "./node_modules/vue-spinners/index.js");
-/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
-/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var vue_barcode_scanner__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-barcode-scanner */ "./node_modules/vue-barcode-scanner/index.js");
+/* harmony import */ var vue_barcode_scanner__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_barcode_scanner__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vuejs_smart_table__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuejs-smart-table */ "./node_modules/vuejs-smart-table/src/main.js");
+/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-print-nb */ "./node_modules/vue-print-nb/index.es5.js");
+/* harmony import */ var vue_print_nb__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_print_nb__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var vue_toastr_2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-toastr-2 */ "./node_modules/vue-toastr-2/dist/vue-toastr-2.common.js");
+/* harmony import */ var vue_toastr_2__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_toastr_2__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var vue_toastr_2_dist_vue_toastr_2_min_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue-toastr-2/dist/vue-toastr-2.min.css */ "./node_modules/vue-toastr-2/dist/vue-toastr-2.min.css");
+/* harmony import */ var vue_toastr_2_dist_vue_toastr_2_min_css__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(vue_toastr_2_dist_vue_toastr_2_min_css__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var vue_spinners__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vue-spinners */ "./node_modules/vue-spinners/index.js");
+/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
+/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_14__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -89631,30 +89936,33 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_google_charts__WEBPACK_IMPORTED_MODULE_4__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]);
+ // inject vue barcode scanner
+
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_barcode_scanner__WEBPACK_IMPORTED_MODULE_5___default.a);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_google_charts__WEBPACK_IMPORTED_MODULE_4__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var lang = document.documentElement.lang.substr(0, 2); // or however you determine your current app locale
 
 var i18n = new vue_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]({
   locale: lang,
   messages: _vue_i18n_locales_generated__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component(vform__WEBPACK_IMPORTED_MODULE_0__["HasError"].name, vform__WEBPACK_IMPORTED_MODULE_0__["HasError"]);
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component(vform__WEBPACK_IMPORTED_MODULE_0__["AlertError"].name, vform__WEBPACK_IMPORTED_MODULE_0__["AlertError"]);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component(vform__WEBPACK_IMPORTED_MODULE_0__["HasError"].name, vform__WEBPACK_IMPORTED_MODULE_0__["HasError"]);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component(vform__WEBPACK_IMPORTED_MODULE_0__["AlertError"].name, vform__WEBPACK_IMPORTED_MODULE_0__["AlertError"]);
 window.Form = vform__WEBPACK_IMPORTED_MODULE_0__["Form"];
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]);
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vuejs_smart_table__WEBPACK_IMPORTED_MODULE_6__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vuejs_smart_table__WEBPACK_IMPORTED_MODULE_7__["default"]);
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_print_nb__WEBPACK_IMPORTED_MODULE_7___default.a);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_print_nb__WEBPACK_IMPORTED_MODULE_8___default.a);
 
 
 window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_toastr_2__WEBPACK_IMPORTED_MODULE_8___default.a);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_toastr_2__WEBPACK_IMPORTED_MODULE_9___default.a);
 
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_spinners__WEBPACK_IMPORTED_MODULE_11__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_spinners__WEBPACK_IMPORTED_MODULE_12__["default"]);
 /*
 Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
     theme: "bubble",
@@ -89663,14 +89971,14 @@ Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
 })*/
 
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_12___default.a, {
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.use(vue_progressbar__WEBPACK_IMPORTED_MODULE_13___default.a, {
   color: 'rgb(143, 255, 199)',
   failedColor: 'red',
   height: '20px'
 });
 
-window.swal = sweetalert2__WEBPACK_IMPORTED_MODULE_13___default.a;
-var toast = sweetalert2__WEBPACK_IMPORTED_MODULE_13___default.a.mixin({
+window.swal = sweetalert2__WEBPACK_IMPORTED_MODULE_14___default.a;
+var toast = sweetalert2__WEBPACK_IMPORTED_MODULE_14___default.a.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
@@ -89723,19 +90031,19 @@ var routes = [{
   path: '/',
   component: __webpack_require__(/*! ./components/POS.vue */ "./resources/js/components/POS.vue").default
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__["default"]({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
   mode: 'history',
   routes: routes
 });
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.filter('capitalize', function (value) {
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.filter('capitalize', function (value) {
   if (!value) return '';
   value = value.toString();
   return value.charAt(0).toUpperCase() + value.slice(1);
 });
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.filter('readableDate', function (date) {
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.filter('readableDate', function (date) {
   return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format("MMM Do YY");
 });
-var Fire = new vue__WEBPACK_IMPORTED_MODULE_10___default.a();
+var Fire = new vue__WEBPACK_IMPORTED_MODULE_11___default.a();
 window.Fire = Fire;
 /**
  * The following block of code may be used to automatically register your
@@ -89747,18 +90055,18 @@ window.Fire = Fire;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_10___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component('passport-clients', __webpack_require__(/*! ./components/passport/Clients.vue */ "./resources/js/components/passport/Clients.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component('passport-authorized-clients', __webpack_require__(/*! ./components/passport/AuthorizedClients.vue */ "./resources/js/components/passport/AuthorizedClients.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component('passport-personal-access-tokens', __webpack_require__(/*! ./components/passport/PersonalAccessTokens.vue */ "./resources/js/components/passport/PersonalAccessTokens.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_11___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var app = new vue__WEBPACK_IMPORTED_MODULE_10___default.a({
+var app = new vue__WEBPACK_IMPORTED_MODULE_11___default.a({
   el: '#app',
   router: router,
   i18n: i18n,
@@ -91347,8 +91655,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/comrade96/omegaadminpanel/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/comrade96/omegaadminpanel/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\User\omegaadminpanel\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\User\omegaadminpanel\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

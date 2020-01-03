@@ -13,7 +13,10 @@ import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated';
 
 import VueGoogleCharts from 'vue-google-charts'
+import VueBarcodeScanner from 'vue-barcode-scanner'
 
+// inject vue barcode scanner
+Vue.use(VueBarcodeScanner)
 Vue.use(VueGoogleCharts)
 
 

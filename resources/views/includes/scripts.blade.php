@@ -2,7 +2,7 @@
 <script src="js/app.js"></script>
 <script src="js/datatables.min.js"></script>
 <script src="js/jQuery.print.min.js"></script>
-
+<script type="text/javascript"  src="js/BarcodeReader.js"></script>
 <script src="js/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="js/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="js/assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>

@@ -31,6 +31,7 @@ class ProductController extends Controller
                 'sellingprice' => 'required|numeric',
                 'category' => 'required|numeric',
                 'company' => 'required|numeric',
+                'barcode' => 'sometimes|string',
                 'unit' => 'required|numeric',
                 'quantity' => 'required|numeric',
                 'edate' => 'required|date|after:today',
@@ -38,6 +39,7 @@ class ProductController extends Controller
 
         return Product::create([
             'name' => $request['name'],
+            'barcode' => $request['barcode'],
             'purchaseprice' => $request['purchaseprice'],
             'sellingprice' => $request['sellingprice'],
             'category_id' => $request['category'],
@@ -73,6 +75,7 @@ class ProductController extends Controller
         $this->validate($request,
             [
                 'name' => 'required|string|max:191',
+                'barcode' => 'sometimes|string',
                 'purchaseprice' => 'required|numeric',
                 'sellingprice' => 'required|numeric',
                 'category' => 'required|numeric',

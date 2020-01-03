@@ -24,6 +24,7 @@
                             <thead slot="head">
                             <tr>
                                 <v-th sortKey="id">المعرف</v-th>
+                                <v-th sortKey="barcode">الباركود</v-th>
                                 <v-th sortKey="name">الاسم</v-th>
                                 <v-th sortKey="purchaseprice">سعر الشراء</v-th>
                                 <v-th sortKey="sellingprice">السعر البيع</v-th>
@@ -40,6 +41,7 @@
                             <tbody slot="body" slot-scope="{displayData}">
                             <v-tr v-for="row in displayData" :key="row.guid">
                                 <td>{{row.id}}</td>
+                                <td>{{row.barcode}}</td>
                                 <td>{{row.name}}</td>
                                 <td>{{row.purchaseprice}}</td>
                                 <td>{{row.sellingprice}}</td>
@@ -78,13 +80,19 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editmode ? updateProduct() : createProduct()">
+                    <form @submit.prevent="editmode ? updateProduct() : createProduct()"> 
                     <div class="modal-body">
                         <div class="form-group">
                             <label>الاسم</label>
                             <input v-model="form.name" type="text" name="name"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
+                        </div>
+                        <div class="form-group">
+                            <label>الباركود</label>
+                            <input v-model="form.barcode" type="text" name="barcode"
+                                   class="form-control" :class="{ 'is-invalid': form.errors.has('barcode') }">
+                            <has-error :form="form" field="barcode"></has-error>
                         </div>
 
                         <div class="form-group">
@@ -172,6 +180,7 @@
                 filters: {
 
                     name: { value: '', keys: ['name'] },
+                    barcode: { value: '', keys: ['barcode'] },
                     company: {value: '', keys: ['company.name']},
                     category: { value: '', keys: ['category.name'] },
                     unit: { value: '', keys: ['unit.name'] }
@@ -187,6 +196,7 @@
                 form:new Form({
                     id:'',
                     name:'',
+                    barcode:'',
                     purchaseprice:'',
                     sellingprice:'',
                     quantity:'',
@@ -333,6 +343,56 @@
             console.log('Component mounted.')
         },
         created() {
+
+            this.$barcodeScanner.init(this.onBarcodeScanned)
+             function setup ()
+          {
+              defaultScanner = new BarcodeReader(null,
+                   onBarcodeReaderComplete);
+          }
+          function onBarcodeReaderComplete ( result )
+         {
+              if (result.status == 0)
+              {
+                   // BarcodeReader object was successfully created.
+                   // Configure the symbologies needed.
+                   defaultScanner.set("Symbology", "Code39", "Enable",
+                        "true", onSetComplete);
+                   defaultScanner.set("Symbology", "Code128", "EnableCode128",
+                        "true", onSetComplete);
+
+                   // Add an event handler for the barcodedataready event
+                   defaultScanner.addEventListener("barcodedataready",
+                        onBarcodeDataReady, false);
+               }
+               else
+               {
+                    defaultScanner = null;
+                    alert('Failed to create BarcodeReader, '
+                         + result.message);
+               }
+          }
+
+          // Verify the symbology configuration.
+          function onSetComplete ( result )
+          {
+               if (result.status != 0)
+               {
+                    alert('set Family: ' + result.family + ', Key: ' +
+                         result.key + ', Option: ' + result.option +
+                         ', Value: ' + result.value + 'failed. ' +
+                         result.message);
+               }
+          }
+
+          // Handle barcode data when available.
+          function onBarcodeDataReady (data, type, time)
+          {
+              console.log("data");
+              console.log(data);
+          }
+
+
             Fire.$on('searching', () => {
                 let query =this.$parent.search;
                 axios.get('api/findProduct?q='+query)
