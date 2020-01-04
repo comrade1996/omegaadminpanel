@@ -4,10 +4,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">المنتجات الناقصة</h3>
-                        <div class="card-tools">
+                        <h3 class="card-title ">المنتجات الناقصة</h3>
+                        <div class="card-tools cardtitle">
                             <button class="btn btn-primary" @click="openCreateModal"> منتج جديد <i
-                                class="fas fa-Item-plus"></i></button>
+                                class="fa fa-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -36,7 +36,7 @@
                                     </a>
                                     /
                                     <a href="#" @click="deleteItem(item.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red;"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -176,7 +176,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'امسح!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if (result.value) {
                             this.form.delete('api/missingitem/' + id)

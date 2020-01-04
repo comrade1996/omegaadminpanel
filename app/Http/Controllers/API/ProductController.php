@@ -136,6 +136,7 @@ class ProductController extends Controller
                     ->orWhere('purchaseprice','LIKE',"%$search%")
                     ->orWhere('sellingprice','LIKE',"%$search%")
                     ->orWhere('company','LIKE',"%$search%")
+                    ->orWhere('barcode','LIKE',"%$search%")
                     ->orWhere('quantity','LIKE',"%$search%");
             })->paginate(10);
             return $products;

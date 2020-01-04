@@ -9,6 +9,7 @@
                         <div class="card-header">
                             <h3 class="card-title">المنتجات</h3>
                             <input placeholder="Search by Product Name" class="form-control" v-model="filters.name.value"/>
+                            <input placeholder="Search by barcode" class="form-control" style="margin-top: 10px;" v-model="filters.barcode.value"/>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
@@ -119,7 +120,8 @@
                 subtotal:'',
              grandtotal:'',
                 filters: {
-                    name: { value: '', keys: ['name'] }
+                    name: { value: '', keys: ['name'] },
+                    barcode: { value: '', keys: ['barcode'] }
                 },
                 globalId:'',
                 isLoading: false,
@@ -133,8 +135,10 @@
         methods:
             {
 
+
                       // Create callback function to receive barcode when the scanner is already done
       onBarcodeScanned (barcode) {
+        console.log("barcode")
         console.log(barcode)
         // do something...
       },
@@ -153,7 +157,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Confirm'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if (result.value) {
                            this.updateSales()
@@ -335,6 +340,7 @@
                     destroyed () {
       // Remove listener when component is destroyed
       this.$barcodeScanner.destroy()
+      
     },
         created() {
             this.$barcodeScanner.init(this.onBarcodeScanned)
@@ -381,7 +387,19 @@
           // Handle barcode data when available.
           function onBarcodeDataReady (data, type, time)
           {
-              this.addByBarcode(data)
+            //      var dat=data 
+            //         this.products.forEach(function (element) {
+            //             if(element.barcode== dat)
+            //             {
+            //   console.log(element);
+
+            //                 this.addsell(element);
+            //             }
+            //             else{
+            //   console.log(data);
+
+            //             }
+            //         });
               console.log("data");
               console.log(data);
           }

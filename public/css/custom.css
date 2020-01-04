@@ -2,3 +2,12 @@
 {
     width:-webkit-fill-available !important;
 }
+
+.cardtitle{
+    text-align: -webkit-left;
+    margin: 10px;
+}
+
+.backgroundAlert {
+    background: #ab6060 !important;
+  }

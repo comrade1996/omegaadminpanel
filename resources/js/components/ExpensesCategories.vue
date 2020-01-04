@@ -5,9 +5,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">تصنيفات المنصرفات</h3>
-                        <div class="card-tools">
-                            <button class="btn btn-primary" @click="openCreateModal"> انشاء تصنيف <i
-                                class="fas fa-Category-plus"></i></button>
+                        <div class="card-tools cardtitle">
+                            <button class="btn btn-primary "  @click="openCreateModal"> انشاء تصنيف <i
+                                class="fa fa-list-ul" ></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -36,7 +36,7 @@
                                     </a>
                                     /
                                     <a href="#" @click="deleteCategory(category.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -176,7 +176,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'امسح!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if (result.value) {
                             this.form.delete('api/expensescategory/' + id)

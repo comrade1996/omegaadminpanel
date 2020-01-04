@@ -74,7 +74,7 @@
                 chartData: [],
                 chartOptions: {
                     chart: {
-                        title: 'Company Performance By months',
+                        title: 'Pharmacy Performance By months',
                         subtitle: 'Sales, Expenses, and Profit in A year',
                     }
                 }, datas: [], options: {

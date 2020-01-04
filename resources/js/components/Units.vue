@@ -5,9 +5,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">وحدات القياس</h3>
-                        <div class="card-tools">
+                        <div class="card-tools cardtitle">
                             <button class="btn btn-primary" @click="openCreateModal">وحدة جديدة <i
-                                class="fas fa-Category-plus"></i></button>
+                                class="fa fa-balance-scale"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -32,7 +32,7 @@
                                     </a>
                                     /
                                     <a href="#" @click="deleteUnit(unit.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red;"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -176,7 +176,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Yes, delete it!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/unit/' + id)

@@ -1905,7 +1905,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'امسح!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this4.form.delete('api/category/' + id).then(function () {
@@ -2115,7 +2116,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this4.form.delete('api/company/' + id).then(function () {
@@ -2231,7 +2233,7 @@ __webpack_require__.r(__webpack_exports__);
       chartData: [],
       chartOptions: {
         chart: {
-          title: 'Company Performance By months',
+          title: 'Pharmacy Performance By months',
           subtitle: 'Sales, Expenses, and Profit in A year'
         }
       },
@@ -2686,7 +2688,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'امسح!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this5.form.delete('api/expenses/' + id).then(function () {
@@ -2908,7 +2911,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'امسح!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this4.form.delete('api/expensescategory/' + id).then(function () {
@@ -3125,7 +3129,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'امسح!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this4.form.delete('api/missingitem/' + id).then(function () {
@@ -3278,6 +3283,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _ref;
@@ -3291,6 +3297,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: {
           value: '',
           keys: ['name']
+        },
+        barcode: {
+          value: '',
+          keys: ['barcode']
         }
       },
       globalId: '',
@@ -3300,6 +3310,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     // Create callback function to receive barcode when the scanner is already done
     onBarcodeScanned: function onBarcodeScanned(barcode) {
+      console.log("barcode");
       console.log(barcode); // do something...
     },
     // Reset to the last barcode before hitting enter (whatever anything in the input box)
@@ -3316,7 +3327,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Confirm'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this.updateSales();
@@ -3516,7 +3528,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
     function onBarcodeDataReady(data, type, time) {
-      this.addByBarcode(data);
+      //      var dat=data 
+      //         this.products.forEach(function (element) {
+      //             if(element.barcode== dat)
+      //             {
+      //   console.log(element);
+      //                 this.addsell(element);
+      //             }
+      //             else{
+      //   console.log(data);
+      //             }
+      //         });
       console.log("data");
       console.log(data);
     }
@@ -4537,7 +4559,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'امسح!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this5.form.delete('api/sales/' + id).then(function () {
@@ -4746,7 +4769,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this4.form.delete('api/unit/' + id).then(function () {
@@ -4912,11 +4936,11 @@ __webpack_require__.r(__webpack_exports__);
       editmode: true,
       users: {},
       items: [{
-        id: 1,
-        label: 'Admin'
-      }, {
         id: 2,
         label: 'Cashier'
+      }, {
+        id: 1,
+        label: 'Admin'
       }, {
         id: 0,
         label: 'User'
@@ -4999,7 +5023,8 @@ __webpack_require__.r(__webpack_exports__);
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'امسح!'
+        confirmButtonText: 'موافق',
+        cancelButtonText: 'الغاء'
       }).then(function (result) {
         if (result.value) {
           _this4.form.delete('api/user/' + id).then(function () {
@@ -69034,7 +69059,7 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title" }, [_vm._v("جدول التصنيفات")]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
@@ -69043,7 +69068,7 @@ var render = function() {
                 },
                 [
                   _vm._v(" اضافة تصنيف "),
-                  _c("i", { staticClass: "fas fa-Category-plus" })
+                  _c("i", { staticClass: "fa fa-database" })
                 ]
               )
             ])
@@ -69273,7 +69298,7 @@ var staticRenderFns = [
     return _c("tr", [
       _c("th", [_vm._v("المعرف")]),
       _vm._v(" "),
-      _c("th", [_vm._v(">اسم المنشئ")]),
+      _c("th", [_vm._v("الاسم ")]),
       _vm._v(" "),
       _c("th", [_vm._v("الوصف")]),
       _vm._v(" "),
@@ -69281,7 +69306,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("تاريخ التعديل")]),
       _vm._v(" "),
-      _c("th", [_vm._v(">اسم المنشئ")])
+      _c("th", [_vm._v("اسم المنشئ")])
     ])
   },
   function() {
@@ -69359,17 +69384,14 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title" }, [_vm._v("الشركات")]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
                   staticClass: "btn btn-primary",
                   on: { click: _vm.openCreateModal }
                 },
-                [
-                  _vm._v("شركة جديدة "),
-                  _c("i", { staticClass: "fas fa-Category-plus" })
-                ]
+                [_vm._v("شركة جديدة "), _c("i", { staticClass: "fa fa-truck" })]
               )
             ])
           ]),
@@ -69435,7 +69457,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_c("i", { staticClass: "fa fa-trash text-red" })]
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-trash text-red",
+                              staticStyle: { color: "red" }
+                            })
+                          ]
                         )
                       ])
                     ])
@@ -69943,7 +69970,7 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title" }, [_vm._v("المنصرفات")]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
@@ -69952,7 +69979,7 @@ var render = function() {
                 },
                 [
                   _vm._v(" اصافة منصرف "),
-                  _c("i", { staticClass: "fas fa-expenses-plus" })
+                  _c("i", { staticClass: "fa fa-minus-circle" })
                 ]
               )
             ])
@@ -70019,7 +70046,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_c("i", { staticClass: "fa fa-trash text-red" })]
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-trash text-red",
+                              staticStyle: { color: "red" }
+                            })
+                          ]
                         )
                       ])
                     ])
@@ -70300,16 +70332,16 @@ var render = function() {
               _vm._v("تصنيفات المنصرفات")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary",
+                  staticClass: "btn btn-primary ",
                   on: { click: _vm.openCreateModal }
                 },
                 [
                   _vm._v(" انشاء تصنيف "),
-                  _c("i", { staticClass: "fas fa-Category-plus" })
+                  _c("i", { staticClass: "fa fa-list-ul" })
                 ]
               )
             ])
@@ -70376,7 +70408,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_c("i", { staticClass: "fa fa-trash text-red" })]
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-trash text-red",
+                              staticStyle: { color: "red" }
+                            })
+                          ]
                         )
                       ])
                     ])
@@ -70620,21 +70657,18 @@ var render = function() {
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _c("h3", { staticClass: "card-title" }, [
+            _c("h3", { staticClass: "card-title " }, [
               _vm._v("المنتجات الناقصة")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
                   staticClass: "btn btn-primary",
                   on: { click: _vm.openCreateModal }
                 },
-                [
-                  _vm._v(" منتج جديد "),
-                  _c("i", { staticClass: "fas fa-Item-plus" })
-                ]
+                [_vm._v(" منتج جديد "), _c("i", { staticClass: "fa fa-plus" })]
               )
             ])
           ]),
@@ -70694,7 +70728,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_c("i", { staticClass: "fa fa-trash text-red" })]
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-trash text-red",
+                              staticStyle: { color: "red" }
+                            })
+                          ]
                         )
                       ])
                     ])
@@ -70964,6 +71003,33 @@ var render = function() {
                         return
                       }
                       _vm.$set(_vm.filters.name, "value", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filters.barcode.value,
+                      expression: "filters.barcode.value"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  staticStyle: { "margin-top": "10px" },
+                  attrs: { placeholder: "Search by barcode" },
+                  domProps: { value: _vm.filters.barcode.value },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.filters.barcode,
+                        "value",
+                        $event.target.value
+                      )
                     }
                   }
                 })
@@ -71252,7 +71318,7 @@ var render = function() {
             _c("h3", { staticClass: "card-title" }, [_vm._v("المنتجات")]),
             _vm._v(" "),
             _c("div", { staticClass: "card-tools" }, [
-              _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "row cardtitle" }, [
                 _c("div", { staticClass: "col-md-7" }, [
                   _c("input", {
                     directives: [
@@ -71277,7 +71343,7 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-md-4 mr-1" }, [
+                _c("div", { staticClass: "col-md-4 mr-1 " }, [
                   _c(
                     "button",
                     {
@@ -71286,7 +71352,7 @@ var render = function() {
                     },
                     [
                       _vm._v("انشاء منتج "),
-                      _c("i", { staticClass: "fas fa-Product-plus" })
+                      _c("i", { staticClass: "fa fa-plus" })
                     ]
                   )
                 ])
@@ -71356,7 +71422,7 @@ var render = function() {
                                 {
                                   class: {
                                     backgroundAlert:
-                                      _vm.expdatediff(row.edate) > 90
+                                      _vm.expdatediff(row.edate) < 90
                                   }
                                 },
                                 [
@@ -71404,7 +71470,8 @@ var render = function() {
                                   },
                                   [
                                     _c("i", {
-                                      staticClass: "fa fa-trash text-red"
+                                      staticClass: "fa fa-trash text-red",
+                                      staticStyle: { color: "red" }
                                     })
                                   ]
                                 )
@@ -72492,6 +72559,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              staticStyle: { "margin-top": "10px" },
               attrs: { placeholder: "Search by Product Name" },
               domProps: { value: _vm.filters.name.value },
               on: {
@@ -72514,6 +72582,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              staticStyle: { "margin-top": "10px" },
               attrs: { placeholder: "Search by Company Name" },
               domProps: { value: _vm.filters.company.value },
               on: {
@@ -72530,6 +72599,7 @@ var render = function() {
               _c(
                 "form",
                 {
+                  staticStyle: { "margin-top": "10px" },
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -72613,7 +72683,10 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "card-body table-responsive p-0" },
+            {
+              staticClass: "card-body table-responsive p-0",
+              staticStyle: { "margin-top": "10px" }
+            },
             [
               _c(
                 "v-table",
@@ -72772,6 +72845,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
+              staticStyle: { "margin-top": "10px" },
               attrs: { placeholder: "Search by Invoice ID" },
               domProps: { value: _vm.filters.sale_id.value },
               on: {
@@ -72865,7 +72939,8 @@ var render = function() {
                                   },
                                   [
                                     _c("i", {
-                                      staticClass: "fa fa-trash text-red"
+                                      staticClass: "fa fa-trash text-red",
+                                      staticStyle: { color: "red" }
                                     })
                                   ]
                                 )
@@ -73173,7 +73248,7 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title" }, [_vm._v("وحدات القياس")]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
@@ -73182,7 +73257,7 @@ var render = function() {
                 },
                 [
                   _vm._v("وحدة جديدة "),
-                  _c("i", { staticClass: "fas fa-Category-plus" })
+                  _c("i", { staticClass: "fa fa-balance-scale" })
                 ]
               )
             ])
@@ -73239,7 +73314,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_c("i", { staticClass: "fa fa-trash text-red" })]
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-trash text-red",
+                              staticStyle: { color: "red" }
+                            })
+                          ]
                         )
                       ])
                     ])
@@ -73439,7 +73519,7 @@ var render = function() {
           _c("div", { staticClass: "card-header" }, [
             _c("h3", { staticClass: "card-title" }, [_vm._v("المستخدمين")]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-tools" }, [
+            _c("div", { staticClass: "card-tools cardtitle" }, [
               _c(
                 "button",
                 {
@@ -73448,7 +73528,7 @@ var render = function() {
                 },
                 [
                   _vm._v(" انشاء مستخدم "),
-                  _c("i", { staticClass: "fas fa-user-plus" })
+                  _c("i", { staticClass: "fa fa-user-plus" })
                 ]
               )
             ])
@@ -73494,7 +73574,7 @@ var render = function() {
                           },
                           [
                             _c("i", {
-                              staticClass: "fas fa-user-edit text-blue"
+                              staticClass: "fa fa-pencil-square-o text-blue"
                             })
                           ]
                         ),
@@ -73511,7 +73591,12 @@ var render = function() {
                               }
                             }
                           },
-                          [_c("i", { staticClass: "fa fa-trash text-red" })]
+                          [
+                            _c("i", {
+                              staticClass: "fa fa-trash text-red",
+                              staticStyle: { color: "red" }
+                            })
+                          ]
                         )
                       ])
                     ])
@@ -90029,7 +90114,7 @@ var routes = [{
   component: __webpack_require__(/*! ./components/POS.vue */ "./resources/js/components/POS.vue").default
 }, {
   path: '/',
-  component: __webpack_require__(/*! ./components/POS.vue */ "./resources/js/components/POS.vue").default
+  component: __webpack_require__(/*! ./components/Dashboard.vue */ "./resources/js/components/Dashboard.vue").default
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__["default"]({
   mode: 'history',

@@ -5,9 +5,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">المنصرفات</h3>
-                        <div class="card-tools">
+                        <div class="card-tools cardtitle">
                             <button class="btn btn-primary" @click="openCreateModal"> اصافة منصرف <i
-                                class="fas fa-expenses-plus"></i></button>
+                                class="fa fa-minus-circle"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -35,7 +35,7 @@
                                     </a>
                                     /
                                     <a href="#" @click="deleteexpenses(expenses.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red;"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -187,7 +187,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'امسح!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/expenses/' + id)

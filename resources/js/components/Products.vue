@@ -6,13 +6,13 @@
                     <div class="card-header">
                         <h3 class="card-title">المنتجات</h3>
                         <div class="card-tools">
-                            <div class="row">
+                            <div class="row cardtitle">
                                 <div class="col-md-7">
                             <input placeholder="Search by Product Name" class="form-control" v-model="filters.name.value" />
                                 </div>
-                                    <div class="col-md-4 mr-1">
+                                    <div class="col-md-4 mr-1 " >
                                         <button class="btn btn-primary" @click="openCreateModal">انشاء منتج <i
-                                            class="fas fa-Product-plus"></i></button>
+                                            class="fa fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                                 <td :class="{backgroundAlert:row.quantity<15}">{{row.quantity}} {{row.unit.name }}</td>
                                 <td>{{row.company.name | capitalize}}</td>
                                 <td>{{row.category.name | capitalize}}</td>
-                                <td :class="{backgroundAlert:expdatediff(row.edate)>90}">{{row.edate | readableDate }}</td>
+                                <td :class="{backgroundAlert:expdatediff(row.edate)<90}">{{row.edate | readableDate }}</td>
                                 <td>{{row.created_by }}</td>
                                 <td>{{row.created_at }}</td>
                                 <td>{{row.updated_at }}</td>
@@ -58,7 +58,7 @@
                                     </a>
                                     /
                                     <a href="#" @click="deleteProduct(row.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red;" ></i>
                                     </a>
                                 </td>
                             </v-tr>

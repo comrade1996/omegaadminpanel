@@ -94,7 +94,7 @@ const routes = [
     { path: '/missingitems', component: require('./components/MissingItems.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/pos', component: require('./components/POS.vue').default },
-    { path: '/', component: require('./components/POS.vue').default }
+    { path: '/', component: require('./components/Dashboard.vue').default }
   ];
 const router = new VueRouter({
     mode: 'history',

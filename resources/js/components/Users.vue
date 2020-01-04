@@ -5,9 +5,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">المستخدمين</h3>
-                        <div class="card-tools">
+                        <div class="card-tools cardtitle">
                             <button class="btn btn-primary" @click="openCreateModal"> انشاء مستخدم <i
-                                class="fas fa-user-plus"></i></button>
+                                class="fa fa-user-plus"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -30,11 +30,11 @@
                                 <td>{{user.created_at | readableDate }}</td>
                                 <td>
                                     <a href="#" @click="openEditModal(user)">
-                                        <i class="fas fa-user-edit text-blue"></i>
+                                        <i class="fa fa-pencil-square-o text-blue"></i>
                                     </a>
                                     /
                                     <a href="#" @click="deleteUser(user.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red;"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -123,8 +123,8 @@
                 editmode: true,
                 users: {},
                 items: [
-                    {id: 1, label: 'Admin'},
                     {id: 2, label: 'Cashier'},
+                    {id: 1, label: 'Admin'},
                     {id: 0, label: 'User'}
                 ],
                 form: new Form({
@@ -206,7 +206,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'امسح!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if (result.value) {
                             this.form.delete('api/user/' + id)

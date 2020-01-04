@@ -6,12 +6,12 @@
                     <div class="card-header">
                         <h3 class="card-title">تفاصيل المبيعات</h3>
                         <input placeholder="Search by Invoice ID" class="form-control" v-model="filters.sale_id.value"/>
-                        <input placeholder="Search by Product Name" class="form-control" v-model="filters.name.value"/>
-                        <input placeholder="Search by Company Name" class="form-control"
+                        <input placeholder="Search by Product Name" class="form-control" style="margin-top: 10px;" v-model="filters.name.value"/>
+                        <input placeholder="Search by Company Name" class="form-control" style="margin-top: 10px;"
                                v-model="filters.company.value"/>
                         <div class="card-tools">
 
-                            <form @submit.prevent="dateFilter(startdate,enddate)">
+                            <form @submit.prevent="dateFilter(startdate,enddate)" style="margin-top: 10px;">
                                 تاريخ البداية<input type="date" data-provide="datepicker" name="startdate"
                                                     v-model="startdate" required>
                                 تاريخ النهاية
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0">
+                    <div class="card-body table-responsive p-0" style="margin-top: 10px;">
                             <v-table :data="salesDetails"  :filters="filters"
                                      class="table table-hover">
                             <thead slot="head">

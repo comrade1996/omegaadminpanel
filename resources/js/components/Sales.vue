@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">المبيعات</h3>
-                        <input placeholder="Search by Invoice ID" class="form-control" v-model="filters.sale_id.value"/>
+                        <input placeholder="Search by Invoice ID" class="form-control" style="margin-top: 10px;" v-model="filters.sale_id.value"/>
                         <div class="card-tools">
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                                 </td>
                                 <td>
                                     <a href="#" @click="deleteSales(row.id)">
-                                        <i class="fa fa-trash text-red"></i>
+                                        <i class="fa fa-trash text-red" style="color:red"></i>
                                     </a>
                                 </td>
                             </v-tr>
@@ -190,7 +190,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'امسح!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/sales/' + id)

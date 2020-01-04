@@ -5,9 +5,9 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">جدول التصنيفات</h3>
-                        <div class="card-tools">
+                        <div class="card-tools cardtitle">
                             <button class="btn btn-primary" @click="openCreateModal"> اضافة تصنيف <i
-                                class="fas fa-Category-plus"></i></button>
+                                class="fa fa-database"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -15,11 +15,11 @@
                         <table class="table table-hover">
                             <tbody><tr>
                                 <th>المعرف</th>
-                                <th>>اسم المنشئ</th>
+                                <th>الاسم </th>
                                 <th>الوصف</th>
                                 <th>تاريخ اﻹنشاء</th>
                                 <th>تاريخ التعديل</th>
-                                <th>>اسم المنشئ</th>
+                                <th>اسم المنشئ</th>
 
                             </tr>
                             <tr v-for="category in categories.data" :key="category.id">
@@ -179,7 +179,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
                         cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'امسح!'
+                        confirmButtonText: 'موافق',
+                        cancelButtonText: 'الغاء'
                     }).then((result) => {
                         if(result.value) {
                             this.form.delete('api/category/' + id)
