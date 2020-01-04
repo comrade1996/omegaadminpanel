@@ -2262,7 +2262,7 @@ __webpack_require__.r(__webpack_exports__);
       this.datas = [];
       this.datas.push(['Sales', 'Sales per Product']);
       this.salesDetails.forEach(function (element) {
-        if (!_this.tempProducts.includes(element.product.name)) {
+        if (!_this.tempProducts.includes(element.product.name) && element.verified == 1) {
           _this.tempProducts.push(element.product.name);
         }
       });
@@ -2288,7 +2288,7 @@ __webpack_require__.r(__webpack_exports__);
       this.chartData.push(['Month', 'Sales', 'Expenses', 'Profit']);
       var dates = [];
       this.sales.forEach(function (element) {
-        if (!dates.includes(element.created_at.substring(5, 7))) {
+        if (!dates.includes(element.created_at.substring(5, 7)) && element.verified == 1) {
           dates.push(element.created_at.substring(5, 7));
         }
       });

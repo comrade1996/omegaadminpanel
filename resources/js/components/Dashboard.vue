@@ -102,7 +102,7 @@
                     this.datas.push(['Sales', 'Sales per Product']);
                     this.salesDetails.forEach(element => {
 
-                        if (!this.tempProducts.includes(element.product.name)) {
+                        if (!this.tempProducts.includes(element.product.name)&& element.verified == 1 ) {
                             this.tempProducts.push(element.product.name);
                         }
                     });
@@ -131,7 +131,7 @@
                     var dates = [];
                     this.sales.forEach(element => {
 
-                        if (!dates.includes(element.created_at.substring(5, 7))) {
+                        if (!dates.includes(element.created_at.substring(5, 7)) && element.verified == 1) {
                             dates.push(element.created_at.substring(5, 7));
                         }
                     });
