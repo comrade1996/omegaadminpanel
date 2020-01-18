@@ -36,7 +36,7 @@
                                 <v-th sortKey="created_at">تاريخ الانشاء</v-th>
                                 <v-th sortKey="updated_at">تاريخ التعديل</v-th>
                                 <v-th>اسم المنشئ</v-th>
-                                <v-th>حالة الفاتورة</v-th>
+                                <!-- <v-th>حالة الفاتورة</v-th> -->
                             </tr>
                             </thead>
                                 <tbody slot="body" slot-scope="{displayData}">
@@ -49,9 +49,9 @@
                                 <td v-if=" row.quantity>0 || null">{{ row.created_at }}</td>
                                 <td v-if=" row.quantity>0 || null">{{ row.updated_at }}</td>
                                 <td v-if=" row.quantity>0 || null">{{ row.created_by }}</td>
-                                <td><p v-if="row.verified==1">مصدقة</p>
+                                <!-- <td><p v-if="row.verified==1">مصدقة</p>
                                     <p v-if="row.verified==0">غير مصدقة</p>
-                                </td>
+                                </td> -->
                             </v-tr>
                             </tbody>
                         </v-table>

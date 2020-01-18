@@ -28,7 +28,9 @@
                                 <v-th sortKey="name">الاسم</v-th>
                                 <v-th sortKey="purchaseprice">سعر الشراء</v-th>
                                 <v-th sortKey="sellingprice">السعر البيع</v-th>
+                                <v-th sortKey="retailprice">سعر التجزئة</v-th>
                                 <v-th sortKey="quantity">الكمية</v-th>
+                                <v-th sortKey="retailquantity">كمية التجزئة</v-th>
                                 <v-th sortKey="company">الشركة</v-th>
                                 <v-th sortKey="category.name">تصنيف المنتج</v-th>
                                 <v-th sortKey="edate">تاريخ الانتهاء</v-th>
@@ -45,7 +47,9 @@
                                 <td>{{row.name}}</td>
                                 <td>{{row.purchaseprice}}</td>
                                 <td>{{row.sellingprice}}</td>
+                                <td>{{row.retailprice}}</td>
                                 <td :class="{backgroundAlert:row.quantity<15}">{{row.quantity}} {{row.unit.name }}</td>
+                                <td>{{row.retailquantity}}</td>
                                 <td>{{row.company.name | capitalize}}</td>
                                 <td>{{row.category.name | capitalize}}</td>
                                 <td :class="{backgroundAlert:expdatediff(row.edate)<90}">{{row.edate | readableDate }}</td>
@@ -80,7 +84,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editmode ? updateProduct() : createProduct()"> 
+                    <form @submit.prevent="editmode ? updateProduct() : createProduct()">
                     <div class="modal-body">
                         <div class="form-group">
                             <label>الاسم</label>
@@ -110,10 +114,24 @@
                         </div>
 
                         <div class="form-group">
+                            <label>سعر التجزئة</label>
+                            <input v-model="form.retailprice" type="text" name="retailprice"
+                                   class="form-control" :class="{ 'is-invalid': form.errors.has('retailprice') }">
+                            <has-error :form="form" field="retailprice"></has-error>
+                        </div>
+
+                        <div class="form-group">
                             <label>الكمية</label>
                             <input v-model="form.quantity" type="text" name="quantity"
                                    class="form-control" :class="{ 'is-invalid': form.errors.has('quantity') }">
                             <has-error :form="form" field="quantity"></has-error>
+                        </div>
+
+                        <div class="form-group">
+                            <label>كمية التجزئة</label>
+                            <input v-model="form.retailquantity" type="text" name="retailquantity"
+                                   class="form-control" :class="{ 'is-invalid': form.errors.has('retailquantity') }">
+                            <has-error :form="form" field="retailquantity"></has-error>
                         </div>
 
                         <div class="form-group">
@@ -199,7 +217,9 @@
                     barcode:'',
                     purchaseprice:'',
                     sellingprice:'',
+                    retailprice:'',
                     quantity:'',
+                    retailquantity:'',
                     edate:'',
                     company:'',
                     unit:'',

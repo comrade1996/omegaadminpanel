@@ -21,6 +21,7 @@
                                     <v-th sortKey="id">المعرف</v-th>
                                     <v-th sortKey="name">الاسم</v-th>
                                     <v-th sortKey="sellingprice">سعر البيع</v-th>
+                                    <v-th sortKey="retailprice">سعر التجزئة</v-th>
                                     <v-th sortKey="quantity">الكمية</v-th>
                                     <v-th sortKey="edate">تاريخ الانتهاء</v-th>
                                     <v-th>العمليات</v-th>
@@ -31,9 +32,22 @@
                                     <td>{{row.id}}</td>
                                     <td>{{row.name}}</td>
                                     <td>{{row.sellingprice}}</td>
+                                    <td>{{row.retailprice}}</td>
                                     <td>{{row.quantity }}</td>
                                     <td>{{row.edate | readableDate }}</td>
+                                    <!-- <toggle-button @change="onChangeEventHandler"/> -->
+<!--
+                                        <toggle-button v-model="myDataVariable"/>
+
+                                        <toggle-button :value="false"
+                                                    color="#82C7EB"
+                                                    :sync="true"
+                                                    :labels="true"/> -->
+
+
                                     <td>
+                                          <toggle-button :value="true" v-model="myDataVariable"
+                                              @change="see(row,myDataVariable)" :labels="{checked: 'on', unchecked: 'off'}"/>
                                         <button @click="removesell(row)"><i class="fa fa-minus-circle text-red"
                                                                             style="color:red"></i></button>
                                         <button @click="addsell(row)"><i class="fa fa-plus-circle text-green"
@@ -113,7 +127,7 @@
         {
           var subtotal;
            var grandtotal;
-
+            var myDataVariable;
 
             return{
 
@@ -134,7 +148,13 @@
         },
         methods:
             {
-
+                see(product,data){
+                    console.log("data")
+                    product.retailed = data
+                    this.myDataVariable = false
+                    console.log(product.retailed)
+                    console.log(data)
+                },
 
                       // Create callback function to receive barcode when the scanner is already done
       onBarcodeScanned (barcode) {
@@ -169,15 +189,34 @@
                 {
 
                     var x=JSON.stringify(this.sells);
-                    var y = this.globalId;
+                    // var y = this.globalId;
                     var a = this.discount;
                     var i = this.subtotal;
                     var z = this.grandtotal;
-                    window.open('api/cashierinvoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank');
+                    // window.open('api/cashierinvoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank');
                     //axios.get("api/invoice").then(({data}) => (console.log(data+"aaaaaaaaaa")));
                 },
                 clearSales() {
                     this.$router.go()
+                },
+                 updateProducts(id)
+                {
+                    axios.post('api/persistproduct',{
+                        id:id
+                    })
+                        .then( (response=> {
+                            console.log(response);
+                            console.log("updated")
+                            swal.fire(
+                                'تم التعديل',
+                                'تم التعديل بنجاح',
+                                'success'
+                            )
+                                this.$router.go()
+                        }))
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 },
                 addsell(product){
                     console.log(product)
@@ -289,11 +328,12 @@
                                 sells:sellsdata
                             })
                                 .then((data)=>{
+                                    console.log("datassssss"+this.globalId)
                                     console.log(data)
                                     pr=true
                                     this.int();
-                            this.clearSales();
-                                    // this.updateProducts()
+                                    this.updateProducts(this.globalId)
+                                    this.clearSales();
                                     console.log("check")
                                 })
                                 .catch(()=>{
@@ -322,7 +362,7 @@
 
                 addByBarcode(data)
                 {
-                    var dat=data 
+                    var dat=data
                     this.products.forEach(function (element) {
                         if(element.barcode== dat)
                         {
@@ -340,7 +380,7 @@
                     destroyed () {
       // Remove listener when component is destroyed
       this.$barcodeScanner.destroy()
-      
+
     },
         created() {
             this.$barcodeScanner.init(this.onBarcodeScanned)
@@ -387,7 +427,7 @@
           // Handle barcode data when available.
           function onBarcodeDataReady (data, type, time)
           {
-            //      var dat=data 
+            //      var dat=data
             //         this.products.forEach(function (element) {
             //             if(element.barcode== dat)
             //             {

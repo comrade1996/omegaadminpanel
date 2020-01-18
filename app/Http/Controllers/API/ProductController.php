@@ -42,9 +42,11 @@ class ProductController extends Controller
             'barcode' => $request['barcode'],
             'purchaseprice' => $request['purchaseprice'],
             'sellingprice' => $request['sellingprice'],
+            'retailprice' => $request['retailprice'],
             'category_id' => $request['category'],
             'unit_id' => $request['unit'],
             'quantity' => $request['quantity'],
+            'retailquantity' => $request['retailquantity'],
             'edate' => $request['edate'],
             'company_id' => $request['company']
         ]);

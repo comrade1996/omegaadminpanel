@@ -51,6 +51,12 @@ Vue.use(VueToastr2)
 import Vue from 'vue'
 import VueSpinners from 'vue-spinners'
 Vue.use(VueSpinners)
+
+
+import ToggleButton from 'vue-js-toggle-button'
+
+Vue.use(ToggleButton)
+
 /*
 Vue.toasted.register('quantity', 'Oops.. Not enugh stock..', {
     theme: "bubble",

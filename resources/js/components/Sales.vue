@@ -22,7 +22,7 @@
                                 <v-th sortKey="created_at">تاريخ الانشاء</v-th>
                                 <v-th sortKey="updated_at">تاريخ التعديل</v-th>
                                 <v-th>اسم المنشئ</v-th>
-                                <v-th>الحالة</v-th>
+                                <!-- <v-th>الحالة</v-th> -->
                                 <v-th>العمليات</v-th>
                             </tr>
                             </thead>
@@ -35,12 +35,12 @@
                                 <td>{{row.created_at | readableDate }}</td>
                                 <td>{{row.updated_at | readableDate }}</td>
                                 <td>{{row.created_by}}</td>
-                                <td>
+                                <!-- <td>
                                     <p v-if="row.verified==1">مصدقة</p>
                                     <button v-if="row.verified==0" @click="updateProducts(row.id)"> تصديق الفاتورة
                                     </button>
 
-                                </td>
+                                </td> -->
                                 <td>
                                     <a href="#" @click="deleteSales(row.id)">
                                         <i class="fa fa-trash text-red" style="color:red"></i>
