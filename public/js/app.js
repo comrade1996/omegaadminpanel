@@ -3358,12 +3358,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     int: function int() {
-      var x = JSON.stringify(this.sells); // var y = this.globalId;
-
+      var x = JSON.stringify(this.sells);
+      var y = this.globalId;
       var a = this.discount;
       var i = this.subtotal;
-      var z = this.grandtotal; // window.open('api/cashierinvoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank');
-      //axios.get("api/invoice").then(({data}) => (console.log(data+"aaaaaaaaaa")));
+      var z = this.grandtotal;
+      window.open('api/cashierinvoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank'); //axios.get("api/invoice").then(({data}) => (console.log(data+"aaaaaaaaaa")));
     },
     clearSales: function clearSales() {
       this.$router.go();
@@ -3377,6 +3377,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         console.log(response);
         console.log("updated");
         swal.fire('تم التعديل', 'تم التعديل بنجاح', 'success');
+
+        _this2.int();
 
         _this2.$router.go();
       }).catch(function (error) {
@@ -3483,9 +3485,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }).then(function (data) {
             console.log("datassssss" + _this3.globalId);
             console.log(data);
-            pr = true;
-
-            _this3.int();
+            pr = true; // this.int();
 
             _this3.updateProducts(_this3.globalId);
 

@@ -189,11 +189,11 @@
                 {
 
                     var x=JSON.stringify(this.sells);
-                    // var y = this.globalId;
+                    var y = this.globalId;
                     var a = this.discount;
                     var i = this.subtotal;
                     var z = this.grandtotal;
-                    // window.open('api/cashierinvoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank');
+                     window.open('api/cashierinvoice?id=' + y + '&sells=' + x + '&subtotal=' + i + '&discount=' + a + '&grandtotal=' + z, '_blank');
                     //axios.get("api/invoice").then(({data}) => (console.log(data+"aaaaaaaaaa")));
                 },
                 clearSales() {
@@ -212,6 +212,7 @@
                                 'تم التعديل بنجاح',
                                 'success'
                             )
+                            this.int()
                                 this.$router.go()
                         }))
                         .catch(function (error) {
@@ -331,7 +332,7 @@
                                     console.log("datassssss"+this.globalId)
                                     console.log(data)
                                     pr=true
-                                    this.int();
+                                    // this.int();
                                     this.updateProducts(this.globalId)
                                     this.clearSales();
                                     console.log("check")
